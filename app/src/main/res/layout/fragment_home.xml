@@ -1,0 +1,31 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layout xmlns:android="http://schemas.android.com/apk/res/android">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:paddingLeft="15dp"
+        android:paddingRight="15dp"
+        android:orientation="vertical">
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="오늘의 추천"
+            android:textColor="@color/color_132439"
+            android:layout_marginTop="18.7dp"
+            android:includeFontPadding="false"
+            android:textSize="18dp"
+            android:textStyle="bold" />
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:textSize="12dp"
+            android:layout_marginTop="9.3dp"
+            android:textColor="@color/color_95989d"
+            android:text="당신의 멋진 인연을 위해 준비했어요"
+            />
+
+    </LinearLayout>
+</layout>
