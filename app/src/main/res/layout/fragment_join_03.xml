@@ -1,0 +1,221 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layout xmlns:android="http://schemas.android.com/apk/res/android">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:orientation="vertical"
+        android:paddingLeft="20dp"
+        android:paddingTop="20dp"
+        android:paddingRight="20dp"
+        android:paddingBottom="31.3dp">
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:includeFontPadding="false"
+            android:text="중복가입 방지를 위해"
+            android:textColor="@color/color_2a3348"
+            android:textSize="18dp"
+            android:textStyle="bold" />
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="6dp"
+            android:includeFontPadding="false"
+            android:text="본인 휴대폰 번호 인증을 해주세요"
+            android:textColor="@color/color_2a3348"
+            android:textSize="18dp" />
+
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="44.7dp"
+            android:includeFontPadding="false"
+            android:text="휴대폰 번호"
+            android:textColor="@color/color_393939"
+            android:textSize="13.2dp" />
+
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="7dp"
+            android:orientation="vertical">
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="45dp"
+                android:gravity="center_vertical"
+                android:orientation="horizontal"
+                android:paddingLeft="7dp">
+
+                <ImageView
+                    android:id="@+id/check_img_phone"
+                    android:layout_width="15dp"
+                    android:layout_height="15dp"
+                    android:src="@drawable/sel_join_check_input" />
+
+                <EditText
+                    android:id="@+id/phone_num"
+                    android:layout_width="0dp"
+                    android:layout_height="match_parent"
+                    android:layout_marginLeft="15dp"
+                    android:layout_weight="1"
+                    android:background="@null"
+                    android:gravity="center_vertical"
+                    android:hint="휴대폰 번호 입력"
+                    android:textColor="@color/color_393939"
+                    android:textColorHint="@color/color_c8ced1"
+                    android:textSize="14dp"
+                    android:textStyle="bold" />
+
+                <TextView
+                    android:id="@+id/btn_reg_auth_num"
+                    android:layout_width="wrap_content"
+                    android:layout_height="32dp"
+                    android:layout_gravity="center"
+                    android:background="@drawable/btn_n_send"
+                    android:gravity="center"
+                    android:paddingLeft="12.7dp"
+                    android:paddingRight="12.7dp"
+                    android:text="인증번호 전송"
+                    android:textColor="@color/color_80cdf0"
+                    android:textSize="13.2dp"
+                    android:textStyle="bold" />
+
+
+            </LinearLayout>
+
+            <ImageView
+                android:layout_width="match_parent"
+                android:layout_height="1dp"
+                android:background="@color/color_c8ced1" />
+
+        </LinearLayout>
+
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="19.7dp"
+            android:includeFontPadding="false"
+            android:text="인증번호"
+            android:textColor="@color/color_393939"
+            android:textSize="13.2dp" />
+
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="7dp"
+            android:orientation="vertical">
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="45dp"
+                android:gravity="center_vertical"
+                android:orientation="horizontal"
+                android:paddingLeft="7dp">
+
+                <ImageView
+                    android:id="@+id/check_img_auth"
+                    android:layout_width="15dp"
+                    android:layout_height="15dp"
+                    android:src="@drawable/sel_join_check_input" />
+
+                <EditText
+                    android:id="@+id/auth_num"
+                    android:layout_width="0dp"
+                    android:layout_height="match_parent"
+                    android:layout_marginLeft="15dp"
+                    android:layout_weight="1"
+                    android:background="@null"
+                    android:gravity="center_vertical"
+                    android:hint="인증번호 입력"
+                    android:textColor="@color/color_393939"
+                    android:textColorHint="@color/color_c8ced1"
+                    android:textSize="14dp"
+                    android:textStyle="bold" />
+
+                <TextView
+                    android:id="@+id/btn_confirm_auth_num"
+                    android:layout_width="wrap_content"
+                    android:layout_height="32dp"
+                    android:layout_gravity="center"
+                    android:background="@drawable/btn_n_confirm"
+                    android:gravity="center"
+                    android:paddingLeft="12.7dp"
+                    android:paddingRight="12.7dp"
+                    android:text="인증하기"
+                    android:textColor="@color/color_white"
+                    android:textSize="13.2dp"
+                    android:textStyle="bold" />
+
+
+            </LinearLayout>
+
+            <ImageView
+                android:layout_width="match_parent"
+                android:layout_height="1dp"
+                android:background="@color/color_c8ced1" />
+
+        </LinearLayout>
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="10dp"
+            android:gravity="end"
+            android:orientation="horizontal">
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:gravity="end"
+                android:includeFontPadding="false"
+                android:text="인증번호 유효시간 "
+                android:textColor="@color/color_80cdf0"
+                android:textSize="11.7dp" />
+
+            <TextView
+                android:id="@+id/tick"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:gravity="end"
+                android:includeFontPadding="false"
+                android:text="02:59"
+                android:textColor="@color/color_80cdf0"
+                android:textSize="11.7dp" />
+
+        </LinearLayout>
+
+        <Space
+            android:layout_width="match_parent"
+            android:layout_height="0dp"
+            android:layout_weight="1" />
+
+        <FrameLayout
+            android:id="@+id/btn_next"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content">
+
+            <ImageView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:adjustViewBounds="true"
+                android:src="@drawable/sel_join_next_btn" />
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center"
+                android:text="다음"
+                android:textColor="@color/color_white"
+                android:textSize="20dp"
+                android:textStyle="bold" />
+        </FrameLayout>
+    </LinearLayout>
+</layout>

@@ -5,8 +5,18 @@
     <color name="colorAccent">#03DAC5</color>
 
 
+    <color name="color_white">#ffffff</color>
     <color name="color_2c2c2c">#2c2c2c</color>
     <color name="color_e5e5e5">#e5e5e5</color>
     <color name="color_132439">#132439</color>
     <color name="color_95989d">#95989d</color>
+    <color name="color_c8ced1">#c8ced1</color>
+    <color name="color_5f6671">#5f6671</color>
+    <color name="color_cc132439">#cc132439</color>
+    <color name="color_669cff">#669cff</color>
+    <color name="color_b3bbbf">#b3bbbf</color>
+    <color name="color_2a3348">#2a3348</color>
+    <color name="color_919da4">#919da4</color>
+    <color name="color_393939">#393939</color>
+    <color name="color_80cdf0">#80cdf0</color>
 </resources>

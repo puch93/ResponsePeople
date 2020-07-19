@@ -17,11 +17,12 @@
         <ImageView
             android:layout_width="match_parent"
             android:layout_height="1dp"
-            android:background="@color/color_e5e5e5" />
+            android:background="@color/color_c8ced1" />
 
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="70dp"
+            android:background="@color/color_white"
             android:orientation="horizontal">
 
             <LinearLayout

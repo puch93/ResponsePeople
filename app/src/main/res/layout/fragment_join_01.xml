@@ -1,0 +1,239 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:orientation="vertical"
+        android:paddingLeft="20dp"
+        android:paddingTop="20dp"
+        android:paddingRight="20dp"
+        android:paddingBottom="31.3dp">
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:includeFontPadding="false"
+            android:text="응답남녀"
+            android:textColor="@color/color_2a3348"
+            android:textSize="18dp"
+            android:textStyle="bold" />
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="6dp"
+            android:includeFontPadding="false"
+            android:text="이용약관에 동의해주세요"
+            android:textColor="@color/color_2a3348"
+            android:textSize="18dp" />
+
+
+        <androidx.constraintlayout.widget.ConstraintLayout
+            android:id="@+id/btn_agree_all"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="45.7dp">
+
+            <ImageView
+                android:id="@+id/imageView"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:adjustViewBounds="true"
+                android:src="@drawable/sel_join_agree_btn"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent" />
+
+            <ImageView
+                android:id="@+id/imageView2"
+                android:layout_width="15dp"
+                android:layout_height="15dp"
+                android:layout_marginLeft="25.3dp"
+                android:src="@drawable/sel_join_check"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintStart_toStartOf="@+id/imageView"
+                app:layout_constraintTop_toTopOf="parent" />
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:gravity="center_horizontal"
+                android:letterSpacing="-0.02"
+                android:text="모두동의"
+                android:textColor="@color/color_919da4"
+                android:textSize="16sp"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="@+id/imageView" />
+
+        </androidx.constraintlayout.widget.ConstraintLayout>
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="18.3dp"
+            android:gravity="center_vertical"
+            android:orientation="horizontal"
+            android:paddingLeft="10dp">
+
+            <CheckBox
+                android:id="@+id/ck_use"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:button="@drawable/sel_check_btn"
+                android:includeFontPadding="false"
+                android:paddingLeft="11.3dp"
+                android:text="(필수) 서비스 이용 약관"
+                android:textColor="@color/color_cc132439"
+                android:textSize="15dp" />
+
+            <Space
+                android:layout_width="0dp"
+                android:layout_height="match_parent"
+                android:layout_weight="1" />
+
+            <LinearLayout
+                android:id="@+id/btn_term_use"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:orientation="vertical"
+                android:padding="10dp">
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="보기"
+                    android:textColor="@color/color_919da4"
+                    android:textSize="15dp" />
+
+                <ImageView
+                    android:layout_width="27.3dp"
+                    android:layout_height="1dp"
+                    android:background="@color/color_919da4" />
+            </LinearLayout>
+
+        </LinearLayout>
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:gravity="center_vertical"
+            android:orientation="horizontal"
+            android:paddingLeft="10dp">
+
+            <CheckBox
+                android:id="@+id/ck_private"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:button="@drawable/sel_check_btn"
+                android:includeFontPadding="false"
+                android:paddingLeft="11.3dp"
+                android:text="(필수) 개인 정보 처리 방침"
+                android:textColor="@color/color_cc132439"
+                android:textSize="15dp" />
+
+            <Space
+                android:layout_width="0dp"
+                android:layout_height="match_parent"
+                android:layout_weight="1" />
+
+            <LinearLayout
+                android:id="@+id/btn_term_private"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:orientation="vertical"
+                android:padding="10dp">
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="보기"
+                    android:textColor="@color/color_919da4"
+                    android:textSize="15dp" />
+
+                <ImageView
+                    android:layout_width="27.3dp"
+                    android:layout_height="1dp"
+                    android:background="@color/color_919da4" />
+            </LinearLayout>
+
+        </LinearLayout>
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:gravity="center_vertical"
+            android:orientation="horizontal"
+            android:paddingLeft="10dp">
+
+            <CheckBox
+                android:id="@+id/ck_gps"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:button="@drawable/sel_check_btn"
+                android:includeFontPadding="false"
+                android:paddingLeft="11.3dp"
+                android:text="(필수) 위치 정보 제공 동의"
+                android:textColor="@color/color_cc132439"
+                android:textSize="15dp" />
+
+            <Space
+                android:layout_width="0dp"
+                android:layout_height="match_parent"
+                android:layout_weight="1" />
+
+            <LinearLayout
+                android:id="@+id/btn_term_gps"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:orientation="vertical"
+                android:padding="10dp">
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="보기"
+                    android:textColor="@color/color_919da4"
+                    android:textSize="15dp" />
+
+                <ImageView
+                    android:layout_width="27.3dp"
+                    android:layout_height="1dp"
+                    android:background="@color/color_919da4" />
+            </LinearLayout>
+
+        </LinearLayout>
+
+
+        <Space
+            android:layout_width="match_parent"
+            android:layout_height="0dp"
+            android:layout_weight="1" />
+
+        <FrameLayout
+            android:id="@+id/btn_next"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content">
+
+            <ImageView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:adjustViewBounds="true"
+                android:src="@drawable/sel_join_next_btn" />
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center"
+                android:text="다음"
+                android:textColor="@color/color_white"
+                android:textSize="20dp"
+                android:textStyle="bold" />
+        </FrameLayout>
+
+    </LinearLayout>
+</layout>
