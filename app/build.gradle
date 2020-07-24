@@ -25,6 +25,10 @@ android {
         enabled = true
     }
 
+    compileOptions {
+        sourceCompatibility JavaVersion.VERSION_1_8
+        targetCompatibility JavaVersion.VERSION_1_8
+    }
 }
 
 dependencies {
@@ -52,4 +56,7 @@ dependencies {
     implementation 'com.android.billingclient:billing:2.2.0'
     implementation 'androidx.viewpager2:viewpager2:1.1.0-alpha01'
     implementation 'me.relex:circleindicator:2.1.4'
+    implementation 'androidx.cardview:cardview:1.0.0'
+    implementation 'com.github.Jay-Goo:RangeSeekBar:v3.0.0'
+    implementation 'com.google.android:flexbox:2.0.1'
 }

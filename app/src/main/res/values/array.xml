@@ -1,0 +1,33 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string-array name="array_ideal">
+        <item>피부가 좋은 사람</item>
+        <item>목소리가 좋은 사람</item>
+        <item>귀여운 사람</item>
+        <item>다정한 사람</item>
+        <item>연락 자주 하는 사람</item>
+        <item>솔직한 사람</item>
+        <item>애교 많은 사람</item>
+        <item>털털한 사람</item>
+        <item>예의 바른 사람</item>
+        <item>운동을 좋아하는 사람</item>
+        <item>웃는 모습이 예쁜 사람</item>
+        <item>적극적인 사람</item>
+        <item>노래 잘하는 사람</item>
+        <item>섹시한 사람</item>
+        <item>유머러스한 사람</item>
+        <item>배려심 깊은 사람</item>
+        <item>허세 없는 사람</item>
+        <item>착한 사람</item>
+        <item>말을 예쁘게 하는 사람</item>
+        <item>본인 일에 충실한 사람</item>
+        <item>대화가 잘 통하는 사람</item>
+        <item>나만 좋아해주는 사람</item>
+        <item>배울 점이 많은 사람</item>
+        <item>패션 감각이 좋은 사람</item>
+        <item>표현을 잘하는 사람</item>
+        <item>잘 먹는 사람</item>
+        <item>대화가 많은 사람</item>
+        <item>함께 많은 시간을 보낼 수 있는 사람</item>
+    </string-array>
+</resources>

@@ -1,0 +1,226 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layout xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:android="http://schemas.android.com/apk/res/android">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:orientation="vertical">
+        
+        <androidx.constraintlayout.widget.ConstraintLayout
+            android:layout_width="match_parent"
+            android:layout_height="50dp">
+
+            <FrameLayout
+                android:layout_width="wrap_content"
+                android:layout_height="match_parent"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent">
+
+                <!--TODO 백버튼-->
+                <ImageView
+                    android:layout_width="20dp"
+                    android:layout_height="match_parent" />
+            </FrameLayout>
+
+            <TextView
+                android:id="@+id/title"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:gravity="center_horizontal"
+                android:text="연봉"
+                android:textColor="@color/color_2a3348"
+                android:textSize="16dp"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent" />
+
+        </androidx.constraintlayout.widget.ConstraintLayout>
+
+        <ImageView
+            android:layout_width="match_parent"
+            android:layout_height="1dp"
+            android:background="@color/color_c8ced1"/>
+
+
+        <ScrollView
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:fadingEdge="none"
+            android:fillViewport="true"
+            android:overScrollMode="never">
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:orientation="vertical"
+                android:paddingLeft="20dp"
+                android:paddingTop="20dp"
+                android:paddingRight="20dp"
+                android:paddingBottom="39.7dp">
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:includeFontPadding="false"
+                    android:text="본인의 연봉을 선택해주세요"
+                    android:textColor="@color/color_393939"
+                    android:textSize="13.2dp"
+                    android:textStyle="bold" />
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="7.7dp"
+                    android:includeFontPadding="false"
+                    android:lineSpacingExtra="3.2dp"
+                    android:text="연봉확인을 위해 급여명세서를 첨부하여 주시기 바랍니다\n첨부된 파일은 응답남녀 관리자가 확인 후 반영합니다"
+                    android:textColor="@color/color_95989d"
+                    android:textSize="10.8dp" />
+
+
+                <CheckBox
+                    android:id="@+id/ck_private"
+                    android:layout_width="match_parent"
+                    android:layout_height="45dp"
+                    android:layout_marginTop="34.3dp"
+                    android:button="@drawable/sel_check_btn"
+                    android:includeFontPadding="false"
+                    android:paddingLeft="11.3dp"
+                    android:paddingRight="10dp"
+                    android:text="비공개"
+                    android:textColor="@color/color_cc132439"
+                    android:textSize="15dp" />
+
+                <ImageView
+                    android:layout_width="match_parent"
+                    android:layout_height="1dp"
+                    android:background="@color/color_c8ced1" />
+
+                <TextView
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="7dp"
+                    android:gravity="end"
+                    android:text="첨부가 불가능할 경우 비공개 선택"
+                    android:textColor="@color/color_95989d"
+                    android:textSize="10.8dp" />
+
+                <CheckBox
+                    android:id="@+id/ck_lower_5000"
+                    android:layout_width="match_parent"
+                    android:layout_height="45dp"
+                    android:layout_marginTop="15.7dp"
+                    android:button="@drawable/sel_check_btn"
+                    android:includeFontPadding="false"
+                    android:paddingLeft="11.3dp"
+                    android:paddingRight="10dp"
+                    android:text="5000만원 미만"
+                    android:textColor="@color/color_cc132439"
+                    android:textSize="15dp" />
+
+                <ImageView
+                    android:layout_width="match_parent"
+                    android:layout_height="1dp"
+                    android:background="@color/color_c8ced1" />
+
+                <CheckBox
+                    android:id="@+id/ck_upper_5000"
+                    android:layout_width="match_parent"
+                    android:layout_height="45dp"
+                    android:layout_marginTop="16dp"
+                    android:button="@drawable/sel_check_btn"
+                    android:includeFontPadding="false"
+                    android:paddingLeft="11.3dp"
+                    android:paddingRight="10dp"
+                    android:text="5000만원 이상"
+                    android:textColor="@color/color_cc132439"
+                    android:textSize="15dp" />
+
+                <ImageView
+                    android:layout_width="match_parent"
+                    android:layout_height="1dp"
+                    android:background="@color/color_c8ced1" />
+
+                <CheckBox
+                    android:id="@+id/ck_upper_1bill"
+                    android:layout_width="match_parent"
+                    android:layout_height="45dp"
+                    android:layout_marginTop="16dp"
+                    android:button="@drawable/sel_check_btn"
+                    android:includeFontPadding="false"
+                    android:paddingLeft="11.3dp"
+                    android:paddingRight="10dp"
+                    android:text="1억원 이상"
+                    android:textColor="@color/color_cc132439"
+                    android:textSize="15dp" />
+
+                <ImageView
+                    android:layout_width="match_parent"
+                    android:layout_height="1dp"
+                    android:background="@color/color_c8ced1" />
+
+                <Space
+                    android:layout_width="match_parent"
+                    android:layout_height="0dp"
+                    android:layout_weight="1" />
+
+                <FrameLayout
+                    android:id="@+id/btn_upload_file"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="30dp">
+
+                    <ImageView
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:adjustViewBounds="true"
+                        android:src="@drawable/btn_file_on" />
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_gravity="center"
+                        android:text="급여명세서 첨부"
+                        android:textColor="@color/color_white"
+                        android:textSize="16dp"
+                        android:textStyle="bold" />
+                </FrameLayout>
+
+                <FrameLayout
+                    android:id="@+id/btn_complete"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="6.7dp">
+
+                    <ImageView
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:adjustViewBounds="true"
+                        android:src="@drawable/btn_file_off" />
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_gravity="center"
+                        android:text="첨부 완료"
+                        android:textColor="@color/color_white"
+                        android:textSize="16dp"
+                        android:textStyle="bold" />
+                </FrameLayout>
+
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="19dp"
+                    android:lineSpacingExtra="3.8dp"
+                    android:text="연봉정보는 가입 후 프로필 수정에서 언제든지 변경할 수 있습니다.\n관리자의 승인 후 자동반영됩니다."
+                    android:textColor="@color/color_95989d"
+                    android:textSize="10.8sp" />
+            </LinearLayout>
+        </ScrollView>
+    </LinearLayout>
+</layout>
