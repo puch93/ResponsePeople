@@ -65,6 +65,7 @@
                     android:layout_height="match_parent"
                     android:layout_marginLeft="15dp"
                     android:background="@null"
+                    android:singleLine="true"
                     android:gravity="center_vertical"
                     android:hint="이메일 주소 입력"
                     android:textColor="@color/color_393939"
@@ -77,7 +78,7 @@
             <ImageView
                 android:layout_width="match_parent"
                 android:layout_height="1dp"
-                android:background="@color/color_c8ced1" />
+                android:background="@color/color_e3e6e8" />
 
         </LinearLayout>
 
@@ -117,10 +118,11 @@
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
                     android:layout_marginLeft="15dp"
-                    android:inputType="textPassword"
                     android:background="@null"
                     android:gravity="center_vertical"
                     android:hint="영문, 숫자 조합 8자리 이상"
+                    android:singleLine="true"
+                    android:inputType="textPassword"
                     android:textColor="@color/color_393939"
                     android:textColorHint="@color/color_c8ced1"
                     android:textSize="14dp"
@@ -131,10 +133,9 @@
             <ImageView
                 android:layout_width="match_parent"
                 android:layout_height="1dp"
-                android:background="@color/color_c8ced1" />
+                android:background="@color/color_e3e6e8" />
 
         </LinearLayout>
-
 
 
         <TextView
@@ -172,10 +173,11 @@
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
                     android:layout_marginLeft="15dp"
-                    android:inputType="textPassword"
                     android:background="@null"
                     android:gravity="center_vertical"
+                    android:singleLine="true"
                     android:hint="정확하게 입력해주세요"
+                    android:inputType="textPassword"
                     android:textColor="@color/color_393939"
                     android:textColorHint="@color/color_c8ced1"
                     android:textSize="14dp"
@@ -186,7 +188,7 @@
             <ImageView
                 android:layout_width="match_parent"
                 android:layout_height="1dp"
-                android:background="@color/color_c8ced1" />
+                android:background="@color/color_e3e6e8" />
 
         </LinearLayout>
 
@@ -212,11 +214,11 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:button="@drawable/sel_check_btn"
+                android:checked="true"
                 android:includeFontPadding="false"
                 android:paddingLeft="9.7dp"
                 android:paddingRight="15dp"
                 android:text="남자"
-                android:checked="true"
                 android:textColor="@color/color_cc132439"
                 android:textSize="15dp" />
 
@@ -225,11 +227,11 @@
                 android:id="@+id/rb_female"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:button="@drawable/sel_check_btn"
                 android:layout_marginLeft="25.7dp"
-                android:paddingRight="15dp"
+                android:button="@drawable/sel_check_btn"
                 android:includeFontPadding="false"
                 android:paddingLeft="9.7dp"
+                android:paddingRight="15dp"
                 android:text="여자"
                 android:textColor="@color/color_cc132439"
                 android:textSize="15dp" />

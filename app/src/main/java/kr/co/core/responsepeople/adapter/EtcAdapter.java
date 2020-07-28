@@ -19,7 +19,7 @@ import kr.co.core.responsepeople.data.EtcData;
 public class EtcAdapter extends RecyclerView.Adapter<EtcAdapter.ViewHolder> {
     private Activity act;
     private ArrayList<EtcData> list = new ArrayList<>();
-    private ArrayList<String> list_selected = new ArrayList<>();
+    private ArrayList<EtcData> list_selected = new ArrayList<>();
 
     public EtcAdapter(Activity act, ArrayList<EtcData> list) {
         this.act = act;
@@ -31,7 +31,7 @@ public class EtcAdapter extends RecyclerView.Adapter<EtcAdapter.ViewHolder> {
         notifyDataSetChanged();
     }
 
-    public ArrayList<String> getSelectedList() {
+    public ArrayList<EtcData> getSelectedList() {
         return this.list_selected;
     }
 
@@ -50,11 +50,11 @@ public class EtcAdapter extends RecyclerView.Adapter<EtcAdapter.ViewHolder> {
         holder.contents.setText(data.getContents());
         holder.contents.setOnClickListener(v -> {
             if(data.isSelected()) {
+                list_selected.remove(data);
                 data.setSelected(false);
-                list_selected.remove(data.getContents());
             } else {
                 data.setSelected(true);
-                list_selected.add(data.getContents());
+                list_selected.add(data);
             }
             list.set(i, data);
             notifyDataSetChanged();

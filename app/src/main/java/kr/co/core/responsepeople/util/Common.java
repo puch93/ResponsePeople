@@ -24,6 +24,7 @@ import android.widget.Toast;
 
 import androidx.core.content.ContextCompat;
 import androidx.core.content.FileProvider;
+import androidx.fragment.app.Fragment;
 
 import com.bumptech.glide.Glide;
 import com.bumptech.glide.load.MultiTransformation;
@@ -52,6 +53,11 @@ import kr.co.core.responsepeople.BuildConfig;
 import kr.co.core.responsepeople.R;
 
 public class Common {
+    public static final int PICK_DIALOG = 101;
+    public static final int PHOTO_TAKE = 102;
+    public static final int PHOTO_GALLERY = 103;
+    public static final int PHOTO_CROP = 104;
+
 
     /* toast setting */
     public static void showToast(final Activity act, final String msg) {
@@ -142,19 +148,12 @@ public class Common {
         }
     }
 
-    // get device id
-    public static String getDeviceId(Context ctx) {
-        String deviceID = "";
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
-            if (ctx.checkSelfPermission(Manifest.permission.READ_EXTERNAL_STORAGE) == PackageManager.PERMISSION_GRANTED) {
-                deviceID = ((TelephonyManager) ctx.getSystemService(Context.TELEPHONY_SERVICE)).getDeviceId();
-            }
-        } else {
-            deviceID = ((TelephonyManager) ctx.getSystemService(Context.TELEPHONY_SERVICE)).getDeviceId();
-        }
-
-        if (StringUtil.isNull(deviceID)) {
-            deviceID = "35" +
+    public static String getDeviceId(Context context) {
+        String newId = null;
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.Q) {
+            Log.i(StringUtil.TAG, "Q이상");
+//            newId = Settings.Secure.getString(context.getContentResolver(), Settings.Secure.ANDROID_ID);
+            newId = "35" +
                     Build.BOARD.length() % 10 + Build.BRAND.length() % 10 +
                     Build.CPU_ABI.length() % 10 + Build.DEVICE.length() % 10 +
                     Build.DISPLAY.length() % 10 + Build.HOST.length() % 10 +
@@ -162,14 +161,25 @@ public class Common {
                     Build.MODEL.length() % 10 + Build.PRODUCT.length() % 10 +
                     Build.TAGS.length() % 10 + Build.TYPE.length() % 10 +
                     Build.USER.length() % 10;
-            if (TextUtils.isEmpty(deviceID)) {
-                deviceID = UUID.randomUUID().toString();
+        } else {
+            Log.i(StringUtil.TAG, "Q미만");
+            newId = ((TelephonyManager) context.getSystemService(Context.TELEPHONY_SERVICE)).getDeviceId();
+
+            if (StringUtil.isNull(newId)) {
+                newId = "35" +
+                        Build.BOARD.length() % 10 + Build.BRAND.length() % 10 +
+                        Build.CPU_ABI.length() % 10 + Build.DEVICE.length() % 10 +
+                        Build.DISPLAY.length() % 10 + Build.HOST.length() % 10 +
+                        Build.ID.length() % 10 + Build.MANUFACTURER.length() % 10 +
+                        Build.MODEL.length() % 10 + Build.PRODUCT.length() % 10 +
+                        Build.TAGS.length() % 10 + Build.TYPE.length() % 10 +
+                        Build.USER.length() % 10;
             }
         }
 
-        return "love||" + deviceID;
-//        return deviceID;
+        return newId;
     }
+
 
     public static String convertTimeSimpleLong(long original) {
         Date date = new Date(original);
@@ -277,13 +287,17 @@ public class Common {
         return f;
     }
 
-    public static void getAlbum(Activity act, int request_code) {
+    public static void getAlbum(Fragment frag, Activity act, int request_code) {
         Intent intent = new Intent(Intent.ACTION_PICK);
         intent.setType(MediaStore.Images.Media.CONTENT_TYPE);
-        act.startActivityForResult(intent, request_code);
+        if (frag != null)
+            frag.startActivityForResult(intent, request_code);
+        else {
+            act.startActivityForResult(intent, request_code);
+        }
     }
 
-    public static void takePhoto(Activity act, int request_code, OnPhotoAfterAction listener) {
+    public static void takePhoto(Fragment frag, Activity act, int request_code, OnPhotoAfterAction listener) {
         Intent intent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
         Uri photoUri;
         File photoFile = null;
@@ -304,16 +318,23 @@ public class Common {
                 listener.doPhotoUri(photoUri);
             }
             intent.putExtra(MediaStore.EXTRA_OUTPUT, photoUri);
-            act.startActivityForResult(intent, request_code);
+            if (frag != null)
+                frag.startActivityForResult(intent, request_code);
+            else {
+                act.startActivityForResult(intent, request_code);
+            }
+
         }
     }
 
     public static File createImageFile() throws IOException {
 //        String timeStamp = new SimpleDateFormat("HHmmss").format(new Date());
 //        String imageFileName = "thefiven" + timeStamp;
+
+        Log.i(StringUtil.TAG, "createImageFile: ");
         String imageFileName = String.valueOf(System.currentTimeMillis());
 
-        File storageDir = new File(Environment.getExternalStorageDirectory().getAbsolutePath() + "/ILOVETALk");
+        File storageDir = new File(Environment.getExternalStorageDirectory().getAbsolutePath() + "/RESPONSEPEOPLE");
 
         if (!storageDir.exists()) {
             storageDir.mkdirs();
@@ -323,7 +344,8 @@ public class Common {
     }
 
 
-    public static void cropImage(Activity act, Uri photoUri, int request_code, OnPhotoAfterAction listener) {
+    public static void cropImage(Fragment frag, Activity act, Uri photoUri, int request_code, OnPhotoAfterAction listener) {
+        Log.i(StringUtil.TAG, "cropImage: ");
         Intent cropIntent = new Intent("com.android.camera.action.CROP");
 
         cropIntent.setFlags(Intent.FLAG_GRANT_WRITE_URI_PERMISSION);
@@ -365,6 +387,10 @@ public class Common {
                 Intent.FLAG_GRANT_WRITE_URI_PERMISSION | Intent.FLAG_GRANT_READ_URI_PERMISSION);
 
         i.setComponent(new ComponentName(res.activityInfo.packageName, res.activityInfo.name));
-        act.startActivityForResult(i, request_code);
+        if (frag != null)
+            frag.startActivityForResult(i, request_code);
+        else {
+            act.startActivityForResult(i, request_code);
+        }
     }
 }

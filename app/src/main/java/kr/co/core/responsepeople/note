@@ -1,0 +1,29 @@
+private void do() {
+             ReqBasic server = new ReqBasic(act, NetUrls.DOMAIN) {
+                 @Override
+                 public void onAfter(int resultCode, HttpResult resultData) {
+                     if (resultData.getResult() != null) {
+                         try {
+                             JSONObject jo = new JSONObject(resultData.getResult());
+
+                             if( StringUtil.getStr(jo, "result").equalsIgnoreCase("Y")) {
+
+                             } else {
+
+                             }
+
+                         } catch (JSONException e) {
+                             e.printStackTrace();
+                             Common.showToastNetwork(act);
+                         }
+                     } else {
+                         Common.showToastNetwork(act);
+                     }
+                 }
+             };
+
+             server.setTag("");
+             server.addParams("dbControl", NetUrls.);
+             server.addParams("", );
+             server.execute(true, false);
+         }

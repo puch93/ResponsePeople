@@ -25,29 +25,30 @@
                 android:layout_marginLeft="25dp"
                 android:layout_marginTop="23dp"
                 android:layout_marginRight="25dp"
+                android:text="생년월일"
                 android:textColor="@color/color_132439"
                 android:textSize="18dp"
-                android:textStyle="bold"
-                android:text="생년월일" />
+                android:textStyle="bold" />
 
             <ImageView
                 android:layout_width="match_parent"
                 android:layout_height="1dp"
                 android:layout_marginTop="21.3dp"
-                android:background="@color/color_c8ced1" />
+                android:background="@color/color_f3f4f5" />
 
             <DatePicker
                 android:id="@+id/picker"
                 android:layout_width="match_parent"
                 android:layout_height="0dp"
-                android:datePickerMode="spinner"
                 android:layout_marginLeft="20dp"
-                android:calendarViewShown="false"
                 android:layout_marginTop="20dp"
                 android:layout_marginRight="20dp"
                 android:layout_marginBottom="20dp"
                 android:layout_weight="1"
-                android:gravity="start" />
+                android:calendarViewShown="false"
+                android:datePickerMode="spinner"
+                android:gravity="start"
+                android:theme="@style/MyAppTheme.DatePicker" />
 
 
             <LinearLayout

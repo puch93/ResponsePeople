@@ -27,7 +27,6 @@
                     android:layout_height="30dp"
                     android:layout_gravity="center"
                     android:src="@drawable/btn_close" />
-
             </FrameLayout>
 
             <TextView
@@ -58,9 +57,9 @@
         </androidx.constraintlayout.widget.ConstraintLayout>
 
         <ImageView
-            android:layout_width="match_parent"
-            android:layout_height="1dp"
-            android:background="@color/color_c8ced1" />
+                                android:layout_width="match_parent"
+                                android:layout_height="1dp"
+                                android:background="@color/color_f3f4f5" />
 
         <FrameLayout
             android:id="@+id/area_replace"

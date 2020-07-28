@@ -1,9 +1,11 @@
 package kr.co.core.responsepeople.data;
 
+import java.io.Serializable;
+
 import lombok.Data;
 
 @Data
-public class EtcData {
+public class EtcData implements Serializable {
     private String contents;
     private boolean selected;
 

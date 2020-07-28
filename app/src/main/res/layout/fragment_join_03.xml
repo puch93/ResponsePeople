@@ -67,6 +67,8 @@
                     android:background="@null"
                     android:gravity="center_vertical"
                     android:hint="휴대폰 번호 입력"
+                    android:inputType="number"
+                    android:singleLine="true"
                     android:textColor="@color/color_393939"
                     android:textColorHint="@color/color_c8ced1"
                     android:textSize="14dp"
@@ -74,11 +76,12 @@
 
                 <TextView
                     android:id="@+id/btn_reg_auth_num"
-                    android:layout_width="wrap_content"
+                    android:layout_width="105dp"
                     android:layout_height="32dp"
                     android:layout_gravity="center"
                     android:background="@drawable/btn_n_send"
                     android:gravity="center"
+                    android:onClick="auth_request"
                     android:paddingLeft="12.7dp"
                     android:paddingRight="12.7dp"
                     android:text="인증번호 전송"
@@ -92,7 +95,7 @@
             <ImageView
                 android:layout_width="match_parent"
                 android:layout_height="1dp"
-                android:background="@color/color_c8ced1" />
+                android:background="@color/color_e3e6e8" />
 
         </LinearLayout>
 
@@ -135,6 +138,8 @@
                     android:background="@null"
                     android:gravity="center_vertical"
                     android:hint="인증번호 입력"
+                    android:inputType="number"
+                    android:singleLine="true"
                     android:textColor="@color/color_393939"
                     android:textColorHint="@color/color_c8ced1"
                     android:textSize="14dp"
@@ -142,11 +147,12 @@
 
                 <TextView
                     android:id="@+id/btn_confirm_auth_num"
-                    android:layout_width="wrap_content"
+                    android:layout_width="105dp"
                     android:layout_height="32dp"
                     android:layout_gravity="center"
                     android:background="@drawable/btn_n_confirm"
                     android:gravity="center"
+                    android:onClick="auth_confirm"
                     android:paddingLeft="12.7dp"
                     android:paddingRight="12.7dp"
                     android:text="인증하기"
@@ -160,15 +166,17 @@
             <ImageView
                 android:layout_width="match_parent"
                 android:layout_height="1dp"
-                android:background="@color/color_c8ced1" />
+                android:background="@color/color_e3e6e8" />
 
         </LinearLayout>
 
         <LinearLayout
+            android:id="@+id/time_area"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginTop="10dp"
             android:gravity="end"
+            android:visibility="invisible"
             android:orientation="horizontal">
 
             <TextView

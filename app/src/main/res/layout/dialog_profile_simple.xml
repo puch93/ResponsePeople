@@ -34,17 +34,18 @@
                 android:layout_width="match_parent"
                 android:layout_height="1dp"
                 android:layout_marginTop="21.3dp"
-                android:background="@color/color_c8ced1" />
+                android:background="@color/color_f3f4f5" />
 
             <NumberPicker
                 android:id="@+id/picker"
                 android:layout_width="match_parent"
                 android:layout_height="0dp"
-                android:layout_marginLeft="20dp"
+                android:layout_marginLeft="35dp"
                 android:layout_marginTop="20dp"
-                android:layout_marginRight="20dp"
+                android:layout_marginRight="35dp"
                 android:layout_marginBottom="20dp"
-                android:layout_weight="1" />
+                android:layout_weight="1"
+                android:theme="@style/MyAppTheme.NumberPicker" />
 
 
             <LinearLayout

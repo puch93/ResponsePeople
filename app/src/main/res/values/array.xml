@@ -1,5 +1,301 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
+    <string-array name="array_location">
+        <item>서울</item>
+        <item>경기</item>
+        <item>인천</item>
+        <item>대전</item>
+        <item>대구</item>
+        <item>부산</item>
+        <item>광주</item>
+        <item>세종</item>
+        <item>울산</item>
+        <item>충북</item>
+        <item>충남</item>
+        <item>전북</item>
+        <item>전남</item>
+        <item>경북</item>
+        <item>경남</item>
+        <item>강원</item>
+        <item>제주</item>
+    </string-array>
+
+    <string-array name="array_body">
+        <item>마른</item>
+        <item>슬림 근육</item>
+        <item>보통</item>
+        <item>근육질</item>
+        <item>통통</item>
+        <item>우람</item>
+        <item>글래머</item>
+        <item></item>
+    </string-array>
+
+    <string-array name="array_height">
+        <item>120cm</item>
+        <item>121cm</item>
+        <item>122cm</item>
+        <item>123cm</item>
+        <item>124cm</item>
+        <item>125cm</item>
+        <item>126cm</item>
+        <item>127cm</item>
+        <item>128cm</item>
+        <item>129cm</item>
+        <item>130cm</item>
+        <item>131cm</item>
+        <item>132cm</item>
+        <item>133cm</item>
+        <item>134cm</item>
+        <item>135cm</item>
+        <item>136cm</item>
+        <item>137cm</item>
+        <item>138cm</item>
+        <item>139cm</item>
+        <item>140cm</item>
+        <item>141cm</item>
+        <item>142cm</item>
+        <item>143cm</item>
+        <item>144cm</item>
+        <item>145cm</item>
+        <item>146cm</item>
+        <item>147cm</item>
+        <item>148cm</item>
+        <item>149cm</item>
+        <item>150cm</item>
+        <item>151cm</item>
+        <item>152cm</item>
+        <item>153cm</item>
+        <item>154cm</item>
+        <item>155cm</item>
+        <item>156cm</item>
+        <item>157cm</item>
+        <item>158cm</item>
+        <item>159cm</item>
+        <item>160cm</item>
+        <item>161cm</item>
+        <item>162cm</item>
+        <item>163cm</item>
+        <item>164cm</item>
+        <item>165cm</item>
+        <item>166cm</item>
+        <item>167cm</item>
+        <item>168cm</item>
+        <item>169cm</item>
+        <item>170cm</item>
+        <item>171cm</item>
+        <item>172cm</item>
+        <item>173cm</item>
+        <item>174cm</item>
+        <item>175cm</item>
+        <item>176cm</item>
+        <item>177cm</item>
+        <item>178cm</item>
+        <item>179cm</item>
+        <item>180cm</item>
+        <item>181cm</item>
+        <item>182cm</item>
+        <item>183cm</item>
+        <item>184cm</item>
+        <item>185cm</item>
+        <item>186cm</item>
+        <item>187cm</item>
+        <item>188cm</item>
+        <item>189cm</item>
+        <item>190cm</item>
+        <item>191cm</item>
+        <item>192cm</item>
+        <item>193cm</item>
+        <item>194cm</item>
+        <item>195cm</item>
+        <item>196cm</item>
+        <item>197cm</item>
+        <item>198cm</item>
+        <item>199cm</item>
+        <item>200cm</item>
+    </string-array>
+
+    <string-array name="array_edu">
+        <item>고등학교</item>
+        <item>전문대</item>
+        <item>대학교</item>
+        <item>석사</item>
+        <item>박사</item>
+        <item>기타</item>
+    </string-array>
+
+    <string-array name="array_job">
+        <item>사업가</item>
+        <item>아르바이트</item>
+        <item>자영업</item>
+        <item>준비 중</item>
+        <item>프리랜서</item>
+        <item>학생</item>
+        <item>회사원</item>
+        <item>공무원</item>
+        <item>군무원</item>
+        <item>군인</item>
+        <item>부사관</item>
+        <item>의경</item>
+        <item>장교</item>
+        <item>직업 군인</item>
+        <item>교육직</item>
+        <item>연구직</item>
+        <item>지식 분야 관련직</item>
+        <item>통계 관련직</item>
+        <item>경영직</item>
+        <item>사무직</item>
+        <item>기획직</item>
+        <item>통계 관련직</item>
+        <item>건설직</item>
+        <item>전자/전기 관련직</item>
+        <item>금융직</item>
+        <item>세무직</item>
+        <item>재무 관련직</item>
+        <item>증권 관련직</item>
+        <item>회계직</item>
+        <item>기계 관련직</item>
+        <item>기술직</item>
+        <item>보험 관련직</item>
+        <item>보험 설계사</item>
+        <item>부동산 관련직</item>
+        <item>부동산 임대업자</item>
+        <item>기사 서비스직</item>
+        <item>미용 서비스직</item>
+        <item>반려동물 서비스직</item>
+        <item>서비스직</item>
+        <item>숙박 서비스직</item>
+        <item>예식 서비스직</item>
+        <item>외식 서비스직</item>
+        <item>육아 서비스직</item>
+        <item>의류/패션 관련직</item>
+        <item>장례 서비스직</item>
+        <item>청소/위생 서비스직</item>
+        <item>레저 서비스직</item>
+        <item>식음료 서비스직</item>
+        <item>여행 서비스직</item>
+        <item>오락 서비스직</item>
+        <item>법률 관련직</item>
+        <item>행정직</item>
+        <item>생산직</item>
+        <item>연구직</item>
+        <item>제조/가공직</item>
+        <item>관리직</item>
+        <item>영업직</item>
+        <item>판매직</item>
+        <item>물류/유통직</item>
+        <item>운송직</item>
+        <item>디자인관련직</item>
+        <item>문화 관련직</item>
+        <item>문화 연구직</item>
+        <item>스포츠 관련직</item>
+        <item>예술 관련직</item>
+        <item>건강 서비스직</item>
+        <item>사회복지 관련직</item>
+        <item>의료 기술직</item>
+        <item>의료 복지 관련직</item>
+        <item>의료 상담직</item>
+        <item>의료 서비스직</item>
+        <item>의료 장비 관련직</item>
+        <item>의료직</item>
+        <item>제약 관련직</item>
+        <item>IT 관련직</item>
+        <item>정보통신 관련직</item>
+        <item>통신 관련직</item>
+        <item>광고/홍보 관련직</item>
+        <item>미디어 관련직</item>
+        <item>방송 관련직</item>
+        <item>영상 관련직</item>
+        <item>무속인</item>
+        <item>사회운동가</item>
+        <item>성직자/종교인</item>
+        <item>일용직</item>
+        <item>자원봉사자</item>
+        <item>조련사</item>
+    </string-array>
+
+    <string-array name="array_religion">
+        <item>무교</item>
+        <item>기독교</item>
+        <item>불교</item>
+        <item>천주교</item>
+        <item>이슬람교</item>
+        <item>힌두교</item>
+        <item>원불교</item>
+        <item>유대교</item>
+        <item>시크교</item>
+        <item>성공회</item>
+        <item>동방정교회</item>
+        <item>민속 신앙</item>
+        <item>기타</item>
+    </string-array>
+
+    <string-array name="array_drink">
+        <item>안 함</item>
+        <item>가끔</item>
+        <item>자주</item>
+    </string-array>
+
+
+    <string-array name="array_smoke">
+        <item>안 함</item>
+        <item>가끔</item>
+        <item>자주</item>
+    </string-array>
+
+
+    <string-array name="array_salary">
+        <item>비공개</item>
+        <item>5000만원 미만</item>
+        <item>5000만원이상 1억미만</item>
+        <item>1억 이상</item>
+    </string-array>
+
+
+    <string-array name="array_charm">
+        <item>재주가 많아요</item>
+        <item>게임을 잘해요</item>
+        <item>노래를 잘해요</item>
+        <item>다리가 예뻐요</item>
+        <item>배려심이 깊어요</item>
+        <item>대화를 잘해요</item>
+        <item>표현을 잘해요</item>
+        <item>한 사람만 봐요</item>
+        <item>체력이 좋음</item>
+        <item>피부가 좋아요</item>
+        <item>털털해요</item>
+        <item>애교가 많아요</item>
+        <item>허세 없어요</item>
+        <item>유머 감각</item>
+        <item>운동 감각</item>
+        <item>짙은 눈썹</item>
+        <item>넓은 어깨</item>
+        <item>뛰어난 커리어</item>
+        <item>손이 예뻐요</item>
+        <item>시사에 밝아요</item>
+        <item>큰 눈</item>
+        <item>비율이 좋아요</item>
+        <item>목소리가 좋아요</item>
+        <item>장난기가 많아요</item>
+        <item>쌍커풀 없는 눈</item>
+        <item>혼자 잘 놀아요</item>
+        <item>섬세해요</item>
+        <item>솔직해요</item>
+        <item>웃는게 예뻐요</item>
+        <item>긍정적 마인드</item>
+        <item>패션 감각</item>
+        <item>다정해요</item>
+        <item>뭐든 잘 먹어요</item>
+        <item>워커홀릭</item>
+        <item>이야기를 잘 들어줘요</item>
+        <item>섹시한 두뇌</item>
+        <item>엉덩이가 예뻐요</item>
+        <item>요리를 잘해요</item>
+        <item>오똑한 콧날</item>
+        <item>동안이에요</item>
+        <item>보조개</item>
+    </string-array>
+
     <string-array name="array_ideal">
         <item>피부가 좋은 사람</item>
         <item>목소리가 좋은 사람</item>
@@ -30,4 +326,48 @@
         <item>대화가 많은 사람</item>
         <item>함께 많은 시간을 보낼 수 있는 사람</item>
     </string-array>
+
+    <string-array name="array_interest">
+        <item>피트니스</item>
+        <item>인테리어</item>
+        <item>여행</item>
+        <item>스포츠/운동</item>
+        <item>게임</item>
+        <item>독서</item>
+        <item>자전거 타기</item>
+        <item>재테크</item>
+        <item>술</item>
+        <item>영화 보기</item>
+        <item>자기개발</item>
+        <item>공연 관람</item>
+        <item>요리</item>
+        <item>웹툰</item>
+        <item>미용</item>
+        <item>정치</item>
+        <item>음악</item>
+        <item>반려동물</item>
+        <item>드라마 보기</item>
+        <item>댄스</item>
+        <item>문학</item>
+        <item>드라이브</item>
+        <item>그림 그리기</item>
+        <item>IT</item>
+        <item>패션</item>
+        <item>외국어/어학</item>
+        <item>맛집 탐방</item>
+        <item>봉사활동</item>
+        <item>사진촬영</item>
+        <item>쇼핑</item>
+        <item>레져</item>
+        <item>커피</item>
+        <item>악기 연주</item>
+        <item>산책</item>
+        <item>전시회 보기</item>
+        <item>글 쓰기</item>
+        <item>애니</item>
+        <item>노래</item>
+        <item>덕질</item>
+    </string-array>
+
+
 </resources>

@@ -1,0 +1,40 @@
+{
+  "project_info": {
+    "project_number": "24596783340",
+    "firebase_url": "https://responsepeople.firebaseio.com",
+    "project_id": "responsepeople",
+    "storage_bucket": "responsepeople.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:24596783340:android:8cc644f292c2ae8f27c5c9",
+        "android_client_info": {
+          "package_name": "kr.co.core.responsepeople"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "24596783340-q69rnf5nel1q3q7j9q0f5p4u94jag2t5.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyAjnnR6rDBq4garkPF3jD590_Zl-QBzc8E"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "24596783340-q69rnf5nel1q3q7j9q0f5p4u94jag2t5.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

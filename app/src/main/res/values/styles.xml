@@ -8,4 +8,25 @@
         <item name="colorAccent">@color/color_669cff</item>
     </style>
 
+    <!-- dialog activity set -->
+    <style name="ActivityDialog" parent="Theme.AppCompat.Light.Dialog">
+        <item name="windowNoTitle">true</item>
+        <item name="windowActionBar">false</item>
+        <!--        <item name="android:windowCloseOnTouchOutside">false</item>-->
+        <item name="android:windowBackground">@android:color/transparent</item>
+    </style>
+
+    <style name="MyAppTheme.NumberPicker" parent="AppTheme">
+        <item name="colorControlNormal">@color/color_e9e7eb</item>
+        <item name="android:textColorPrimary">@color/color_132439</item>
+        <item name="android:textColorHighlight">@color/color_132439</item>
+        <item name="android:textSize">27dp</item>
+    </style>
+
+    <style name="MyAppTheme.DatePicker" parent="AppTheme">
+        <item name="colorControlNormal">@color/color_e9e7eb</item>
+        <item name="android:textColorPrimary">@color/color_132439</item>
+        <item name="android:textColorHighlight">@color/color_132439</item>
+        <item name="android:textSize">27dp</item>
+    </style>
 </resources>

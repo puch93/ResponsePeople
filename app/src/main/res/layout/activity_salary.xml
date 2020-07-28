@@ -1,27 +1,32 @@
 <?xml version="1.0" encoding="utf-8"?>
-<layout xmlns:app="http://schemas.android.com/apk/res-auto"
-    xmlns:android="http://schemas.android.com/apk/res/android">
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
 
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:orientation="vertical">
-        
+
         <androidx.constraintlayout.widget.ConstraintLayout
             android:layout_width="match_parent"
             android:layout_height="50dp">
 
             <FrameLayout
+                android:id="@+id/btn_back"
                 android:layout_width="wrap_content"
                 android:layout_height="match_parent"
+                android:paddingLeft="15dp"
+                android:paddingRight="15dp"
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toTopOf="parent">
 
                 <!--TODO 백버튼-->
                 <ImageView
-                    android:layout_width="20dp"
-                    android:layout_height="match_parent" />
+                    android:layout_width="30dp"
+                    android:layout_height="30dp"
+                    android:layout_gravity="center"
+                    android:src="@drawable/btn_back" />
             </FrameLayout>
 
             <TextView
@@ -42,7 +47,7 @@
         <ImageView
             android:layout_width="match_parent"
             android:layout_height="1dp"
-            android:background="@color/color_c8ced1"/>
+            android:background="@color/color_f3f4f5" />
 
 
         <ScrollView
@@ -81,86 +86,94 @@
                     android:textSize="10.8dp" />
 
 
-                <CheckBox
-                    android:id="@+id/ck_private"
-                    android:layout_width="match_parent"
-                    android:layout_height="45dp"
-                    android:layout_marginTop="34.3dp"
-                    android:button="@drawable/sel_check_btn"
-                    android:includeFontPadding="false"
-                    android:paddingLeft="11.3dp"
-                    android:paddingRight="10dp"
-                    android:text="비공개"
-                    android:textColor="@color/color_cc132439"
-                    android:textSize="15dp" />
-
-                <ImageView
-                    android:layout_width="match_parent"
-                    android:layout_height="1dp"
-                    android:background="@color/color_c8ced1" />
-
-                <TextView
+                <RadioGroup
+                    android:id="@+id/rg_salary"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:layout_marginTop="7dp"
-                    android:gravity="end"
-                    android:text="첨부가 불가능할 경우 비공개 선택"
-                    android:textColor="@color/color_95989d"
-                    android:textSize="10.8dp" />
+                    android:orientation="vertical">
 
-                <CheckBox
-                    android:id="@+id/ck_lower_5000"
-                    android:layout_width="match_parent"
-                    android:layout_height="45dp"
-                    android:layout_marginTop="15.7dp"
-                    android:button="@drawable/sel_check_btn"
-                    android:includeFontPadding="false"
-                    android:paddingLeft="11.3dp"
-                    android:paddingRight="10dp"
-                    android:text="5000만원 미만"
-                    android:textColor="@color/color_cc132439"
-                    android:textSize="15dp" />
+                    <RadioButton
+                        android:id="@+id/rb_private"
+                        android:layout_width="match_parent"
+                        android:layout_height="45dp"
+                        android:layout_marginTop="34.3dp"
+                        android:button="@drawable/sel_check_btn"
+                        android:checked="true"
+                        android:includeFontPadding="false"
+                        android:paddingLeft="11.3dp"
+                        android:paddingRight="10dp"
+                        android:text="비공개"
+                        android:textColor="@color/color_cc132439"
+                        android:textSize="15dp" />
 
-                <ImageView
-                    android:layout_width="match_parent"
-                    android:layout_height="1dp"
-                    android:background="@color/color_c8ced1" />
+                    <ImageView
+                        android:layout_width="match_parent"
+                        android:layout_height="1dp"
+                        android:background="@color/color_e3e6e8" />
 
-                <CheckBox
-                    android:id="@+id/ck_upper_5000"
-                    android:layout_width="match_parent"
-                    android:layout_height="45dp"
-                    android:layout_marginTop="16dp"
-                    android:button="@drawable/sel_check_btn"
-                    android:includeFontPadding="false"
-                    android:paddingLeft="11.3dp"
-                    android:paddingRight="10dp"
-                    android:text="5000만원 이상"
-                    android:textColor="@color/color_cc132439"
-                    android:textSize="15dp" />
+                    <TextView
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="7dp"
+                        android:gravity="end"
+                        android:text="첨부가 불가능할 경우 비공개 선택"
+                        android:textColor="@color/color_95989d"
+                        android:textSize="10.8dp" />
 
-                <ImageView
-                    android:layout_width="match_parent"
-                    android:layout_height="1dp"
-                    android:background="@color/color_c8ced1" />
+                    <RadioButton
+                        android:id="@+id/rb_lower_5000"
+                        android:layout_width="match_parent"
+                        android:layout_height="45dp"
+                        android:layout_marginTop="15.7dp"
+                        android:button="@drawable/sel_check_btn"
+                        android:includeFontPadding="false"
+                        android:paddingLeft="11.3dp"
+                        android:paddingRight="10dp"
+                        android:text="5000만원 미만"
+                        android:textColor="@color/color_cc132439"
+                        android:textSize="15dp" />
 
-                <CheckBox
-                    android:id="@+id/ck_upper_1bill"
-                    android:layout_width="match_parent"
-                    android:layout_height="45dp"
-                    android:layout_marginTop="16dp"
-                    android:button="@drawable/sel_check_btn"
-                    android:includeFontPadding="false"
-                    android:paddingLeft="11.3dp"
-                    android:paddingRight="10dp"
-                    android:text="1억원 이상"
-                    android:textColor="@color/color_cc132439"
-                    android:textSize="15dp" />
+                    <ImageView
+                        android:layout_width="match_parent"
+                        android:layout_height="1dp"
+                        android:background="@color/color_e3e6e8" />
 
-                <ImageView
-                    android:layout_width="match_parent"
-                    android:layout_height="1dp"
-                    android:background="@color/color_c8ced1" />
+                    <RadioButton
+                        android:id="@+id/rb_upper_5000"
+                        android:layout_width="match_parent"
+                        android:layout_height="45dp"
+                        android:layout_marginTop="16dp"
+                        android:button="@drawable/sel_check_btn"
+                        android:includeFontPadding="false"
+                        android:paddingLeft="11.3dp"
+                        android:paddingRight="10dp"
+                        android:text="5000만원 이상"
+                        android:textColor="@color/color_cc132439"
+                        android:textSize="15dp" />
+
+                    <ImageView
+                        android:layout_width="match_parent"
+                        android:layout_height="1dp"
+                        android:background="@color/color_e3e6e8" />
+
+                    <RadioButton
+                        android:id="@+id/rb_upper_1bill"
+                        android:layout_width="match_parent"
+                        android:layout_height="45dp"
+                        android:layout_marginTop="16dp"
+                        android:button="@drawable/sel_check_btn"
+                        android:includeFontPadding="false"
+                        android:paddingLeft="11.3dp"
+                        android:paddingRight="10dp"
+                        android:text="1억원 이상"
+                        android:textColor="@color/color_cc132439"
+                        android:textSize="15dp" />
+
+                    <ImageView
+                        android:layout_width="match_parent"
+                        android:layout_height="1dp"
+                        android:background="@color/color_e3e6e8" />
+                </RadioGroup>
 
                 <Space
                     android:layout_width="match_parent"
@@ -180,10 +193,11 @@
                         android:src="@drawable/btn_file_on" />
 
                     <TextView
+                        android:id="@+id/btn_upload_file_text"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_gravity="center"
-                        android:text="급여명세서 첨부"
+                        android:text="급여명세서 이미지 첨부"
                         android:textColor="@color/color_white"
                         android:textSize="16dp"
                         android:textStyle="bold" />
@@ -205,7 +219,7 @@
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_gravity="center"
-                        android:text="첨부 완료"
+                        android:text="선택 완료"
                         android:textColor="@color/color_white"
                         android:textSize="16dp"
                         android:textStyle="bold" />

@@ -4,6 +4,7 @@
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
+        android:background="@color/color_white"
         android:gravity="center_horizontal"
         android:orientation="vertical">
 
@@ -57,7 +58,7 @@
                 <ImageView
                     android:layout_width="match_parent"
                     android:layout_height="1dp"
-                    android:background="@color/color_c8ced1" />
+                    android:background="@color/color_e3e6e8" />
 
                 <EditText
                     android:id="@+id/password"
@@ -79,7 +80,7 @@
                 <ImageView
                     android:layout_width="match_parent"
                     android:layout_height="1dp"
-                    android:background="@color/color_c8ced1" />
+                    android:background="@color/color_e3e6e8" />
 
                 <CheckBox
                     android:id="@+id/ck_auto_login"
@@ -153,8 +154,8 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_gravity="center_horizontal"
-                    android:padding="10dp"
-                    android:orientation="vertical">
+                    android:orientation="vertical"
+                    android:padding="10dp">
 
                     <TextView
                         android:layout_width="wrap_content"
@@ -178,12 +179,11 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_gravity="center_horizontal"
-                    android:textSize="11dp"
-                    android:textColor="@color/color_b3bbbf"
                     android:layout_marginBottom="14.7dp"
                     android:gravity="center_horizontal"
                     android:text="ⓒ 응답남녀 Allrights Reserved."
-                    />
+                    android:textColor="@color/color_b3bbbf"
+                    android:textSize="11dp" />
             </LinearLayout>
 
             <Space
