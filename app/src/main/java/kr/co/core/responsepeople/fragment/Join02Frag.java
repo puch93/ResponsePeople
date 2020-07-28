@@ -32,14 +32,14 @@ public class Join02Frag extends BaseFrag {
     public static final Pattern VALID_PASSWOLD_REGEX_ALPHA_NUM = Pattern.compile("^[a-zA-Z0-9]{8,16}$"); // 8자리 ~ 16자리까지 가능
     Matcher matcher_id;
     Matcher matcher_pw;
+
     @Nullable
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         binding = DataBindingUtil.inflate(inflater, R.layout.fragment_join_02, container, false);
         act = getActivity();
 
-        matcher_id = VALID_EMAIL_ADDRESS_REGEX.matcher(binding.id.getText().toString());
-        matcher_pw = VALID_PASSWOLD_REGEX_ALPHA_NUM.matcher(binding.pw.getText().toString());
+
 
         binding.rgGender.setTag("M");
         binding.rgGender.setOnCheckedChangeListener(new RadioGroup.OnCheckedChangeListener() {
@@ -55,12 +55,13 @@ public class Join02Frag extends BaseFrag {
         binding.btnNext.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-
-                if(binding.id.length() == 0 || !matcher_id.matches()) {
+                matcher_id = VALID_EMAIL_ADDRESS_REGEX.matcher(binding.id.getText().toString());
+                matcher_pw = VALID_PASSWOLD_REGEX_ALPHA_NUM.matcher(binding.pw.getText().toString());
+                if (binding.id.length() == 0 || !matcher_id.matches()) {
                     Common.showToast(act, "이메일을 확인해주세요");
-                } else if(binding.pw.length() == 0 || !matcher_pw.matches()) {
+                } else if (binding.pw.length() == 0 || !matcher_pw.matches()) {
                     Common.showToast(act, "비밀번호를 확인해주세요");
-                } else if(binding.pwConfirm.length() == 0 || !binding.pwConfirm.getText().toString().equalsIgnoreCase(binding.pw.getText().toString())) {
+                } else if (binding.pwConfirm.length() == 0 || !binding.pwConfirm.getText().toString().equalsIgnoreCase(binding.pw.getText().toString())) {
                     Common.showToast(act, "비밀번호를 정확하게 입력해주세요");
                 } else {
                     nextProcess();
@@ -96,7 +97,8 @@ public class Join02Frag extends BaseFrag {
 
             @Override
             public void afterTextChanged(Editable editable) {
-                if(binding.id.length() == 0 || !matcher_id.matches()) {
+                matcher_id = VALID_EMAIL_ADDRESS_REGEX.matcher(binding.id.getText().toString());
+                if (binding.id.length() == 0 || !matcher_id.matches()) {
                     binding.checkImgEmail.setSelected(false);
                 } else {
                     binding.checkImgEmail.setSelected(true);
@@ -115,7 +117,8 @@ public class Join02Frag extends BaseFrag {
 
             @Override
             public void afterTextChanged(Editable editable) {
-                if(binding.pw.length() == 0 || !matcher_pw.matches()) {
+                matcher_pw = VALID_PASSWOLD_REGEX_ALPHA_NUM.matcher(binding.pw.getText().toString());
+                if (binding.pw.length() == 0 || !matcher_pw.matches()) {
                     binding.checkImgPw.setSelected(false);
                 } else {
                     binding.checkImgPw.setSelected(true);
@@ -133,14 +136,16 @@ public class Join02Frag extends BaseFrag {
 
             @Override
             public void afterTextChanged(Editable editable) {
-                if(binding.pw.length() == 0 || !matcher_pw.matches()) {
+                matcher_id = VALID_EMAIL_ADDRESS_REGEX.matcher(binding.id.getText().toString());
+                matcher_pw = VALID_PASSWOLD_REGEX_ALPHA_NUM.matcher(binding.pw.getText().toString());
+                if (binding.pw.length() == 0 || !matcher_pw.matches()) {
                     binding.checkImgPwConfirm.setSelected(false);
-                } else if(binding.pwConfirm.length() == 0 || !binding.pwConfirm.getText().toString().equalsIgnoreCase(binding.pw.getText().toString())) {
+                } else if (binding.pwConfirm.length() == 0 || !binding.pwConfirm.getText().toString().equalsIgnoreCase(binding.pw.getText().toString())) {
                     binding.checkImgPwConfirm.setSelected(false);
                 } else {
                     binding.checkImgPwConfirm.setSelected(true);
 
-                    if(binding.id.length() == 0 && !matcher_id.matches()) {
+                    if (binding.id.length() == 0 && !matcher_id.matches()) {
                         binding.btnNext.setSelected(false);
                     } else {
                         binding.btnNext.setSelected(true);

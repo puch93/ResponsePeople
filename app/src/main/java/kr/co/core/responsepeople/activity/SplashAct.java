@@ -82,6 +82,7 @@ public class SplashAct extends BaseAct {
                         if (isReady && !StringUtil.isNull(AppPreference.getProfilePref(act, AppPreference.PREF_FCM))) {
                             isReady = false;
                             startActivity(new Intent(act, LoginAct.class));
+                            finish();
                             timer.cancel();
                         }
                     }

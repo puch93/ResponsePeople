@@ -8,4 +8,5 @@ public class NetUrls {
     public static final String AUTH_CONFIRM = "setOTPMemberCheck"; // 휴대폰 인증번호 확인
     public static final String JOIN = "setMobileMemberRegi"; // 회원가입
     public static final String LOGIN = "setMobileLoginCk"; // 로그인
+    public static final String ONLINE_MEMBER = "setJoinMemberList"; // 로그인
 }

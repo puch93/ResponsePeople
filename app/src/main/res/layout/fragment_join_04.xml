@@ -89,15 +89,15 @@
 
                         <ImageView
                             android:id="@+id/check_img_nick"
-                            android:layout_width="15dp"
-                            android:layout_height="15dp"
-                            android:src="@drawable/sel_join_check_input" />
+                            android:layout_width="27dp"
+                    android:layout_height="27dp"
+                    android:src="@drawable/sel_join_check_input" />
 
                         <EditText
                             android:id="@+id/nick"
                             android:layout_width="match_parent"
                             android:layout_height="match_parent"
-                            android:layout_marginLeft="15dp"
+                            android:layout_marginLeft="10dp"
                             android:background="@null"
                             android:singleLine="true"
                             android:gravity="center_vertical"
@@ -143,15 +143,15 @@
 
                         <ImageView
                             android:id="@+id/check_img_location"
-                            android:layout_width="15dp"
-                            android:layout_height="15dp"
-                            android:src="@drawable/sel_join_check_input" />
+                            android:layout_width="27dp"
+                    android:layout_height="27dp"
+                    android:src="@drawable/sel_join_check_input" />
 
                         <TextView
                             android:id="@+id/location"
                             android:layout_width="match_parent"
                             android:layout_height="match_parent"
-                            android:layout_marginLeft="15dp"
+                            android:layout_marginLeft="10dp"
                             android:background="@null"
                             android:gravity="center_vertical"
                             android:hint="지역을 설정해주세요"
@@ -196,15 +196,15 @@
 
                         <ImageView
                             android:id="@+id/check_img_birth"
-                            android:layout_width="15dp"
-                            android:layout_height="15dp"
-                            android:src="@drawable/sel_join_check_input" />
+                            android:layout_width="27dp"
+                    android:layout_height="27dp"
+                    android:src="@drawable/sel_join_check_input" />
 
                         <TextView
                             android:id="@+id/birth"
                             android:layout_width="match_parent"
                             android:layout_height="match_parent"
-                            android:layout_marginLeft="15dp"
+                            android:layout_marginLeft="10dp"
                             android:background="@null"
                             android:gravity="center_vertical"
                             android:hint="생년월일을 선택해주세요"
@@ -260,15 +260,15 @@
 
                                 <ImageView
                                     android:id="@+id/check_img_height"
-                                    android:layout_width="15dp"
-                                    android:layout_height="15dp"
-                                    android:src="@drawable/sel_join_check_input" />
+                                    android:layout_width="27dp"
+                    android:layout_height="27dp"
+                    android:src="@drawable/sel_join_check_input" />
 
                                 <TextView
                                     android:id="@+id/height"
                                     android:layout_width="match_parent"
                                     android:layout_height="match_parent"
-                                    android:layout_marginLeft="15dp"
+                                    android:layout_marginLeft="10dp"
                                     android:background="@null"
                                     android:gravity="center_vertical"
                                     android:hint="선택"
@@ -319,15 +319,15 @@
 
                                 <ImageView
                                     android:id="@+id/check_img_body"
-                                    android:layout_width="15dp"
-                                    android:layout_height="15dp"
-                                    android:src="@drawable/sel_join_check_input" />
+                                    android:layout_width="27dp"
+                    android:layout_height="27dp"
+                    android:src="@drawable/sel_join_check_input" />
 
                                 <TextView
                                     android:id="@+id/body"
                                     android:layout_width="match_parent"
                                     android:layout_height="match_parent"
-                                    android:layout_marginLeft="15dp"
+                                    android:layout_marginLeft="10dp"
                                     android:background="@null"
                                     android:gravity="center_vertical"
                                     android:hint="선택"
@@ -386,15 +386,15 @@
 
                                 <ImageView
                                     android:id="@+id/check_img_edu"
-                                    android:layout_width="15dp"
-                                    android:layout_height="15dp"
-                                    android:src="@drawable/sel_join_check_input" />
+                                    android:layout_width="27dp"
+                    android:layout_height="27dp"
+                    android:src="@drawable/sel_join_check_input" />
 
                                 <TextView
                                     android:id="@+id/edu"
                                     android:layout_width="match_parent"
                                     android:layout_height="match_parent"
-                                    android:layout_marginLeft="15dp"
+                                    android:layout_marginLeft="10dp"
                                     android:background="@null"
                                     android:gravity="center_vertical"
                                     android:hint="선택"
@@ -445,15 +445,15 @@
 
                                 <ImageView
                                     android:id="@+id/check_img_job"
-                                    android:layout_width="15dp"
-                                    android:layout_height="15dp"
-                                    android:src="@drawable/sel_join_check_input" />
+                                    android:layout_width="27dp"
+                    android:layout_height="27dp"
+                    android:src="@drawable/sel_join_check_input" />
 
                                 <TextView
                                     android:id="@+id/job"
                                     android:layout_width="match_parent"
                                     android:layout_height="match_parent"
-                                    android:layout_marginLeft="15dp"
+                                    android:layout_marginLeft="10dp"
                                     android:background="@null"
                                     android:gravity="center_vertical"
                                     android:hint="선택"
@@ -510,15 +510,15 @@
 
                                 <ImageView
                                     android:id="@+id/check_img_drink"
-                                    android:layout_width="15dp"
-                                    android:layout_height="15dp"
-                                    android:src="@drawable/sel_join_check_input" />
+                                    android:layout_width="27dp"
+                    android:layout_height="27dp"
+                    android:src="@drawable/sel_join_check_input" />
 
                                 <TextView
                                     android:id="@+id/drink"
                                     android:layout_width="match_parent"
                                     android:layout_height="match_parent"
-                                    android:layout_marginLeft="15dp"
+                                    android:layout_marginLeft="10dp"
                                     android:background="@null"
                                     android:gravity="center_vertical"
                                     android:hint="선택"
@@ -569,15 +569,15 @@
 
                                 <ImageView
                                     android:id="@+id/check_img_smoke"
-                                    android:layout_width="15dp"
-                                    android:layout_height="15dp"
-                                    android:src="@drawable/sel_join_check_input" />
+                                    android:layout_width="27dp"
+                    android:layout_height="27dp"
+                    android:src="@drawable/sel_join_check_input" />
 
                                 <TextView
                                     android:id="@+id/smoke"
                                     android:layout_width="match_parent"
                                     android:layout_height="match_parent"
-                                    android:layout_marginLeft="15dp"
+                                    android:layout_marginLeft="10dp"
                                     android:background="@null"
                                     android:gravity="center_vertical"
                                     android:hint="선택"
@@ -635,15 +635,15 @@
 
                                 <ImageView
                                     android:id="@+id/check_img_religion"
-                                    android:layout_width="15dp"
-                                    android:layout_height="15dp"
-                                    android:src="@drawable/sel_join_check_input" />
+                                    android:layout_width="27dp"
+                    android:layout_height="27dp"
+                    android:src="@drawable/sel_join_check_input" />
 
                                 <TextView
                                     android:id="@+id/religion"
                                     android:layout_width="match_parent"
                                     android:layout_height="match_parent"
-                                    android:layout_marginLeft="15dp"
+                                    android:layout_marginLeft="10dp"
                                     android:background="@null"
                                     android:gravity="center_vertical"
                                     android:hint="선택"
@@ -694,15 +694,15 @@
 
                                 <ImageView
                                     android:id="@+id/check_img_salary"
-                                    android:layout_width="15dp"
-                                    android:layout_height="15dp"
-                                    android:src="@drawable/sel_join_check_input" />
+                                    android:layout_width="27dp"
+                    android:layout_height="27dp"
+                    android:src="@drawable/sel_join_check_input" />
 
                                 <TextView
                                     android:id="@+id/salary"
                                     android:layout_width="match_parent"
                                     android:layout_height="match_parent"
-                                    android:layout_marginLeft="15dp"
+                                    android:layout_marginLeft="10dp"
                                     android:background="@null"
                                     android:gravity="center_vertical"
                                     android:hint="선택"

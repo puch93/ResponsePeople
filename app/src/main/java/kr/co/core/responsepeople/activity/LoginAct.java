@@ -7,6 +7,7 @@ import android.app.Activity;
 import android.content.Intent;
 import android.os.Bundle;
 
+import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
@@ -50,7 +51,17 @@ public class LoginAct extends BaseAct {
                         JSONObject jo = new JSONObject(resultData.getResult());
 
                         if( StringUtil.getStr(jo, "result").equalsIgnoreCase("Y")) {
+                            JSONArray ja = jo.getJSONArray("data");
+                            JSONObject job = ja.getJSONObject(0);
+                            String m_idx = StringUtil.getStr(job, "m_idx");
+                            String m_gender = StringUtil.getStr(job, "m_gender");
 
+
+                            AppPreference.setProfilePref(act, AppPreference.PREF_MIDX, m_idx);
+                            AppPreference.setProfilePref(act, AppPreference.PREF_GENDER, m_gender);
+
+                            startActivity(new Intent(act, MainAct.class));
+                            finish();
                         } else {
                             Common.showToast(act, StringUtil.getStr(jo, "message"));
                         }

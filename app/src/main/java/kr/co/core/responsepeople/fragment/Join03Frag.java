@@ -60,6 +60,7 @@ public class Join03Frag extends BaseFrag {
             } else if (isAuthProceeding) {
                 Common.showToast(act, "유효시간이 지난 후 시도해주세요.");
             } else {
+                binding.authNum.setText("");
                 isAuthSucceed = false;
                 isAuthTimeAfter = false;
                 phoneNum = binding.phoneNum.getText().toString();
