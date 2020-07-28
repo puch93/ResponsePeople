@@ -14,6 +14,7 @@ import androidx.databinding.DataBindingUtil;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
+import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
@@ -46,7 +47,7 @@ public class OnlineFrag extends BaseFrag implements View.OnClickListener {
     @Nullable
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
-        binding = DataBindingUtil.inflate(inflater, R.layout.fragment_online, container,false);
+        binding = DataBindingUtil.inflate(inflater, R.layout.fragment_online, container, false);
         act = getActivity();
 
         manager = new LinearLayoutManager(act);
@@ -84,12 +85,33 @@ public class OnlineFrag extends BaseFrag implements View.OnClickListener {
                     try {
                         JSONObject jo = new JSONObject(resultData.getResult());
 
-                        if( StringUtil.getStr(jo, "result").equalsIgnoreCase("Y")) {
+                        if (StringUtil.getStr(jo, "result").equalsIgnoreCase("Y")) {
+                            JSONArray ja = jo.getJSONArray("data");
 
+                            for (int i = 0; i < ja.length(); i++) {
+                                JSONObject job = ja.getJSONObject(i);
+                                String m_idx = StringUtil.getStr(job, "m_idx");
+                                String m_nick = StringUtil.getStr(job, "m_nick");
+                                String m_age = StringUtil.getStr(job, "m_age");
+                                String m_job = StringUtil.getStr(job, "m_job");
+                                String m_location = StringUtil.getStr(job, "m_location");
+                                String m_salary = StringUtil.getStr(job, "m_salary");
+                                String m_salary_result = StringUtil.getStr(job, "m_salary_result");
+                                String m_profile1 = StringUtil.getStr(job, "m_profile1");
+
+                                list.add(new MemberData(m_idx, m_nick, m_age, m_job, m_location, m_salary, m_profile1, false, m_salary_result.equalsIgnoreCase("Y")));
+                            }
+
+                            act.runOnUiThread(new Runnable() {
+                                @Override
+                                public void run() {
+                                    adapter.setList(list);
+                                }
+                            });
+                            isScroll = false;
                         } else {
-
+                            isScroll = true;
                         }
-                        isScroll = false;
 
                     } catch (JSONException e) {
                         isScroll = false;
