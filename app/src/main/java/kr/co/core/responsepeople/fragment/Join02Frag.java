@@ -29,7 +29,7 @@ public class Join02Frag extends BaseFrag {
     Activity act;
 
     public static final Pattern VALID_EMAIL_ADDRESS_REGEX = Pattern.compile("^[A-Z0-9._%+-]+@[A-Z0-9.-]+\\.[A-Z]{2,6}$", Pattern.CASE_INSENSITIVE);
-    public static final Pattern VALID_PASSWOLD_REGEX_ALPHA_NUM = Pattern.compile("^[a-zA-Z0-9]{8,16}$"); // 8자리 ~ 16자리까지 가능
+    public static final Pattern VALID_PASSWOLD_REGEX_ALPHA_NUM = Pattern.compile("^(?=.*[A-Za-z])(?=.*[0-9])[A-Za-z0-9]{8,16}$"); // 영문 대소문자 + 8자리 ~ 16자리까지 가능
     Matcher matcher_id;
     Matcher matcher_pw;
 
@@ -38,7 +38,6 @@ public class Join02Frag extends BaseFrag {
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         binding = DataBindingUtil.inflate(inflater, R.layout.fragment_join_02, container, false);
         act = getActivity();
-
 
 
         binding.rgGender.setTag("M");
@@ -117,12 +116,32 @@ public class Join02Frag extends BaseFrag {
 
             @Override
             public void afterTextChanged(Editable editable) {
-                matcher_pw = VALID_PASSWOLD_REGEX_ALPHA_NUM.matcher(binding.pw.getText().toString());
-                if (binding.pw.length() == 0 || !matcher_pw.matches()) {
-                    binding.checkImgPw.setSelected(false);
+                String text = editable.toString();
+                if (!StringUtil.isNull(text)) {
+                    Matcher matcher = VALID_PASSWOLD_REGEX_ALPHA_NUM.matcher(text);
+                    if (matcher.find()) {
+                        binding.checkImgPw.setSelected(true);
+                        if(binding.pw.getText().toString().equalsIgnoreCase(binding.pwConfirm.getText().toString())) {
+                            binding.checkImgPwConfirm.setSelected(true);
+                        } else {
+                            binding.checkImgPwConfirm.setSelected(false);
+                        }
+                    } else {
+                        binding.checkImgPw.setSelected(false);
+                        binding.checkImgPwConfirm.setSelected(false);
+                    }
                 } else {
-                    binding.checkImgPw.setSelected(true);
+                    binding.checkImgPw.setSelected(false);
+                    binding.checkImgPwConfirm.setSelected(false);
                 }
+
+
+//                matcher_pw = VALID_PASSWOLD_REGEX_ALPHA_NUM.matcher(binding.pw.getText().toString());
+//                if (binding.pw.length() == 0 || !matcher_pw.matches()) {
+//                    binding.checkImgPw.setSelected(false);
+//                } else {
+//                    binding.checkImgPw.setSelected(true);
+//                }
             }
         });
         binding.pwConfirm.addTextChangedListener(new TextWatcher() {

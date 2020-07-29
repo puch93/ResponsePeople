@@ -120,7 +120,7 @@
                     android:layout_marginLeft="10dp"
                     android:background="@null"
                     android:gravity="center_vertical"
-                    android:hint="영문, 숫자 조합 8자리 이상"
+                    android:hint="영문, 숫자 조합 8~16자"
                     android:singleLine="true"
                     android:inputType="textPassword"
                     android:textColor="@color/color_393939"

@@ -16,6 +16,7 @@ import kr.co.core.responsepeople.R;
 import kr.co.core.responsepeople.adapter.EtcAdapter;
 import kr.co.core.responsepeople.data.EtcData;
 import kr.co.core.responsepeople.databinding.ActivityEtcIdealBinding;
+import kr.co.core.responsepeople.util.Common;
 import kr.co.core.responsepeople.util.LogUtil;
 import kr.co.core.responsepeople.util.StringUtil;
 
@@ -79,11 +80,15 @@ public class EtcIdealAct extends BaseAct {
 
         binding.btnComplete.setOnClickListener(v -> {
             LogUtil.logI(adapter.getSelectedList().toString());
-            Intent intent = new Intent();
-            intent.putExtra("type", type);
-            intent.putExtra("list", adapter.getSelectedList());
-            setResult(RESULT_OK, intent);
-            finish();
+            if (adapter.getSelectedList().size() == 0) {
+                Common.showToast(act, "항목을 1개이상 선택해주세요");
+            } else {
+                Intent intent = new Intent();
+                intent.putExtra("type", type);
+                intent.putExtra("list", adapter.getSelectedList());
+                setResult(RESULT_OK, intent);
+                finish();
+            }
         });
     }
 }

@@ -9,14 +9,14 @@
         android:id="@+id/data_area"
         android:layout_width="wrap_content"
         android:layout_height="match_parent"
-        android:visibility="gone">
+        android:visibility="visible">
 
         <androidx.cardview.widget.CardView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_gravity="bottom"
-            android:layout_marginTop="3.3dp"
-            android:layout_marginRight="3.3dp"
+            android:layout_marginTop="5dp"
+            android:layout_marginRight="5dp"
             app:cardCornerRadius="15dp"
             app:cardElevation="0dp">
 
@@ -31,6 +31,7 @@
         <TextView
             android:id="@+id/representative"
             android:layout_width="wrap_content"
+            android:layout_marginTop="1.7dp"
             android:layout_height="wrap_content"
             android:background="@drawable/m_photo_bg"
             android:gravity="center"
@@ -57,6 +58,7 @@
     <FrameLayout
         android:id="@+id/select_area"
         android:layout_width="wrap_content"
+        android:visibility="gone"
         android:layout_height="match_parent">
 
         <ImageView
@@ -64,8 +66,8 @@
             android:layout_width="60dp"
             android:layout_height="wrap_content"
             android:adjustViewBounds="true"
-            android:layout_marginTop="3.3dp"
-            android:layout_marginRight="3.3dp"
+            android:layout_marginTop="5dp"
+            android:layout_marginRight="5dp"
             android:src="@drawable/btn_addphoto" />
     </FrameLayout>
 

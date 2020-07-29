@@ -65,6 +65,7 @@ public class SalaryAct extends BaseAct {
                             .putExtra("salary", selectedData)
                             .putExtra("file", sendFile)
                     );
+                    finish();
                 } else {
                     Common.showToast(act, "급여명세서를 첨부해주세요");
                 }

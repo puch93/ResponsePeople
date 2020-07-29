@@ -50,13 +50,6 @@
                                 android:layout_height="1dp"
                                 android:background="@color/color_f3f4f5" />
 
-        <androidx.core.widget.NestedScrollView
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:fadingEdge="none"
-            android:fillViewport="true"
-            android:overScrollMode="never">
-
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
@@ -103,18 +96,13 @@
                 <androidx.recyclerview.widget.RecyclerView
                     android:id="@+id/recyclerView"
                     android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
+                    android:layout_height="0dp"
+                    android:layout_weight="1"
                     android:layout_marginTop="30dp"
                     android:fadingEdge="none"
                     android:overScrollMode="never"
                     android:paddingLeft="15dp"
                     android:paddingRight="15dp" />
-
-                <Space
-                    android:layout_width="match_parent"
-                    android:layout_height="0dp"
-                    android:layout_weight="1" />
-
 
                 <FrameLayout
                     android:id="@+id/btn_complete"
@@ -140,9 +128,6 @@
                         android:textSize="20dp"
                         android:textStyle="bold" />
                 </FrameLayout>
-
-
             </LinearLayout>
-        </androidx.core.widget.NestedScrollView>
     </LinearLayout>
 </layout>

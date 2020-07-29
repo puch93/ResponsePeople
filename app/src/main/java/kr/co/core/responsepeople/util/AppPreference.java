@@ -18,26 +18,11 @@ public class AppPreference {
     public static final String PREF_LON = "longitude";
 
 
-    public static final String PREF_NOTICE_WOMEN_CHECK_DATE = "notice_women_date";
-    public static final String PREF_NOTICE_MAN_CHECK_DATE = "notice_man_date";
-
-    /* profile boolean key */
-    public static final String PREF_SET_CHAT = "chat";
-    public static final String PREF_SET_VIDEO = "video";
-    public static final String PREF_SET_VOICE = "voice";
-    public static final String PREF_SET_SOUND = "sound";
-    public static final String PREF_SET_VIBRATE = "vibrate";
-    public static final String PREF_SET_NONE = "none";
-
-    public static final String PREF_SET_WITHDRAWAL = "withdrawal";
-
-
-    public static final String PREF_NOTICE_WOMEN_CHECK = "notice_women";
-    public static final String PREF_NOTICE_MAN_CHECK = "notice_man";
-
-
-    public static final String CALL_CONNECT_TIME = "connect_time";
-    public static final String CALL_DISCONNECT_TIME = "disconnect_time";
+    /* 가입시 사용 */
+    public static final String STATE_IMAGE = "join_image"; // 프로필 사진 검수여부
+    public static final String STATE_PREFER = "join_prefer"; // 선호 설정 여부
+    public static final String STATE_REVIEWING = "join_reviewing"; // 평가중
+    public static final String STATE_COMPLETE = "join_complete"; // 평가완료
 
 
     // profile string
@@ -61,15 +46,6 @@ public class AppPreference {
         editor.putBoolean(key, value);
         editor.commit();
     }
-
-    public static Boolean getProfilePrefBool(Context context, String key) {
-        SharedPreferences pref = context.getSharedPreferences("profile", context.MODE_PRIVATE);
-        if (key.equalsIgnoreCase(PREF_SET_SOUND) || key.equalsIgnoreCase(PREF_SET_VIBRATE) || key.equalsIgnoreCase(PREF_SET_NONE))
-            return pref.getBoolean(key, false);
-        else
-            return pref.getBoolean(key, true);
-    }
-
 
     // profile string
     public static void setProfilePrefLong(Context context, String key, long value) {

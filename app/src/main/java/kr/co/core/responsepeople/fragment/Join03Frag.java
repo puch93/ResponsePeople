@@ -46,11 +46,15 @@ public class Join03Frag extends BaseFrag {
         binding.btnNext.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                if(!isAuthSucceed) {
-                    Common.showToast(act, "전화번호 인증을 먼저 진행해주세요");
-                } else {
-                    nextProcess();
-                }
+//                if (!isAuthSucceed) {
+//                    Common.showToast(act, "전화번호 인증을 먼저 진행해주세요");
+//                } else {
+//                    nextProcess();
+//                }
+
+                //TODO test
+                phoneNum = binding.phoneNum.getText().toString();
+                nextProcess();
             }
         });
 
@@ -68,13 +72,17 @@ public class Join03Frag extends BaseFrag {
             }
         });
         binding.btnConfirmAuthNum.setOnClickListener(v -> {
-            if (isAuthProceeding) {
-                auth_confirm();
+            if (binding.authNum.length() == 0) {
+                Common.showToast(act, "인증번호를 입력해주세요");
             } else {
-                if (isAuthTimeAfter) {
-                    Common.showToast(act, "유효시간이 지났습니다. 다시 요청해주세요.");
+                if (isAuthProceeding) {
+                    auth_confirm();
                 } else {
-                    Common.showToast(act, "인증번호를 먼저 요청해주세요.");
+                    if (isAuthTimeAfter) {
+                        Common.showToast(act, "유효시간이 지났습니다. 다시 요청해주세요.");
+                    } else {
+                        Common.showToast(act, "인증번호를 먼저 요청해주세요.");
+                    }
                 }
             }
         });
@@ -84,7 +92,7 @@ public class Join03Frag extends BaseFrag {
     }
 
     private void nextProcess() {
-        JoinAct.joinData.setHp(binding.phoneNum.getText().toString());
+        JoinAct.joinData.setHp(phoneNum);
 
         BaseFrag fragment = new Join04Frag();
         ((JoinAct) act).replaceFragment(fragment);
