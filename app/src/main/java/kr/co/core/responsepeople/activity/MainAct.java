@@ -5,6 +5,7 @@ import androidx.fragment.app.FragmentManager;
 import androidx.fragment.app.FragmentTransaction;
 
 import android.app.Activity;
+import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
 
@@ -30,11 +31,17 @@ public class MainAct extends BaseAct implements View.OnClickListener {
 
         backPressCloseHandler = new BackPressCloseHandler(this);
         fragmentManager = getSupportFragmentManager();
+
+        binding.btnQuestion.setOnClickListener(this);
+        binding.btnAlarm.setOnClickListener(this);
+        binding.btnChat.setOnClickListener(this);
         binding.menu01Area.setOnClickListener(this);
         binding.menu02Area.setOnClickListener(this);
         binding.menu03Area.setOnClickListener(this);
         binding.menu04Area.setOnClickListener(this);
         binding.menu05Area.setOnClickListener(this);
+
+        binding.menu01Area.performClick();
     }
 
     private void switchLayout(View view) {
@@ -64,6 +71,10 @@ public class MainAct extends BaseAct implements View.OnClickListener {
             case R.id.menu05_area:
                 switchLayout(view);
                 replaceFragment(new OnlineFrag(), "online");
+                break;
+
+            case R.id.btn_question:
+                startActivity(new Intent(act, QuestionManageAct.class));
                 break;
 
         }

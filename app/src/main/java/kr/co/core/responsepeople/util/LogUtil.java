@@ -11,4 +11,13 @@ public class LogUtil {
     public static void logI(Activity act, String contents) {
         Log.i(act.getClass().getSimpleName(), contents);
     }
+
+    public static void logLarge(String str) {
+        if (str.length() > 1500) {
+            Log.i("TEST_HOME", str.substring(0, 1500));
+            logLarge(str.substring(1500));
+        } else {
+            Log.i("TEST_HOME", str); // continuation
+        }
+    }
 }

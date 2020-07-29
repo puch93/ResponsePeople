@@ -6,9 +6,11 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.FrameLayout;
 import android.widget.ImageView;
+import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
+import androidx.cardview.widget.CardView;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.bumptech.glide.Glide;
@@ -17,6 +19,7 @@ import java.util.ArrayList;
 
 import kr.co.core.responsepeople.R;
 import kr.co.core.responsepeople.data.MemberData;
+import kr.co.core.responsepeople.util.Common;
 
 public class MemberAdapter extends RecyclerView.Adapter<MemberAdapter.ViewHolder> {
     private Activity act;
@@ -36,7 +39,19 @@ public class MemberAdapter extends RecyclerView.Adapter<MemberAdapter.ViewHolder
     @Override
     public ViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
         View view = LayoutInflater.from(parent.getContext()).inflate(R.layout.item_member, parent, false);
-        return new MemberAdapter.ViewHolder(view);
+        MemberAdapter.ViewHolder viewHolder = new MemberAdapter.ViewHolder(view);
+
+        int height = (parent.getMeasuredWidth() - act.getResources().getDimensionPixelSize(R.dimen.rcv_height_member_minus)) / 2;
+
+        if (height <= 0) {
+            height = act.getResources().getDimensionPixelSize(R.dimen.rcv_height_member_default);
+        } else {
+            height = (int) (height * 1.25);
+        }
+
+        FrameLayout.LayoutParams params = (FrameLayout.LayoutParams) viewHolder.card_view.getLayoutParams();
+        params.height = height;
+        return viewHolder;
     }
 
     @Override
@@ -54,7 +69,7 @@ public class MemberAdapter extends RecyclerView.Adapter<MemberAdapter.ViewHolder
             holder.salary.setText("연봉 검수중");
         }
 
-        Glide.with(act).load(data.getProfile_img()).into(holder.profile_img);
+        Common.processProfileImageRec(act, holder.profile_img, data.getProfile_img(), data.isImage_ok(), 5, 3);
         holder.btn_like.setSelected(data.isLike());
     }
 
@@ -68,11 +83,13 @@ public class MemberAdapter extends RecyclerView.Adapter<MemberAdapter.ViewHolder
         ImageView profile_img;
         FrameLayout btn_like, btn_question;
         View itemView;
+        CardView card_view;
 
         ViewHolder(@NonNull View view) {
             super(view);
             itemView = view;
 
+            card_view = view.findViewById(R.id.card_view);
             nick = view.findViewById(R.id.nick);
             age = view.findViewById(R.id.age);
             job = view.findViewById(R.id.job);

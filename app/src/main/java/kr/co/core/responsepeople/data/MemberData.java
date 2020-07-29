@@ -14,8 +14,9 @@ public class MemberData {
 
     private boolean like;
     private boolean salary_ok;
+    private boolean image_ok;
 
-    public MemberData(String idx, String nick, String age, String job, String location, String salary, String profile_img, boolean like, boolean salary_ok) {
+    public MemberData(String idx, String nick, String age, String job, String location, String salary, String profile_img, boolean image_ok,  boolean like, boolean salary_ok) {
         this.idx = idx;
         this.nick = nick;
         this.age = age;
@@ -25,5 +26,6 @@ public class MemberData {
         this.profile_img = profile_img;
         this.like = like;
         this.salary_ok = salary_ok;
+        this.image_ok = image_ok;
     }
 }

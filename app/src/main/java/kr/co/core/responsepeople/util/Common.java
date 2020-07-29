@@ -5,6 +5,7 @@ import android.app.Activity;
 import android.app.ActivityManager;
 import android.content.ComponentName;
 import android.content.Context;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.content.pm.ResolveInfo;
@@ -51,12 +52,15 @@ import java.util.regex.Pattern;
 import jp.wasabeef.glide.transformations.BlurTransformation;
 import kr.co.core.responsepeople.BuildConfig;
 import kr.co.core.responsepeople.R;
+import kr.co.core.responsepeople.activity.BaseAct;
+import kr.co.core.responsepeople.server.netUtil.NetUrls;
 
 public class Common {
     public static final int PICK_DIALOG = 101;
     public static final int PHOTO_TAKE = 102;
     public static final int PHOTO_GALLERY = 103;
     public static final int PHOTO_CROP = 104;
+
 
 
     /* toast setting */
@@ -101,6 +105,62 @@ public class Common {
                     Toast.makeText(act, act.getString(R.string.toast_develop), Toast.LENGTH_SHORT).show();
                 }
             });
+        }
+    }
+
+    public interface OnAlertAfter {
+        void onAfterOk();
+        void onAfterCancel();
+    }
+
+    public static void showAlert(Activity act, String title, String contents, final OnAlertAfter onAlertAfter) {
+        androidx.appcompat.app.AlertDialog.Builder alertDialog = new androidx.appcompat.app.AlertDialog.Builder(act);
+
+        alertDialog.setCancelable(false);
+        alertDialog.setTitle(title);
+        alertDialog.setMessage(contents);
+
+        // ok
+        alertDialog.setPositiveButton("예",
+                new DialogInterface.OnClickListener() {
+                    public void onClick(DialogInterface dialog, int which) {
+                        onAlertAfter.onAfterOk();
+                        dialog.cancel();
+                    }
+                });
+        // cancel
+        alertDialog.setNegativeButton("아니오",
+                new DialogInterface.OnClickListener() {
+                    public void onClick(DialogInterface dialog, int which) {
+                        onAlertAfter.onAfterCancel();
+                        dialog.cancel();
+                    }
+                });
+        alertDialog.show();
+    }
+
+
+    public static void processProfileImageRec(Context ctx, ImageView imageView, String profile_img, boolean isPass, int radius, int sampling) {
+        if(StringUtil.isNull(profile_img)) {
+            // 사진 값이 없을 때
+            Glide.with(ctx)
+//                    .load(AppPreference.getProfilePref(ctx, AppPreference.PREF_GENDER).equalsIgnoreCase("M") ? R.drawable.noimg_female : R.drawable.noimg_female)
+                    .load(R.drawable.noimg_sexless)
+                    .into(imageView);
+        } else {
+            // 사진 값이 있을 때
+            if(!isPass) {
+                // 검수중일때
+                Glide.with(ctx)
+                        .load(NetUrls.DOMAIN_ORIGIN + profile_img)
+                        .transform(new BlurTransformation(radius, sampling), new CenterCrop())
+                        .into(imageView);
+            } else {
+                //검수완료일때
+                Glide.with(ctx)
+                        .load(NetUrls.DOMAIN_ORIGIN + profile_img)
+                        .into(imageView);
+            }
         }
     }
 

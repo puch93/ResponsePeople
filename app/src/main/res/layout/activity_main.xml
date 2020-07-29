@@ -16,6 +16,7 @@
             android:orientation="horizontal">
 
             <FrameLayout
+                android:id="@+id/btn_question"
                 android:layout_width="wrap_content"
                 android:layout_height="match_parent"
                 android:paddingLeft="5dp"
@@ -24,11 +25,13 @@
                 <ImageView
                     android:layout_width="30dp"
                     android:layout_height="30dp"
+                    android:background="?android:attr/selectableItemBackgroundBorderless"
                     android:layout_gravity="center_vertical"
                     android:src="@drawable/btn_h_q" />
             </FrameLayout>
 
             <FrameLayout
+                android:id="@+id/btn_alarm"
                 android:layout_width="wrap_content"
                 android:layout_height="match_parent"
                 android:paddingLeft="5dp">
@@ -37,6 +40,7 @@
                     android:layout_width="30dp"
                     android:layout_height="30dp"
                     android:layout_gravity="center_vertical"
+                    android:background="?android:attr/selectableItemBackgroundBorderless"
                     android:layout_marginRight="5dp"
                     android:src="@drawable/btn_h_alarm" />
 
@@ -56,6 +60,7 @@
             </FrameLayout>
 
             <FrameLayout
+                android:id="@+id/btn_chat"
                 android:layout_width="wrap_content"
                 android:layout_height="match_parent"
                 android:paddingLeft="5dp"
@@ -65,6 +70,7 @@
                     android:layout_width="30dp"
                     android:layout_height="30dp"
                     android:layout_gravity="center_vertical"
+                    android:background="?android:attr/selectableItemBackgroundBorderless"
                     android:src="@drawable/btn_h_chat" />
             </FrameLayout>
         </LinearLayout>

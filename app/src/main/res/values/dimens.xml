@@ -1,0 +1,5 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <dimen name="rcv_height_member_minus">40dp</dimen>
+    <dimen name="rcv_height_member_default">200dp</dimen>
+</resources>
