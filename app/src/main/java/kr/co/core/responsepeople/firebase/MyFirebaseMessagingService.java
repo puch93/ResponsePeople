@@ -63,13 +63,6 @@ public class MyFirebaseMessagingService extends FirebaseMessagingService {
         // TODO: Implement this method to send token to your app server.
     }
 
-    /**
-     * 푸시종류
-     * 1. 심쿵
-     * 2. 매칭
-     * 3. 채팅
-     * 4. 그외의 알림 (CGPMS 등)
-     */
 
     @Override
     public void onMessageReceived(RemoteMessage remoteMessage) {

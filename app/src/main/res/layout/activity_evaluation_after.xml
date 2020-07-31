@@ -23,15 +23,27 @@
                     android:layout_height="wrap_content">
 
                     <ImageView
+                        android:id="@+id/profile_img"
                         android:layout_width="match_parent"
                         android:layout_height="360dp"
+                        android:visibility="visible"
                         android:scaleType="centerCrop"
                         app:layout_constraintBottom_toBottomOf="parent"
                         app:layout_constraintEnd_toEndOf="parent"
+                        app:layout_constraintHorizontal_bias="0.0"
                         app:layout_constraintStart_toStartOf="parent"
                         app:layout_constraintTop_toTopOf="parent"
+                        app:layout_constraintVertical_bias="0.0"
                         tools:background="@color/color_c4c8cc" />
+
+                    <ImageView
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        android:scaleType="centerCrop"
+                        android:src="@drawable/black_filter"/>
+
                     <TextView
+                        android:id="@+id/nick"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_marginLeft="20dp"
@@ -41,21 +53,63 @@
                         android:textColor="@color/color_white"
                         android:textSize="22dp"
                         android:textStyle="bold"
-                        app:layout_constraintBottom_toTopOf="@+id/textView"
+                        app:layout_constraintBottom_toTopOf="@+id/linear"
                         app:layout_constraintStart_toStartOf="parent" />
 
-                    <TextView
-                        android:id="@+id/textView"
+                    <LinearLayout
+                        android:id="@+id/linear"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_marginLeft="20dp"
                         android:layout_marginBottom="36dp"
-                        android:includeFontPadding="false"
-                        android:text="회사원·서울·5000만원 미만"
-                        android:textColor="@color/color_white"
-                        android:textSize="12dp"
+                        android:orientation="horizontal"
                         app:layout_constraintBottom_toBottomOf="parent"
-                        app:layout_constraintStart_toStartOf="parent" />
+                        app:layout_constraintStart_toStartOf="parent">
+
+                        <TextView
+                            android:id="@+id/job"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:includeFontPadding="false"
+                            android:textColor="@color/color_white"
+                            android:textSize="12dp"
+                            tools:text="회사원" />
+
+                        <TextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:includeFontPadding="false"
+                            android:text="·"
+                            android:textColor="@color/color_white"
+                            android:textSize="12dp" />
+
+                        <TextView
+                            android:id="@+id/location"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:includeFontPadding="false"
+                            android:textColor="@color/color_white"
+                            android:textSize="12dp"
+                            tools:text="서울" />
+
+                        <TextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:includeFontPadding="false"
+                            android:text="·"
+                            android:textColor="@color/color_white"
+                            android:textSize="12dp" />
+
+                        <TextView
+                            android:id="@+id/salary"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:includeFontPadding="false"
+                            android:textColor="@color/color_white"
+                            android:textSize="12dp"
+                            tools:text="5000만원 미만" />
+
+                    </LinearLayout>
 
 
                 </androidx.constraintlayout.widget.ConstraintLayout>
@@ -93,6 +147,7 @@
                                     android:textSize="22dp"
                                     android:textStyle="bold" />
                                 <TextView
+                                    android:id="@+id/score_average"
                                     android:layout_width="wrap_content"
                                     android:layout_height="wrap_content"
                                     android:includeFontPadding="false"
@@ -112,15 +167,33 @@
 
 
                             </LinearLayout>
-                            <TextView
+                            <LinearLayout
                                 android:layout_width="wrap_content"
                                 android:layout_height="wrap_content"
-                                android:layout_marginTop="8.7dp"
-                                android:includeFontPadding="false"
-                                android:text="상위 50% 이상"
-                                android:textColor="@color/color_95989d"
-                                android:textSize="12dp"
-                                android:textStyle="bold" />
+                                android:orientation="horizontal">
+
+                                <TextView
+                                    android:layout_width="wrap_content"
+                                    android:layout_height="wrap_content"
+                                    android:layout_marginTop="8.7dp"
+                                    android:includeFontPadding="false"
+                                    android:text="상위 "
+                                    android:textColor="@color/color_95989d"
+                                    android:textSize="12dp"
+                                    android:textStyle="bold" />
+
+                                <TextView
+                                    android:id="@+id/score_over"
+                                    android:layout_width="wrap_content"
+                                    android:layout_height="wrap_content"
+                                    android:layout_marginTop="8.7dp"
+                                    android:includeFontPadding="false"
+                                    android:text="50"
+                                    android:textColor="@color/color_95989d"
+                                    android:textSize="12dp"
+                                    android:textStyle="bold" />
+
+                            </LinearLayout>
                         </LinearLayout>
 
                         <LinearLayout
@@ -130,12 +203,13 @@
                             android:orientation="horizontal">
                             
                             <ImageView
-                                android:id="@+id/icon_grade"
+                                android:id="@+id/tier_icon"
                                 android:layout_width="20dp"
                                 android:layout_height="20dp"
                                 android:src="@drawable/icon_b_bronz"/>
 
                             <TextView
+                                android:id="@+id/tier_text"
                                 android:layout_width="wrap_content"
                                 android:layout_height="wrap_content"
                                 android:textSize="22dp"
@@ -155,6 +229,7 @@
                         android:layout_marginTop="16.7dp">
 
                         <ProgressBar
+                            android:id="@+id/progressBar"
                             style="?android:attr/progressBarStyleHorizontal"
                             android:layout_width="match_parent"
                             android:layout_height="10dp"
@@ -176,7 +251,7 @@
                             <ImageView
                                 android:layout_width="1dp"
                                 android:layout_height="10dp"
-                                android:background="#e6e8ec" />
+                                android:background="@color/color_c8ced1" />
 
                             <Space
                                 android:layout_width="0dp"
@@ -186,7 +261,7 @@
                             <ImageView
                                 android:layout_width="1dp"
                                 android:layout_height="10dp"
-                                android:background="#e6e8ec" />
+                                android:background="@color/color_c8ced1" />
 
                             <Space
                                 android:layout_width="0dp"
@@ -196,7 +271,7 @@
                             <ImageView
                                 android:layout_width="1dp"
                                 android:layout_height="10dp"
-                                android:background="#e6e8ec" />
+                                android:background="@color/color_c8ced1" />
 
                             <Space
                                 android:layout_width="0dp"
@@ -293,7 +368,7 @@
                     <androidx.recyclerview.widget.RecyclerView
                         android:id="@+id/recyclerView"
                         android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
+                        android:layout_height="400dp"
                         android:fadingEdge="none"
                         android:overScrollMode="never" />
                 </LinearLayout>

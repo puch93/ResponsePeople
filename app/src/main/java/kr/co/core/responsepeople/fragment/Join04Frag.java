@@ -35,6 +35,7 @@ import com.bumptech.glide.Glide;
 import com.google.android.flexbox.FlexWrap;
 import com.google.android.flexbox.FlexboxLayoutManager;
 
+import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
@@ -111,58 +112,216 @@ public class Join04Frag extends BaseFrag implements View.OnClickListener {
         act = getActivity();
         frag = this;
 
+        progressDialog = new AppCompatDialog(act);
+        progressDialog.setCancelable(false);
+        progressDialog.getWindow().setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
+        progressDialog.setContentView(R.layout.dialog_state_image);
+        progressDialog.setOnCancelListener(new DialogInterface.OnCancelListener() {
+            @Override
+            public void onCancel(DialogInterface dialogInterface) {
+                act.finish();
+                act.finishAffinity();
+            }
+        });
+
         setRecyclerView();
 
         if (fromLogin) {
-//            progressDialog = new AppCompatDialog(act);
-//            progressDialog.setCancelable(true);
-//            progressDialog.getWindow().setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
-//            progressDialog.setContentView(R.layout.dialog_state_image);
-//            progressDialog.setOnCancelListener(new DialogInterface.OnCancelListener() {
-//                @Override
-//                public void onCancel(DialogInterface dialogInterface) {
-//                    act.finish();
-//                    act.finishAffinity();
-//                }
-//            });
-//            progressDialog.show();
-//
-//            new Handler().postDelayed(new Runnable() {
-//                @Override
-//                public void run() {
-//                    progressDialog.dismiss();
-//                }
-//            }, 2000);
+            setFromLoginLayout();
+        } else {
+
+            setClickListener();
+            setTextWatcher();
+
+            binding.btnNext.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View view) {
+                    matcher_nick = VALID_NICK.matcher(binding.nick.getText().toString());
+
+                    if (images.size() < 3) {
+                        Common.showToast(act, "이미지를 3장이상 등록해주세요");
+                    } else if (binding.nick.length() == 0 || !matcher_nick.matches()) {
+                        Common.showToast(act, "닉네임을 확인해주세요");
+                    } else if (binding.location.length() == 0) {
+                        Common.showToast(act, "지역을 선택해주세요");
+                    } else if (binding.birth.length() == 0) {
+                        Common.showToast(act, "생년월일을 선택해주세요");
+                    } else if (binding.height.length() == 0) {
+                        Common.showToast(act, "키를 선택해주세요");
+                    } else if (binding.body.length() == 0) {
+                        Common.showToast(act, "체형을 선택해주세요");
+                    } else if (binding.edu.length() == 0) {
+                        Common.showToast(act, "학력을 선택해주세요");
+                    } else if (binding.job.length() == 0) {
+                        Common.showToast(act, "직업을 선택해주세요");
+                    } else if (binding.drink.length() == 0) {
+                        Common.showToast(act, "음주여부를 선택해주세요");
+                    } else if (binding.smoke.length() == 0) {
+                        Common.showToast(act, "흡연여부를 선택해주세요");
+                    } else if (binding.religion.length() == 0) {
+                        Common.showToast(act, "종교를 선택해주세요");
+                    } else if (binding.salary.length() == 0) {
+                        Common.showToast(act, "연봉을 선택해주세요");
+                    } else if (binding.intro.length() == 0) {
+                        Common.showToast(act, "소개말을 입력해주세요");
+                    } else if (list_charm.size() < 2) {
+                        Common.showToast(act, "매력포인트를 선택해주세요");
+                    } else if (list_interest.size() < 2) {
+                        Common.showToast(act, "관심사를 선택해주세요");
+                    } else if (list_ideal.size() < 2) {
+                        Common.showToast(act, "이상형을 선택해주세요");
+                    } else {
+                        nextProcess();
+//                        doReCheckTest();
+                    }
+                }
+            });
+        }
+
+        return binding.getRoot();
+    }
+    private void doTestEditProfile() {
+        ReqBasic server = new ReqBasic(act, NetUrls.DOMAIN) {
+            @Override
+            public void onAfter(int resultCode, HttpResult resultData) {
+                if (resultData.getResult() != null) {
+                    try {
+                        JSONObject jo = new JSONObject(resultData.getResult());
+
+                        if( StringUtil.getStr(jo, "result").equalsIgnoreCase("Y")) {
+
+                        } else {
+
+                        }
+
+                    } catch (JSONException e) {
+                        e.printStackTrace();
+                        Common.showToastNetwork(act);
+                    }
+                } else {
+                    Common.showToastNetwork(act);
+                }
+            }
+        };
+
+        server.setTag("Edit Info");
+        server.addParams("dbControl", NetUrls.EDIT_PROFILE);
+        server.addParams("m_idx", AppPreference.getProfilePref(act, AppPreference.PREF_MIDX));
+        server.addParams("m_body", JoinAct.joinData.getBody());
+        server.addParams("m_religion", JoinAct.joinData.getReligion());
+        server.addParams("m_drink", JoinAct.joinData.getDrink());
+        server.addParams("m_smoke", JoinAct.joinData.getSmoke());
+        server.addParams("m_salary", JoinAct.joinData.getSalary());
+        server.addParams("m_charm", JoinAct.joinData.getCharm());
+        server.addParams("m_ideal", JoinAct.joinData.getIdeal());
+        server.addParams("m_interest", JoinAct.joinData.getInterest());
+        server.addParams("m_intro", JoinAct.joinData.getIntro());
+
+        // 파일
+        for (int i = 1; i < JoinAct.joinData.getImages().size(); i++) {
+            String filePath = JoinAct.joinData.getImages().get(i);
+            File file = new File(filePath);
+            server.addFileParams("m_profile" + i, file);
+            server.addParams("m_profile" + i + "ck", "Y");
+        }
+
+        if (null != JoinAct.joinData.getSalary_file()) {
+            server.addFileParams("m_salary_file", JoinAct.joinData.getSalary_file());
+        }
 
 
-            JSONObject jo = new JSONObject();
-            images.add(null);
+        server.execute(true, false);
+    }
+
+
+    private void doReCheckTest() {
+        ReqBasic server = new ReqBasic(act, NetUrls.DOMAIN) {
+            @Override
+            public void onAfter(int resultCode, HttpResult resultData) {
+                if (resultData.getResult() != null) {
+                    try {
+                        JSONObject jo = new JSONObject(resultData.getResult());
+
+                        if (StringUtil.getStr(jo, "result").equalsIgnoreCase("Y")) {
+
+                        } else {
+
+                        }
+
+                    } catch (JSONException e) {
+                        e.printStackTrace();
+                        Common.showToastNetwork(act);
+                    }
+                } else {
+                    Common.showToastNetwork(act);
+                }
+            }
+        };
+
+        server.setTag("Request ReCheck");
+        server.addParams("dbControl", NetUrls.REQUEST_CHECK);
+        server.addParams("m_idx", "29");
+        // 파일
+        ArrayList<String> list_test = adapter.getList();
+        for (int i = 1; i < list_test.size(); i++) {
+            String filePath = list_test.get(i);
+            File file = new File(filePath);
+            server.addFileParams("m_profile" + i, file);
+            server.addParams("m_profile" + i + "ck", "Y");
+        }
+        server.execute(true, false);
+    }
+
+    private void setProgressDialogShow() {
+        if (progressDialog != null && !progressDialog.isShowing())
+            progressDialog.show();
+    }
+
+    private void setProgressDialogDismiss() {
+        if (progressDialog != null && progressDialog.isShowing())
+            progressDialog.dismiss();
+    }
+
+    private void setFromLoginLayout() {
+        setProgressDialogShow();
+
+        try {
+            JSONObject jo = new JSONObject(AppPreference.getProfilePref(act, AppPreference.PREF_JSON));
+            JSONArray ja = jo.getJSONArray("data");
+            JSONObject job = ja.getJSONObject(0);
+
             for (int i = 1; i < 7; i++) {
-                if (!StringUtil.isNull(StringUtil.getStr(jo, "m_profile" + i))) {
-                    images.add(NetUrls.DOMAIN_ORIGIN + StringUtil.getStr(jo, "m_profile" + i));
+                if (!StringUtil.isNull(StringUtil.getStr(job, "m_profile" + i))) {
+                    images.add(NetUrls.DOMAIN_ORIGIN + StringUtil.getStr(job, "m_profile" + i));
                 } else {
                     break;
                 }
             }
 
-            String m_nick = StringUtil.getStr(jo, "m_nick");
-            String m_location = StringUtil.getStr(jo, "m_location");
-            String m_birth = StringUtil.getStr(jo, "m_birth");
-            String m_height = StringUtil.getStr(jo, "m_height");
-            String m_body = StringUtil.getStr(jo, "m_body");
-            String m_edu = StringUtil.getStr(jo, "m_edu");
-            String m_job = StringUtil.getStr(jo, "m_job");
-            String m_drink = StringUtil.getStr(jo, "m_drink");
-            String m_smoke = StringUtil.getStr(jo, "m_smoke");
-            String m_religion = StringUtil.getStr(jo, "m_religion");
-            String m_salary = StringUtil.getStr(jo, "m_salary");
-            String m_intro = StringUtil.getStr(jo, "m_intro");
-            list_charm = new ArrayList(Arrays.asList(StringUtil.getStr(jo, "m_charm").split(",")));
-            list_charm.add(0, null);
-            list_interest = new ArrayList(Arrays.asList(StringUtil.getStr(jo, "m_interest").split(",")));
-            list_interest.add(0, null);
-            list_ideal = new ArrayList(Arrays.asList(StringUtil.getStr(jo, "m_ideal").split(",")));
-            list_ideal.add(0, null);
+            String m_nick = StringUtil.getStr(job, "m_nick");
+            String m_location = StringUtil.getStr(job, "m_location");
+            String m_birth = StringUtil.getStr(job, "m_birth");
+            String m_height = StringUtil.getStr(job, "m_height");
+            String m_body = StringUtil.getStr(job, "m_body");
+            String m_edu = StringUtil.getStr(job, "m_edu");
+            String m_job = StringUtil.getStr(job, "m_job");
+            String m_drink = StringUtil.getStr(job, "m_drink");
+            String m_smoke = StringUtil.getStr(job, "m_smoke");
+            String m_religion = StringUtil.getStr(job, "m_religion");
+            String m_salary = StringUtil.getStr(job, "m_salary");
+            String m_intro = StringUtil.getStr(job, "m_intro");
+
+            for (String contents : StringUtil.getStr(job, "m_charm").split(",")) {
+                list_charm.add(new EtcData(contents, false));
+            }
+
+            for (String contents : StringUtil.getStr(job, "m_interest").split(",")) {
+                list_interest.add(new EtcData(contents, false));
+            }
+
+            for (String contents : StringUtil.getStr(job, "m_ideal").split(",")) {
+                list_ideal.add(new EtcData(contents, false));
+            }
 
             act.runOnUiThread(new Runnable() {
                 @Override
@@ -187,57 +346,9 @@ public class Join04Frag extends BaseFrag implements View.OnClickListener {
                     adapter_ideal.setList(list_ideal);
                 }
             });
-        } else {
-
+        } catch (JSONException e) {
+            e.printStackTrace();
         }
-
-        setClickListener();
-        setTextWatcher();
-
-        binding.btnNext.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                matcher_nick = VALID_NICK.matcher(binding.nick.getText().toString());
-
-                if (images.size() < 3) {
-                    Common.showToast(act, "이미지를 3장이상 등록해주세요");
-                } else if (binding.nick.length() == 0 || !matcher_nick.matches()) {
-                    Common.showToast(act, "닉네임을 확인해주세요");
-                } else if (binding.location.length() == 0) {
-                    Common.showToast(act, "지역을 선택해주세요");
-                } else if (binding.birth.length() == 0) {
-                    Common.showToast(act, "생년월일을 선택해주세요");
-                } else if (binding.height.length() == 0) {
-                    Common.showToast(act, "키를 선택해주세요");
-                } else if (binding.body.length() == 0) {
-                    Common.showToast(act, "체형을 선택해주세요");
-                } else if (binding.edu.length() == 0) {
-                    Common.showToast(act, "학력을 선택해주세요");
-                } else if (binding.job.length() == 0) {
-                    Common.showToast(act, "직업을 선택해주세요");
-                } else if (binding.drink.length() == 0) {
-                    Common.showToast(act, "음주여부를 선택해주세요");
-                } else if (binding.smoke.length() == 0) {
-                    Common.showToast(act, "흡연여부를 선택해주세요");
-                } else if (binding.religion.length() == 0) {
-                    Common.showToast(act, "종교를 선택해주세요");
-                } else if (binding.salary.length() == 0) {
-                    Common.showToast(act, "연봉을 선택해주세요");
-                } else if (binding.intro.length() == 0) {
-                    Common.showToast(act, "소개말을 입력해주세요");
-                } else if (list_charm.size() < 2) {
-                    Common.showToast(act, "매력포인트를 선택해주세요");
-                } else if (list_interest.size() < 2) {
-                    Common.showToast(act, "관심사를 선택해주세요");
-                } else if (list_ideal.size() < 2) {
-                    Common.showToast(act, "이상형을 선택해주세요");
-                } else {
-                    nextProcess();
-                }
-            }
-        });
-
-        return binding.getRoot();
     }
 
     public void doJoin() {
@@ -249,9 +360,9 @@ public class Join04Frag extends BaseFrag implements View.OnClickListener {
                         JSONObject jo = new JSONObject(resultData.getResult());
 
                         if (StringUtil.getStr(jo, "result").equalsIgnoreCase("Y")) {
-
+                            setProgressDialogShow();
                         } else {
-
+                            Common.showToast(act, "message");
                         }
 
                     } catch (JSONException e) {
@@ -552,12 +663,9 @@ public class Join04Frag extends BaseFrag implements View.OnClickListener {
         // 이미지 파일
         JoinAct.joinData.setImages(adapter.getList());
 
-//        BaseFrag fragment = new Join05Frag();
-//        ((JoinAct) act).replaceFragment(fragment);
-
-
-//        ((JoinAct) act).doJoin();
         Log.i(StringUtil.TAG, "joinData: " + JoinAct.joinData);
+//        doJoin();
+        doTestEditProfile();
     }
 
 

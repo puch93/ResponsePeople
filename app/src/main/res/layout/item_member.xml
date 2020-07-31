@@ -22,6 +22,7 @@
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
+            android:background="?android:attr/selectableItemBackground"
             app:layout_constraintTop_toTopOf="parent">
 
             <ImageView
@@ -35,6 +36,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
                 android:scaleType="centerCrop"
+                android:background="?android:attr/selectableItemBackground"
                 android:src="@drawable/black_filter"/>
         </androidx.cardview.widget.CardView>
 

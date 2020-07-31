@@ -3,4 +3,5 @@
     <dimen name="rcv_height_member_minus">40dp</dimen>
     <dimen name="rcv_height_member_default">200dp</dimen>
     <dimen name="join_expand_image_default">320dp</dimen>
+    <dimen name="profile_detail_default_height">360dp</dimen>
 </resources>

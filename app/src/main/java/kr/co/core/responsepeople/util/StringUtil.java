@@ -103,6 +103,20 @@ public class StringUtil {
         return String.valueOf(lastYear);
     }
 
+    public static String converTime(String original, String pattern) {
+        //아이템별 시간
+        SimpleDateFormat dateFormat1 = new SimpleDateFormat("yyyy-MM-dd hh:mm:ss", java.util.Locale.getDefault());
+        Date date1 = null;
+        try {
+            date1 = dateFormat1.parse(original);
+        } catch (ParseException e) {
+            e.printStackTrace();
+        }
+
+        SimpleDateFormat dateFormat2 = new SimpleDateFormat(pattern, java.util.Locale.getDefault());
+        return dateFormat2.format(date1);
+    }
+
     public static String getStr(JSONObject jo, String key) {
         String s = null;
         try {

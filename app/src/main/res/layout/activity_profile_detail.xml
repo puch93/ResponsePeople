@@ -5,8 +5,8 @@
 
     <FrameLayout
         android:layout_width="match_parent"
-        android:background="@color/color_white"
-        android:layout_height="match_parent">
+        android:layout_height="match_parent"
+        android:background="@color/color_white">
 
         <androidx.core.widget.NestedScrollView
             android:layout_width="match_parent"
@@ -21,12 +21,14 @@
 
                 <androidx.constraintlayout.widget.ConstraintLayout
                     android:layout_width="match_parent"
-                    android:layout_height="wrap_content">
+                    android:layout_height="wrap_content"
+                    android:visibility="visible">
 
-                    <ImageView
-                        android:id="@+id/imageView3"
+                    <androidx.viewpager.widget.ViewPager
+                        android:id="@+id/view_pager"
                         android:layout_width="match_parent"
-                        android:layout_height="360dp"
+                        android:layout_height="wrap_content"
+                        tools:layout_height="360dp"
                         android:scaleType="centerCrop"
                         app:layout_constraintBottom_toBottomOf="parent"
                         app:layout_constraintEnd_toEndOf="parent"
@@ -34,32 +36,142 @@
                         app:layout_constraintTop_toTopOf="parent"
                         tools:background="@color/color_c4c8cc" />
 
-                    <TextView
+                    <FrameLayout
+                        android:id="@+id/btn_back"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:paddingLeft="15dp"
+                        android:paddingTop="9.3dp"
+                        android:paddingRight="15dp"
+                        android:paddingBottom="9.3dp"
+                        app:layout_constraintStart_toStartOf="parent"
+                        app:layout_constraintTop_toTopOf="parent">
+
+                        <ImageView
+                            android:layout_width="30dp"
+                            android:layout_height="30dp"
+                            android:src="@drawable/btn_back_2" />
+                    </FrameLayout>
+
+                    <LinearLayout
+                        android:id="@+id/linear"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_marginLeft="20dp"
                         android:layout_marginBottom="9.7dp"
-                        android:includeFontPadding="false"
-                        android:text="정BTS"
-                        android:textColor="@color/color_white"
-                        android:textSize="22dp"
-                        android:textStyle="bold"
-                        app:layout_constraintBottom_toTopOf="@+id/textView"
-                        app:layout_constraintStart_toStartOf="parent" />
+                        android:gravity="center_vertical"
+                        android:orientation="horizontal"
+                        app:layout_constraintBottom_toTopOf="@+id/linear2"
+                        app:layout_constraintStart_toStartOf="parent">
 
-                    <TextView
-                        android:id="@+id/textView"
+                        <TextView
+                            android:id="@+id/nick"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:includeFontPadding="false"
+                            tools:text="정BTS"
+                            android:textColor="@color/color_white"
+                            android:textSize="22dp"
+                            android:textStyle="bold" />
+                        <TextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:includeFontPadding="false"
+                            android:text=", "
+                            android:textColor="@color/color_white"
+                            android:textSize="22dp"
+                            android:textStyle="bold" />
+                        <TextView
+                            android:id="@+id/age"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:includeFontPadding="false"
+                            tools:text="22"
+                            android:textColor="@color/color_white"
+                            android:textSize="22dp"
+                            android:textStyle="bold" />
+
+                        <ImageView
+                            android:id="@+id/icon_tier"
+                            android:layout_width="20dp"
+                            android:layout_height="20dp"
+                            android:layout_marginLeft="12.7dp"
+                            tools:src="@drawable/icon_b_diamond" />
+                    </LinearLayout>
+
+                    <LinearLayout
+                        android:id="@+id/linear2"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_marginLeft="20dp"
                         android:layout_marginBottom="45.3dp"
-                        android:includeFontPadding="false"
-                        android:text="회사원·서울·5000만원 미만"
-                        android:textColor="@color/color_white"
-                        android:textSize="12dp"
+                        android:orientation="horizontal"
                         app:layout_constraintBottom_toBottomOf="parent"
-                        app:layout_constraintStart_toStartOf="parent" />
+                        app:layout_constraintStart_toStartOf="parent">
 
+                        <TextView
+                            android:id="@+id/job_top"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:includeFontPadding="false"
+                            android:textColor="@color/color_white"
+                            android:textSize="12dp"
+                            tools:text="회사원" />
+
+                        <TextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:includeFontPadding="false"
+                            android:text="·"
+                            android:textColor="@color/color_white"
+                            android:textSize="12dp" />
+
+                        <TextView
+                            android:id="@+id/location"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:includeFontPadding="false"
+                            android:textColor="@color/color_white"
+                            android:textSize="12dp"
+                            tools:text="서울" />
+
+                        <TextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:includeFontPadding="false"
+                            android:text="·"
+                            android:textColor="@color/color_white"
+                            android:textSize="12dp" />
+
+                        <TextView
+                            android:id="@+id/salary"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:includeFontPadding="false"
+                            android:textColor="@color/color_white"
+                            android:textSize="12dp"
+                            tools:text="5000만원 미만" />
+
+                    </LinearLayout>
+
+                    <FrameLayout
+                        android:id="@+id/btn_like"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_gravity="right|bottom"
+                        android:layout_marginRight="10dp"
+                        android:layout_marginBottom="36.3dp"
+                        android:padding="10dp"
+                        app:layout_constraintBottom_toBottomOf="parent"
+                        app:layout_constraintEnd_toEndOf="parent">
+
+                        <ImageView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:adjustViewBounds="true"
+                            android:src="@drawable/sel_like" />
+
+                    </FrameLayout>
 
                     <me.relex.circleindicator.CircleIndicator
                         android:id="@+id/indicator"
@@ -69,7 +181,7 @@
                         app:ci_drawable_unselected="@drawable/roll_off"
                         app:ci_margin="3dp"
                         app:ci_orientation="horizontal"
-                        app:layout_constraintBottom_toBottomOf="@+id/imageView3"
+                        app:layout_constraintBottom_toBottomOf="parent"
                         app:layout_constraintEnd_toEndOf="parent"
                         app:layout_constraintStart_toStartOf="parent" />
 
@@ -78,89 +190,394 @@
                 <LinearLayout
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:paddingTop="19.7dp"
+                    android:orientation="vertical"
                     android:paddingLeft="21dp"
+                    android:paddingTop="19.7dp"
                     android:paddingRight="21dp"
                     android:paddingBottom="28.3dp"
-                    android:orientation="vertical">
+                    android:visibility="visible">
 
                     <TextView
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
+                        android:includeFontPadding="false"
                         android:text="내 소개"
                         android:textColor="@color/color_2c2c2c"
-                        android:includeFontPadding="false"
                         android:textSize="18dp"
                         android:textStyle="bold" />
 
                     <TextView
+                        android:id="@+id/intro"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_marginTop="13dp"
                         android:includeFontPadding="false"
-                        android:textSize="14dp"
-                        android:textColor="@color/color_cc2c2c2c"
                         android:lineSpacingExtra="7dp"
-                        android:text="프리랜서 사진작가로 일하고 있는 젠틀남입니다 ^^
+                        tools:text="프리랜서 사진작가로 일하고 있는 젠틀남입니다 ^^
 일할땐 열심히 놀땐 미친듯이 놀자가 모토입니다.
 혼자인 시간이 길어져 이제는 좋은 인연 찾고자 합니다"
-                        />
+                        android:textColor="@color/color_cc2c2c2c"
+                        android:textSize="14dp" />
                 </LinearLayout>
-                
+
                 <ImageView
                     android:layout_width="match_parent"
                     android:layout_height="1dp"
-                    android:background="@color/color_ebedef"/>
+                    android:background="@color/color_ebedef" />
 
                 <ImageView
                     android:layout_width="match_parent"
                     android:layout_height="7dp"
-                    android:background="@color/color_f6f8f9"/>
-
-
+                    android:background="@color/color_f6f8f9" />
 
 
                 <LinearLayout
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:paddingTop="19.7dp"
+                    android:orientation="vertical"
                     android:paddingLeft="21dp"
+                    android:paddingTop="22dp"
+                    android:visibility="visible"
                     android:paddingRight="21dp"
-                    android:paddingBottom="28.3dp"
-                    android:orientation="vertical">
+                    android:paddingBottom="31.3dp">
 
                     <TextView
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:text="별점 주기"
-                        android:textColor="@color/color_2c2c2c"
                         android:includeFontPadding="false"
+                        android:text="회원 정보"
+                        android:textColor="@color/color_2c2c2c"
                         android:textSize="18dp"
                         android:textStyle="bold" />
 
-                    <TextView
-                        android:layout_width="wrap_content"
+
+                    <LinearLayout
+                        android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:layout_marginTop="13dp"
-                        android:includeFontPadding="false"
-                        android:textSize="14dp"
-                        android:textColor="@color/color_cc2c2c2c"
-                        android:lineSpacingExtra="7dp"
-                        android:text="프리랜서 사진작가로 일하고 있는 젠틀남입니다 ^^
-일할땐 열심히 놀땐 미친듯이 놀자가 모토입니다.
-혼자인 시간이 길어져 이제는 좋은 인연 찾고자 합니다"
-                        />
+                        android:layout_marginTop="25dp"
+                        android:orientation="horizontal">
+
+                        <TextView
+                            android:layout_width="70dp"
+                            android:layout_height="wrap_content"
+                            android:text="직업"
+                            android:textColor="@color/color_2c2c2c"
+                            android:textSize="14dp"
+                            android:textStyle="bold" />
+
+                        <TextView
+                            android:id="@+id/job"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:textColor="@color/color_8b929f"
+                            android:textSize="14dp"
+                            android:textStyle="bold"
+                            tools:text="프리랜서" />
+                    </LinearLayout>
+
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="25dp"
+                        android:orientation="horizontal">
+
+                        <TextView
+                            android:layout_width="70dp"
+                            android:layout_height="wrap_content"
+                            android:text="학력"
+                            android:textColor="@color/color_2c2c2c"
+                            android:textSize="14dp"
+                            android:textStyle="bold" />
+
+                        <TextView
+                            android:id="@+id/edu"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:textColor="@color/color_8b929f"
+                            android:textSize="14dp"
+                            android:textStyle="bold"
+                            tools:text="석사" />
+                    </LinearLayout>
+
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="21dp"
+                        android:orientation="horizontal">
+
+                        <TextView
+                            android:layout_width="70dp"
+                            android:layout_height="wrap_content"
+                            android:text="연봉"
+                            android:textColor="@color/color_2c2c2c"
+                            android:textSize="14dp"
+                            android:textStyle="bold" />
+
+                        <TextView
+                            android:id="@+id/salary_top"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:textColor="@color/color_8b929f"
+                            android:textSize="14dp"
+                            android:textStyle="bold"
+                            tools:text="5000만원 이상" />
+                    </LinearLayout>
+
+                    <ImageView
+                        android:layout_width="match_parent"
+                        android:layout_height="1dp"
+                        android:layout_marginTop="28.7dp"
+                        android:background="@color/color_e3e6e8" />
+
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="25dp"
+                        android:orientation="horizontal">
+
+                        <TextView
+                            android:layout_width="70dp"
+                            android:layout_height="wrap_content"
+                            android:text="키"
+                            android:textColor="@color/color_2c2c2c"
+                            android:textSize="14dp"
+                            android:textStyle="bold" />
+
+                        <TextView
+                            android:id="@+id/height"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:textColor="@color/color_8b929f"
+                            android:textSize="14dp"
+                            android:textStyle="bold"
+                            tools:text="173cm" />
+                    </LinearLayout>
+
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="25dp"
+                        android:orientation="horizontal">
+
+                        <TextView
+                            android:layout_width="70dp"
+                            android:layout_height="wrap_content"
+                            android:text="체형"
+                            android:textColor="@color/color_2c2c2c"
+                            android:textSize="14dp"
+                            android:textStyle="bold" />
+
+                        <TextView
+                            android:id="@+id/body"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:textColor="@color/color_8b929f"
+                            android:textSize="14dp"
+                            android:textStyle="bold"
+                            tools:text="마름탄탄" />
+                    </LinearLayout>
+
+
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="25dp"
+                        android:orientation="horizontal">
+
+                        <TextView
+                            android:layout_width="70dp"
+                            android:layout_height="wrap_content"
+                            android:text="음주"
+                            android:textColor="@color/color_2c2c2c"
+                            android:textSize="14dp"
+                            android:textStyle="bold" />
+
+                        <TextView
+                            android:id="@+id/drink"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:textColor="@color/color_8b929f"
+                            android:textSize="14dp"
+                            android:textStyle="bold"
+                            tools:text="가끔" />
+                    </LinearLayout>
+
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="25dp"
+                        android:orientation="horizontal">
+
+                        <TextView
+                            android:layout_width="70dp"
+                            android:layout_height="wrap_content"
+                            android:text="흡연"
+                            android:textColor="@color/color_2c2c2c"
+                            android:textSize="14dp"
+                            android:textStyle="bold" />
+
+                        <TextView
+                            android:id="@+id/smoke"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:textColor="@color/color_8b929f"
+                            android:textSize="14dp"
+                            android:textStyle="bold"
+                            tools:text="안 함" />
+                    </LinearLayout>
+
+
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="25dp"
+                        android:orientation="horizontal">
+
+                        <TextView
+                            android:layout_width="70dp"
+                            android:layout_height="wrap_content"
+                            android:text="종교"
+                            android:textColor="@color/color_2c2c2c"
+                            android:textSize="14dp"
+                            android:textStyle="bold" />
+
+                        <TextView
+                            android:id="@+id/religion"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:textColor="@color/color_8b929f"
+                            android:textSize="14dp"
+                            android:textStyle="bold"
+                            tools:text="기독교" />
+                    </LinearLayout>
                 </LinearLayout>
 
                 <ImageView
                     android:layout_width="match_parent"
                     android:layout_height="1dp"
-                    android:background="@color/color_ebedef"/>
+                    android:background="@color/color_ebedef" />
 
                 <ImageView
                     android:layout_width="match_parent"
                     android:layout_height="7dp"
-                    android:background="@color/color_f6f8f9"/>
+                    android:background="@color/color_f6f8f9" />
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="vertical"
+                    android:paddingLeft="21dp"
+                    android:paddingTop="22dp"
+                    android:paddingRight="21dp"
+                    android:paddingBottom="21.3dp"
+                    android:visibility="visible">
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:includeFontPadding="false"
+                        android:text="매력 포인트"
+                        android:textColor="@color/color_2c2c2c"
+                        android:textSize="18dp"
+                        android:textStyle="bold" />
+
+                    <androidx.recyclerview.widget.RecyclerView
+                        android:id="@+id/recyclerView_charm"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="17dp"
+                        android:fadingEdge="none"
+                        android:overScrollMode="never" />
+
+                </LinearLayout>
+
+
+                <ImageView
+                    android:layout_width="match_parent"
+                    android:layout_height="1dp"
+                    android:background="@color/color_ebedef" />
+
+                <ImageView
+                    android:layout_width="match_parent"
+                    android:layout_height="7dp"
+                    android:background="@color/color_f6f8f9" />
+
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="vertical"
+                    android:paddingLeft="21dp"
+                    android:paddingTop="22dp"
+                    android:paddingRight="21dp"
+                    android:paddingBottom="21.3dp"
+                    android:visibility="visible">
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:includeFontPadding="false"
+                        android:text="관심사"
+                        android:textColor="@color/color_2c2c2c"
+                        android:textSize="18dp"
+                        android:textStyle="bold" />
+
+                    <androidx.recyclerview.widget.RecyclerView
+                        android:id="@+id/recyclerView_interest"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="17dp"
+                        android:fadingEdge="none"
+                        android:overScrollMode="never" />
+
+                </LinearLayout>
+
+
+                <ImageView
+                    android:layout_width="match_parent"
+                    android:layout_height="1dp"
+                    android:background="@color/color_ebedef" />
+
+                <ImageView
+                    android:layout_width="match_parent"
+                    android:layout_height="7dp"
+                    android:background="@color/color_f6f8f9" />
+
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="vertical"
+                    android:paddingLeft="21dp"
+                    android:paddingTop="22dp"
+                    android:paddingRight="21dp"
+                    android:paddingBottom="21.3dp"
+                    android:visibility="visible">
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:includeFontPadding="false"
+                        android:text="이상형"
+                        android:textColor="@color/color_2c2c2c"
+                        android:textSize="18dp"
+                        android:textStyle="bold" />
+
+                    <androidx.recyclerview.widget.RecyclerView
+                        android:id="@+id/recyclerView_ideal"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="17dp"
+                        android:fadingEdge="none"
+                        android:overScrollMode="never" />
+
+                </LinearLayout>
+
+
+                <Space
+                    android:layout_width="match_parent"
+                    android:layout_height="150dp"/>
+
             </LinearLayout>
         </androidx.core.widget.NestedScrollView>
 
@@ -183,29 +600,104 @@
                 android:background="@color/color_white"
                 android:paddingLeft="20dp"
                 android:paddingRight="20dp"
-                android:paddingBottom="27dp">
+                android:paddingBottom="35dp">
+
 
                 <FrameLayout
-                    android:id="@+id/btn_complete"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content">
+                    android:id="@+id/btn_question"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="12.7dp"
+                    android:layout_weight="1">
 
                     <ImageView
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:adjustViewBounds="true"
-                        android:src="@drawable/btn_blue" />
+                        android:src="@drawable/btn_m_blue"/>
 
-                    <TextView
+                    <LinearLayout
                         android:layout_width="wrap_content"
+                        android:gravity="center_vertical"
                         android:layout_height="wrap_content"
                         android:layout_gravity="center"
-                        android:text="들어가기"
-                        android:textColor="@color/color_white"
-                        android:textSize="20dp"
-                        android:textStyle="bold" />
+                        android:orientation="horizontal">
+
+                        <TextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:textSize="18dp"
+                            android:textColor="@color/color_white"
+                            android:includeFontPadding="false"
+                            android:textStyle="bold"
+                            android:gravity="center_horizontal"
+                            android:text="질문 보내기"
+                            />
+
+                        <ImageView
+                            android:layout_width="24dp"
+                            android:layout_marginLeft="13.7dp"
+                            android:layout_height="24dp"
+                            android:src="@drawable/btn_s_q"/>
+                    </LinearLayout>
+
                 </FrameLayout>
 
+
+                <FrameLayout
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_marginLeft="10dp"
+                    android:layout_weight="1">
+
+                    <FrameLayout
+                        android:id="@+id/btn_chat"
+                        android:layout_width="match_parent"
+                        android:layout_marginTop="12.7dp"
+                        android:layout_height="wrap_content">
+
+                        <ImageView
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:adjustViewBounds="true"
+                            android:src="@drawable/btn_m_purple"/>
+
+                        <LinearLayout
+                            android:layout_width="wrap_content"
+                            android:gravity="center_vertical"
+                            android:layout_height="wrap_content"
+                            android:layout_gravity="center"
+                            android:orientation="horizontal">
+
+                            <TextView
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:textSize="18dp"
+                                android:textColor="@color/color_white"
+                                android:includeFontPadding="false"
+                                android:textStyle="bold"
+                                android:gravity="center_horizontal"
+                                android:text="채팅하기"
+                                />
+
+                            <ImageView
+                                android:layout_width="24dp"
+                                android:layout_marginLeft="13.7dp"
+                                android:layout_height="24dp"
+                                android:src="@drawable/btn_s_chat"/>
+                        </LinearLayout>
+                    </FrameLayout>
+                    <TextView
+                        android:layout_width="50dp"
+                        android:layout_height="25dp"
+                        android:background="@drawable/free_bg"
+                        android:includeFontPadding="false"
+                        android:layout_gravity="right"
+                        android:text="Free"
+                        android:gravity="center"
+                        android:textColor="@color/color_white"
+                        android:textStyle="bold"/>
+                </FrameLayout>
             </LinearLayout>
         </LinearLayout>
 

@@ -115,7 +115,7 @@ public class OnlineFrag extends BaseFrag implements View.OnClickListener {
                                 JSONObject job = ja.getJSONObject(i);
                                 String m_idx = StringUtil.getStr(job, "m_idx");
                                 String m_nick = StringUtil.getStr(job, "m_nick");
-                                String m_age = StringUtil.getStr(job, "m_age");
+                                String m_age = StringUtil.calcAge(StringUtil.getStr(job, "m_birth").substring(0, 4));
                                 String m_job = StringUtil.getStr(job, "m_job");
                                 String m_location = StringUtil.getStr(job, "m_location");
                                 String m_salary = StringUtil.getStr(job, "m_salary");
@@ -162,5 +162,6 @@ public class OnlineFrag extends BaseFrag implements View.OnClickListener {
 
     @Override
     public void onClick(View view) {
+
     }
 }

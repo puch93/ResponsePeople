@@ -1,0 +1,57 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:orientation="vertical">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:gravity="right"
+        android:orientation="horizontal"
+        android:paddingRight="15dp"
+        android:paddingTop="8.5dp"
+        android:paddingBottom="8.5dp">
+
+        <TextView
+            android:id="@+id/read"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="bottom"
+            android:paddingBottom="3dp"
+            android:textSize="12dp"
+            android:includeFontPadding="false"
+            android:textColor="@color/color_669cff"
+            android:layout_marginRight="5dp"
+            android:text="1" />
+
+        <TextView
+            android:id="@+id/send_time"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="bottom"
+            android:layout_marginRight="7.7dp"
+            android:gravity="end"
+            android:includeFontPadding="false"
+            android:textColor="#99848d91"
+            android:textSize="10dp"
+            tools:text="오후 8:09" />
+
+        <TextView
+            android:id="@+id/contents"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:maxWidth="270dp"
+            android:minWidth="40dp"
+            android:background="@drawable/me_chatbox"
+            android:includeFontPadding="false"
+            android:gravity="center"
+            android:letterSpacing="-0.05"
+            android:lineSpacingExtra="2.7sp"
+            android:padding="13.3dp"
+            android:text="좋아요! 송정 어디로 갈까요?"
+            android:textColor="#ffffff"
+            android:textSize="12dp" />
+    </LinearLayout>
+</LinearLayout>

@@ -23,6 +23,7 @@
                     android:layout_height="wrap_content">
 
                     <ImageView
+                        android:id="@+id/profile_img"
                         android:layout_width="match_parent"
                         android:layout_height="360dp"
                         android:scaleType="centerCrop"
@@ -32,32 +33,80 @@
                         app:layout_constraintTop_toTopOf="parent"
                         tools:background="@color/color_c4c8cc" />
 
+                    <ImageView
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        android:scaleType="centerCrop"
+                        android:src="@drawable/black_filter"/>
+
                     <TextView
+                        android:id="@+id/nick"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_marginLeft="20dp"
                         android:layout_marginBottom="9.7dp"
                         android:includeFontPadding="false"
-                        android:text="정BTS"
                         android:textColor="@color/color_white"
                         android:textSize="22dp"
                         android:textStyle="bold"
-                        app:layout_constraintBottom_toTopOf="@+id/textView"
-                        app:layout_constraintStart_toStartOf="parent" />
+                        app:layout_constraintBottom_toTopOf="@+id/linear"
+                        app:layout_constraintStart_toStartOf="parent"
+                        tools:text="정BTS" />
 
-                    <TextView
-                        android:id="@+id/textView"
+                    <LinearLayout
+                        android:id="@+id/linear"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_marginLeft="20dp"
                         android:layout_marginBottom="36dp"
-                        android:includeFontPadding="false"
-                        android:text="회사원·서울·5000만원 미만"
-                        android:textColor="@color/color_white"
-                        android:textSize="12dp"
+                        android:orientation="horizontal"
                         app:layout_constraintBottom_toBottomOf="parent"
-                        app:layout_constraintStart_toStartOf="parent" />
+                        app:layout_constraintStart_toStartOf="parent">
 
+                        <TextView
+                            android:id="@+id/job"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:includeFontPadding="false"
+                            android:textColor="@color/color_white"
+                            android:textSize="12dp"
+                            tools:text="회사원" />
+
+                        <TextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:includeFontPadding="false"
+                            android:text="·"
+                            android:textColor="@color/color_white"
+                            android:textSize="12dp" />
+
+                        <TextView
+                            android:id="@+id/location"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:includeFontPadding="false"
+                            android:textColor="@color/color_white"
+                            android:textSize="12dp"
+                            tools:text="서울" />
+
+                        <TextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:includeFontPadding="false"
+                            android:text="·"
+                            android:textColor="@color/color_white"
+                            android:textSize="12dp" />
+
+                        <TextView
+                            android:id="@+id/salary"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:includeFontPadding="false"
+                            android:textColor="@color/color_white"
+                            android:textSize="12dp"
+                            tools:text="5000만원 미만" />
+
+                    </LinearLayout>
 
                     <LinearLayout
                         android:layout_width="wrap_content"
@@ -79,14 +128,15 @@
                             android:textSize="12dp" />
 
                         <TextView
+                            android:id="@+id/progress"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:layout_marginTop="7dp"
                             android:includeFontPadding="false"
-                            android:text="41%"
                             android:textColor="@color/color_white"
                             android:textSize="22dp"
-                            android:textStyle="bold" />
+                            android:textStyle="bold"
+                            tools:text="41%" />
 
                     </LinearLayout>
                 </androidx.constraintlayout.widget.ConstraintLayout>
@@ -110,24 +160,68 @@
                             android:layout_weight="1"
                             android:orientation="vertical">
 
-                            <TextView
+                            <LinearLayout
                                 android:layout_width="wrap_content"
                                 android:layout_height="wrap_content"
-                                android:includeFontPadding="false"
-                                android:text="평균 6.05점"
-                                android:textColor="@color/color_3d3d3d"
-                                android:textSize="22dp"
-                                android:textStyle="bold" />
+                                android:orientation="horizontal">
 
-                            <TextView
+                                <TextView
+                                    android:layout_width="wrap_content"
+                                    android:layout_height="wrap_content"
+                                    android:includeFontPadding="false"
+                                    android:text="평균 "
+                                    android:textColor="@color/color_3d3d3d"
+                                    android:textSize="22dp"
+                                    android:textStyle="bold" />
+
+                                <TextView
+                                    android:id="@+id/score_average"
+                                    android:layout_width="wrap_content"
+                                    android:layout_height="wrap_content"
+                                    android:includeFontPadding="false"
+                                    android:text="6.05"
+                                    android:textColor="@color/color_3d3d3d"
+                                    android:textSize="22dp"
+                                    android:textStyle="bold" />
+
+                                <TextView
+                                    android:layout_width="wrap_content"
+                                    android:layout_height="wrap_content"
+                                    android:includeFontPadding="false"
+                                    android:text="점"
+                                    android:textColor="@color/color_3d3d3d"
+                                    android:textSize="22dp"
+                                    android:textStyle="bold" />
+
+                            </LinearLayout>
+
+                            <LinearLayout
                                 android:layout_width="wrap_content"
                                 android:layout_height="wrap_content"
-                                android:layout_marginTop="8.7dp"
-                                android:includeFontPadding="false"
-                                android:text="상위 50% 이상"
-                                android:textColor="@color/color_95989d"
-                                android:textSize="12dp"
-                                android:textStyle="bold" />
+                                android:orientation="horizontal">
+
+                                <TextView
+                                    android:layout_width="wrap_content"
+                                    android:layout_height="wrap_content"
+                                    android:layout_marginTop="8.7dp"
+                                    android:includeFontPadding="false"
+                                    android:text="상위 "
+                                    android:textColor="@color/color_95989d"
+                                    android:textSize="12dp"
+                                    android:textStyle="bold" />
+
+                                <TextView
+                                    android:id="@+id/score_over"
+                                    android:layout_width="wrap_content"
+                                    android:layout_height="wrap_content"
+                                    android:layout_marginTop="8.7dp"
+                                    android:includeFontPadding="false"
+                                    android:text="50"
+                                    android:textColor="@color/color_95989d"
+                                    android:textSize="12dp"
+                                    android:textStyle="bold" />
+
+                            </LinearLayout>
                         </LinearLayout>
 
                         <LinearLayout
@@ -145,15 +239,32 @@
                                 android:textColor="@color/color_95989d"
                                 android:textSize="12dp" />
 
-                            <TextView
+                            <LinearLayout
                                 android:layout_width="wrap_content"
                                 android:layout_height="wrap_content"
                                 android:layout_marginTop="7dp"
-                                android:includeFontPadding="false"
-                                android:text="2/10"
-                                android:textColor="@color/color_95989d"
-                                android:textSize="22dp"
-                                android:textStyle="bold" />
+                                android:orientation="horizontal">
+
+                                <TextView
+                                    android:id="@+id/review_count"
+                                    android:layout_width="wrap_content"
+                                    android:layout_height="wrap_content"
+                                    android:includeFontPadding="false"
+                                    android:text="2"
+                                    android:textColor="@color/color_95989d"
+                                    android:textSize="22dp"
+                                    android:textStyle="bold" />
+
+                                <TextView
+                                    android:layout_width="wrap_content"
+                                    android:layout_height="wrap_content"
+                                    android:includeFontPadding="false"
+                                    android:text="/5"
+                                    android:textColor="@color/color_95989d"
+                                    android:textSize="22dp"
+                                    android:textStyle="bold" />
+
+                            </LinearLayout>
                         </LinearLayout>
                     </LinearLayout>
 
@@ -163,6 +274,7 @@
                         android:layout_marginTop="16.7dp">
 
                         <ProgressBar
+                            android:id="@+id/progressBar"
                             style="?android:attr/progressBarStyleHorizontal"
                             android:layout_width="match_parent"
                             android:layout_height="10dp"
@@ -184,7 +296,7 @@
                             <ImageView
                                 android:layout_width="1dp"
                                 android:layout_height="10dp"
-                                android:background="#e6e8ec" />
+                                android:background="@color/color_c8ced1" />
 
                             <Space
                                 android:layout_width="0dp"
@@ -194,7 +306,7 @@
                             <ImageView
                                 android:layout_width="1dp"
                                 android:layout_height="10dp"
-                                android:background="#e6e8ec" />
+                                android:background="@color/color_c8ced1" />
 
                             <Space
                                 android:layout_width="0dp"
@@ -204,7 +316,7 @@
                             <ImageView
                                 android:layout_width="1dp"
                                 android:layout_height="10dp"
-                                android:background="#e6e8ec" />
+                                android:background="@color/color_c8ced1" />
 
                             <Space
                                 android:layout_width="0dp"
@@ -319,15 +431,15 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:adjustViewBounds="true"
-                android:src="@drawable/blur_bg"/>
+                android:src="@drawable/blur_bg" />
 
             <LinearLayout
                 android:layout_width="match_parent"
+                android:layout_height="wrap_content"
                 android:background="@color/color_white"
                 android:paddingLeft="20dp"
                 android:paddingRight="20dp"
-                android:paddingBottom="27dp"
-                android:layout_height="wrap_content">
+                android:paddingBottom="27dp">
 
                 <FrameLayout
                     android:id="@+id/btn_next"
@@ -344,7 +456,7 @@
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_gravity="center"
-                        android:text="다음"
+                        android:text="평가중"
                         android:textColor="@color/color_white"
                         android:textSize="20dp"
                         android:textStyle="bold" />

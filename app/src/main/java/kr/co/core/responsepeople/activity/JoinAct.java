@@ -60,13 +60,24 @@ public class JoinAct extends BaseAct {
 
         joinData = new JoinData();
 
-        boolean fromLogin = getIntent().getBooleanExtra("fromLogin", false);
-        if (fromLogin) {
-            Join04Frag join04Frag = new Join04Frag();
-            join04Frag.setFromLogin(true);
-            replaceFragment(new Join04Frag());
-        } else {
-            replaceFragment(new Join05Frag());
+        String type = getIntent().getStringExtra("type");
+        switch (type) {
+            case "image":
+                Join04Frag join04Frag = new Join04Frag();
+                join04Frag.setFromLogin(true);
+
+                /* replace fragment */
+                replaceDirect(join04Frag);
+                break;
+
+            case "prefer":
+                /* replace fragment */
+                replaceDirect(new Join05Frag());
+                break;
+
+            default:
+                replaceFragment(new Join01Frag());
+                break;
         }
 
         binding.btnClose.setOnClickListener(new View.OnClickListener() {
@@ -75,6 +86,13 @@ public class JoinAct extends BaseAct {
                 finish();
             }
         });
+    }
+
+    private void replaceDirect(BaseFrag frag) {
+        /* replace fragment */
+        FragmentTransaction transaction = fragmentManager.beginTransaction();
+        transaction.replace(R.id.area_replace, frag);
+        transaction.commit();
     }
 
     public void replaceFragment(BaseFrag frag) {

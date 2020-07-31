@@ -8,4 +8,7 @@
     <string name="ago_days">일전</string>
     <string name="ago_months">달전</string>
     <string name="ago_years">년전</string>
+
+    <string name="tag01">tag_type</string>
+    <string name="tag02">tag_view</string>
 </resources>

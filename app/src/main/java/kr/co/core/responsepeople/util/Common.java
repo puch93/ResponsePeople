@@ -15,6 +15,7 @@ import android.net.Uri;
 import android.os.Build;
 import android.os.Environment;
 import android.provider.MediaStore;
+import android.provider.Settings;
 import android.telephony.PhoneNumberUtils;
 import android.telephony.TelephonyManager;
 import android.text.TextUtils;
@@ -60,7 +61,6 @@ public class Common {
     public static final int PHOTO_TAKE = 102;
     public static final int PHOTO_GALLERY = 103;
     public static final int PHOTO_CROP = 104;
-
 
 
     /* toast setting */
@@ -110,6 +110,7 @@ public class Common {
 
     public interface OnAlertAfter {
         void onAfterOk();
+
         void onAfterCancel();
     }
 
@@ -139,9 +140,45 @@ public class Common {
         alertDialog.show();
     }
 
+    public static String calTier(float score) {
+        if (score >= 1 && score <= 4) {
+            return "브론즈";
+        } else if (score > 4 && score <= 6) {
+            return "실버";
+        } else if (score > 6 && score <= 8) {
+            return "골드";
+        } else if (score > 8) {
+            return "다이아";
+        } else {
+            return "브론즈";
+        }
+    }
+
+    public static String calTierMessage(float score) {
+        int result = (int) (100 - (score / 10) * 100);
+        if(result == 100) {
+            return String.valueOf(result) + "%";
+        } else {
+            return String.valueOf(result) + "% 이상";
+        }
+    }
+
+    public static int calTierImage(float score) {
+        if (score >= 1 && score <= 4) {
+            return R.drawable.icon_b_bronz;
+        } else if (score > 4 && score <= 6) {
+            return R.drawable.icon_b_silver;
+        } else if (score > 6 && score <= 8) {
+            return R.drawable.icon_b_gold;
+        } else if (score > 8) {
+            return R.drawable.icon_b_diamond;
+        } else {
+            return R.drawable.icon_b_bronz;
+        }
+    }
 
     public static void processProfileImageRec(Context ctx, ImageView imageView, String profile_img, boolean isPass, int radius, int sampling) {
-        if(StringUtil.isNull(profile_img)) {
+        if (StringUtil.isNull(profile_img)) {
             // 사진 값이 없을 때
             Glide.with(ctx)
 //                    .load(AppPreference.getProfilePref(ctx, AppPreference.PREF_GENDER).equalsIgnoreCase("M") ? R.drawable.noimg_female : R.drawable.noimg_female)
@@ -149,7 +186,7 @@ public class Common {
                     .into(imageView);
         } else {
             // 사진 값이 있을 때
-            if(!isPass) {
+            if (!isPass) {
                 // 검수중일때
                 Glide.with(ctx)
                         .load(NetUrls.DOMAIN_ORIGIN + profile_img)
@@ -163,6 +200,36 @@ public class Common {
             }
         }
     }
+
+
+    public static void processProfileImageCircle(Context ctx, ImageView imageView, String profile_img, boolean isPass, int radius, int sampling) {
+        if (StringUtil.isNull(profile_img)) {
+            // 사진 값이 없을 때
+            Glide.with(ctx)
+//                    .load(AppPreference.getProfilePref(ctx, AppPreference.PREF_GENDER).equalsIgnoreCase("M") ? R.drawable.noimg_female : R.drawable.noimg_female)
+                    .load(R.drawable.noimg_sexless)
+                    .transform(new CircleCrop())
+                    .into(imageView);
+        } else {
+            // 사진 값이 있을 때
+            if (!isPass) {
+                // 검수중일때
+                Glide.with(ctx)
+                        .load(NetUrls.DOMAIN_ORIGIN + profile_img)
+                        .transform(new BlurTransformation(radius, sampling), new CircleCrop(), new CenterCrop())
+                        .into(imageView);
+            } else {
+                //검수완료일때
+                Glide.with(ctx)
+                        .load(NetUrls.DOMAIN_ORIGIN + profile_img)
+                        .transform(new CircleCrop())
+                        .into(imageView);
+            }
+        }
+    }
+
+
+
 
     public static boolean isImage(String msg) {
         String reg = "^([\\S]+(\\.(?i)(jpg|png|jpeg))$)";
@@ -212,15 +279,7 @@ public class Common {
         String newId = null;
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.Q) {
             Log.i(StringUtil.TAG, "Q이상");
-//            newId = Settings.Secure.getString(context.getContentResolver(), Settings.Secure.ANDROID_ID);
-            newId = "35" +
-                    Build.BOARD.length() % 10 + Build.BRAND.length() % 10 +
-                    Build.CPU_ABI.length() % 10 + Build.DEVICE.length() % 10 +
-                    Build.DISPLAY.length() % 10 + Build.HOST.length() % 10 +
-                    Build.ID.length() % 10 + Build.MANUFACTURER.length() % 10 +
-                    Build.MODEL.length() % 10 + Build.PRODUCT.length() % 10 +
-                    Build.TAGS.length() % 10 + Build.TYPE.length() % 10 +
-                    Build.USER.length() % 10;
+            newId = Settings.Secure.getString(context.getContentResolver(), Settings.Secure.ANDROID_ID);
         } else {
             Log.i(StringUtil.TAG, "Q미만");
             newId = ((TelephonyManager) context.getSystemService(Context.TELEPHONY_SERVICE)).getDeviceId();

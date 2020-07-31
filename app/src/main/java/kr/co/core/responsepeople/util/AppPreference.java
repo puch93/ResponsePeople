@@ -8,6 +8,7 @@ public class AppPreference {
     public static final String PREF_MIDX = "midx";
     public static final String PREF_FCM = "fcm";
     public static final String PREF_UNIQ = "uniq";
+    public static final String PREF_JSON = "json";
 
     public static final String PREF_ID = "id";
     public static final String PREF_PW = "pw";
