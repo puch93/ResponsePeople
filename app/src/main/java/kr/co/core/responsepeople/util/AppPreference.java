@@ -49,6 +49,10 @@ public class AppPreference {
         editor.putBoolean(key, value);
         editor.commit();
     }
+    public static boolean getProfilePrefBool(Context context, String key) {
+        SharedPreferences pref = context.getSharedPreferences("profile", context.MODE_PRIVATE);
+        return pref.getBoolean(key, false);
+    }
 
     // profile string
     public static void setProfilePrefLong(Context context, String key, long value) {

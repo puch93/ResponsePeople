@@ -9,6 +9,9 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
 
+import org.json.JSONException;
+import org.json.JSONObject;
+
 import kr.co.core.responsepeople.R;
 import kr.co.core.responsepeople.databinding.ActivityMainBinding;
 import kr.co.core.responsepeople.fragment.BaseFrag;
@@ -17,7 +20,13 @@ import kr.co.core.responsepeople.fragment.NearFrag;
 import kr.co.core.responsepeople.fragment.OnlineFrag;
 import kr.co.core.responsepeople.fragment.RecommendFrag;
 import kr.co.core.responsepeople.fragment.ResponseFrag;
+import kr.co.core.responsepeople.server.ReqBasic;
+import kr.co.core.responsepeople.server.netUtil.HttpResult;
+import kr.co.core.responsepeople.server.netUtil.NetUrls;
+import kr.co.core.responsepeople.util.AppPreference;
 import kr.co.core.responsepeople.util.BackPressCloseHandler;
+import kr.co.core.responsepeople.util.Common;
+import kr.co.core.responsepeople.util.StringUtil;
 
 public class MainAct extends BaseAct implements View.OnClickListener {
     ActivityMainBinding binding;
@@ -40,6 +49,7 @@ public class MainAct extends BaseAct implements View.OnClickListener {
         binding.btnQuestion.setOnClickListener(this);
         binding.btnAlarm.setOnClickListener(this);
         binding.btnChat.setOnClickListener(this);
+        binding.btnSetting.setOnClickListener(this);
         binding.menu01Area.setOnClickListener(this);
         binding.menu02Area.setOnClickListener(this);
         binding.menu03Area.setOnClickListener(this);
@@ -48,6 +58,7 @@ public class MainAct extends BaseAct implements View.OnClickListener {
 
         binding.menu01Area.performClick();
     }
+
 
     @Override
     public void onBackPressed() {
@@ -102,6 +113,44 @@ public class MainAct extends BaseAct implements View.OnClickListener {
                 startActivity(new Intent(act, QuestionManageAct.class));
                 break;
 
+            case R.id.btn_setting:
+                doLogout();
+                break;
+
         }
+    }
+
+
+    private void doLogout() {
+        ReqBasic server = new ReqBasic(act, NetUrls.DOMAIN) {
+            @Override
+            public void onAfter(int resultCode, HttpResult resultData) {
+                if (resultData.getResult() != null) {
+                    try {
+                        JSONObject jo = new JSONObject(resultData.getResult());
+
+                        if( StringUtil.getStr(jo, "result").equalsIgnoreCase("Y")) {
+                            AppPreference.setProfilePrefBool(act, AppPreference.AUTO_LOGIN, false);
+                            startActivity(new Intent(act, LoginAct.class));
+                            finish();
+                            finishAffinity();
+                        } else {
+                            Common.showToast(act, StringUtil.getStr(jo, "message"));
+                        }
+
+                    } catch (JSONException e) {
+                        e.printStackTrace();
+                        Common.showToastNetwork(act);
+                    }
+                } else {
+                    Common.showToastNetwork(act);
+                }
+            }
+        };
+
+        server.setTag("Logout");
+        server.addParams("dbControl", NetUrls.LOGOUT);
+        server.addParams("m_idx", AppPreference.getProfilePref(act, AppPreference.PREF_MIDX));
+        server.execute(true, false);
     }
 }

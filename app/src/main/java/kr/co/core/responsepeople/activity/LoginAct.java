@@ -33,7 +33,13 @@ public class LoginAct extends BaseAct {
         act = this;
 
         binding.btnLogin.setOnClickListener(v -> {
-            doLogin();
+            if(binding.id.length() == 0) {
+                Common.showToast(act, "아이디를 입력해주세요");
+            } else if(binding.password.length() == 0) {
+                Common.showToast(act, "비밀번호를 입력해주세요");
+            } else {
+                doLogin();
+            }
         });
         binding.btnFind.setOnClickListener(v -> {
 
@@ -67,6 +73,9 @@ public class LoginAct extends BaseAct {
                             AppPreference.setProfilePref(act, AppPreference.PREF_PW, m_pass);
                             AppPreference.setProfilePref(act, AppPreference.PREF_IMAGE, NetUrls.DOMAIN_ORIGIN + m_profile1);
 
+                            if (binding.ckAutoLogin.isChecked())
+                                AppPreference.setProfilePrefBool(act, AppPreference.AUTO_LOGIN, true);
+
                             startActivity(new Intent(act, MainAct.class));
                             finish();
                         } else {
@@ -89,7 +98,7 @@ public class LoginAct extends BaseAct {
                                 if (!StringUtil.isNull(type)) {
                                     AppPreference.setProfilePref(act, AppPreference.PREF_JSON, jo.toString());
                                     // 로그인 완료회원 아니면 자동로그인 처리 (로그인시 페이지 이동 고정시킴)
-                                    MemberUtil.setJoinProcess(act, StringUtil.getStr(job, "m_id"), StringUtil.getStr(job, "m_pw"));
+//                                    MemberUtil.setJoinProcess(act, StringUtil.getStr(job, "m_id"), StringUtil.getStr(job, "m_pw"));
 
 
                                     switch (type) {
