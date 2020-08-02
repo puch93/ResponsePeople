@@ -38,11 +38,14 @@ import java.util.TimerTask;
 
 import kr.co.core.responsepeople.R;
 import kr.co.core.responsepeople.activity.MainAct;
+import kr.co.core.responsepeople.fragment.BaseFrag;
+import kr.co.core.responsepeople.fragment.Join04Frag;
 import kr.co.core.responsepeople.server.ReqBasic;
 import kr.co.core.responsepeople.server.netUtil.HttpResult;
 import kr.co.core.responsepeople.server.netUtil.NetUrls;
 import kr.co.core.responsepeople.util.AppPreference;
 import kr.co.core.responsepeople.util.Common;
+import kr.co.core.responsepeople.util.LogUtil;
 import kr.co.core.responsepeople.util.StringUtil;
 
 public class MyFirebaseMessagingService extends FirebaseMessagingService {
@@ -70,5 +73,32 @@ public class MyFirebaseMessagingService extends FirebaseMessagingService {
         ctx = getApplicationContext();
 
         Log.e(StringUtil.TAG_PUSH, "remoteMessage.getData: " + remoteMessage.getData());
+        JSONObject jo = new JSONObject(remoteMessage.getData());
+        String type = StringUtil.getStr(jo, "type");
+        String m_idx = StringUtil.getStr(jo, "m_idx");
+        if (!StringUtil.isNull(type) && !StringUtil.isNull(m_idx)) {
+                switch (type) {
+                    case "image":
+                        if (Join04Frag.frag != null) {
+                            LogUtil.logI("Join04Frag.frag != null");
+                            ((Join04Frag) Join04Frag.frag).imageConfirmed();
+                        }
+                        break;
+
+                    case "image_fail":
+                        if (Join04Frag.frag != null) {
+                            LogUtil.logI("Join04Frag.frag != null");
+                            ((Join04Frag) Join04Frag.frag).imageFailed();
+                        }
+
+                        break;
+                }
+
+        } else {
+            if (StringUtil.isNull(type))
+                LogUtil.logI(ctx.getClass().getSimpleName() + " --> type is null");
+            if (StringUtil.isNull(m_idx))
+                LogUtil.logI(ctx.getClass().getSimpleName() + " --> m_idx is null");
+        }
     }
 }

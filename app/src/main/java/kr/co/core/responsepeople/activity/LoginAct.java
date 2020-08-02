@@ -19,6 +19,7 @@ import kr.co.core.responsepeople.server.netUtil.NetUrls;
 import kr.co.core.responsepeople.util.AppPreference;
 import kr.co.core.responsepeople.util.Common;
 import kr.co.core.responsepeople.util.GpsInfo;
+import kr.co.core.responsepeople.util.MemberUtil;
 import kr.co.core.responsepeople.util.StringUtil;
 
 public class LoginAct extends BaseAct {
@@ -58,11 +59,13 @@ public class LoginAct extends BaseAct {
                             String m_gender = StringUtil.getStr(job, "m_gender");
                             String m_id = StringUtil.getStr(job, "m_id");
                             String m_pass = StringUtil.getStr(job, "m_pass");
+                            String m_profile1 = StringUtil.getStr(job, "m_profile1");
 
                             AppPreference.setProfilePref(act, AppPreference.PREF_MIDX, m_idx);
                             AppPreference.setProfilePref(act, AppPreference.PREF_GENDER, m_gender);
                             AppPreference.setProfilePref(act, AppPreference.PREF_ID, m_id);
                             AppPreference.setProfilePref(act, AppPreference.PREF_PW, m_pass);
+                            AppPreference.setProfilePref(act, AppPreference.PREF_IMAGE, NetUrls.DOMAIN_ORIGIN + m_profile1);
 
                             startActivity(new Intent(act, MainAct.class));
                             finish();
@@ -83,27 +86,38 @@ public class LoginAct extends BaseAct {
                                 AppPreference.setProfilePref(act, AppPreference.PREF_ID, m_id);
                                 AppPreference.setProfilePref(act, AppPreference.PREF_PW, m_pass);
 
-                                switch (type) {
-                                    // 프로필 사진 검수중
-                                    case "image":
-                                        AppPreference.setProfilePref(act, AppPreference.PREF_JSON, jo.toString());
-                                        startActivity(new Intent(act, JoinAct.class).putExtra("type", "image"));
-                                        break;
-                                    // 선호 설정 안함
-                                    case "prefer":
-                                        AppPreference.setProfilePref(act, AppPreference.PREF_JSON, jo.toString());
-                                        startActivity(new Intent(act, JoinAct.class).putExtra("type", "prefer"));
-                                        break;
-                                    // 평가 중인 경우
-                                    case "rating":
-                                        AppPreference.setProfilePref(act, AppPreference.PREF_JSON, jo.toString());
-                                        startActivity(new Intent(act, EvaluationBeforeAct.class));
-                                        break;
-                                    // 평가 완료 안누른 회원
-                                    case "waiting":
-                                        AppPreference.setProfilePref(act, AppPreference.PREF_JSON, jo.toString());
-                                        startActivity(new Intent(act, EvaluationAfterAct.class));
-                                        break;
+                                if (!StringUtil.isNull(type)) {
+                                    AppPreference.setProfilePref(act, AppPreference.PREF_JSON, jo.toString());
+                                    // 로그인 완료회원 아니면 자동로그인 처리 (로그인시 페이지 이동 고정시킴)
+                                    MemberUtil.setJoinProcess(act, StringUtil.getStr(job, "m_id"), StringUtil.getStr(job, "m_pw"));
+
+
+                                    switch (type) {
+                                        // 프로필 사진 검수중
+                                        case "image":
+                                            startActivity(new Intent(act, JoinAct.class).putExtra("type", "image"));
+                                            break;
+                                        // 프로필 재심사
+                                        case "image_fail":
+                                            startActivity(new Intent(act, JoinAct.class).putExtra("type", "image_fail"));
+                                            break;
+                                        // 선호 설정 안함
+                                        case "prefer":
+                                            startActivity(new Intent(act, JoinAct.class).putExtra("type", "prefer"));
+                                            break;
+                                        // 평가 중인 경우
+                                        case "rating":
+                                            startActivity(new Intent(act, EvaluationBeforeAct.class));
+                                            break;
+                                        // 평가 완료 안누른 회원
+                                        case "waiting":
+                                            startActivity(new Intent(act, EvaluationAfterAct.class));
+                                            break;
+                                    }
+
+
+                                    //TODO 주석해제 해줘야함 나중에
+//                                    finish();
                                 }
                             }
                         }

@@ -14,6 +14,7 @@ public class AppPreference {
     public static final String PREF_PW = "pw";
     public static final String PREF_NICK = "nick";
     public static final String PREF_GENDER = "gender";
+    public static final String PREF_IMAGE = "image";
 
     public static final String PREF_LAT = "latitude";
     public static final String PREF_LON = "longitude";
@@ -24,6 +25,7 @@ public class AppPreference {
     public static final String STATE_PREFER = "join_prefer"; // 선호 설정 여부
     public static final String STATE_REVIEWING = "join_reviewing"; // 평가중
     public static final String STATE_COMPLETE = "join_complete"; // 평가완료
+    public static final String AUTO_LOGIN = "auto_login"; // 자동로그인
 
 
     // profile string

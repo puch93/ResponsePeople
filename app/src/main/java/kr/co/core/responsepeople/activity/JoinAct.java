@@ -62,17 +62,31 @@ public class JoinAct extends BaseAct {
 
         String type = getIntent().getStringExtra("type");
         switch (type) {
+            // 이미지 검수중
             case "image":
+            case "image_fail":
                 Join04Frag join04Frag = new Join04Frag();
-                join04Frag.setFromLogin(true);
+                join04Frag.setFromType(type);
 
                 /* replace fragment */
                 replaceDirect(join04Frag);
+                runOnUiThread(new Runnable() {
+                    @Override
+                    public void run() {
+                        binding.indicator.animatePageSelected(3);
+                    }
+                });
                 break;
 
             case "prefer":
                 /* replace fragment */
                 replaceDirect(new Join05Frag());
+                runOnUiThread(new Runnable() {
+                    @Override
+                    public void run() {
+                        binding.indicator.animatePageSelected(4);
+                    }
+                });
                 break;
 
             default:
@@ -96,21 +110,26 @@ public class JoinAct extends BaseAct {
     }
 
     public void replaceFragment(BaseFrag frag) {
-        if (frag instanceof Join01Frag) {
-            binding.title.setText("이용 약관 동의");
-        } else if (frag instanceof Join02Frag) {
-            binding.title.setText("계정 생성");
-            binding.indicator.animatePageSelected(1);
-        } else if (frag instanceof Join03Frag) {
-            binding.title.setText("본인 인증");
-            binding.indicator.animatePageSelected(2);
-        } else if (frag instanceof Join04Frag) {
-            binding.title.setText("프로필 작성");
-            binding.indicator.animatePageSelected(3);
-        } else {
-            binding.title.setText("선호 설정");
-            binding.indicator.animatePageSelected(4);
-        }
+        runOnUiThread(new Runnable() {
+            @Override
+            public void run() {
+                if (frag instanceof Join01Frag) {
+                    binding.title.setText("이용 약관 동의");
+                } else if (frag instanceof Join02Frag) {
+                    binding.title.setText("계정 생성");
+                    binding.indicator.animatePageSelected(1);
+                } else if (frag instanceof Join03Frag) {
+                    binding.title.setText("본인 인증");
+                    binding.indicator.animatePageSelected(2);
+                } else if (frag instanceof Join04Frag) {
+                    binding.title.setText("프로필 작성");
+                    binding.indicator.animatePageSelected(3);
+                } else {
+                    binding.title.setText("선호 설정");
+                    binding.indicator.animatePageSelected(4);
+                }
+            }
+        });
 
         /* replace fragment */
         FragmentTransaction transaction = fragmentManager.beginTransaction();
@@ -118,6 +137,7 @@ public class JoinAct extends BaseAct {
             transaction.setCustomAnimations(R.anim.anim_slide_in_right, R.anim.anim_slide_out_left, R.anim.anim_slide_in_left, R.anim.anim_slide_out_right);
         }
         transaction.replace(R.id.area_replace, frag);
-        transaction.commit();
+//        transaction.commit();
+        transaction.commitAllowingStateLoss();
     }
 }

@@ -1,0 +1,96 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:orientation="vertical">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="67dp"
+        android:gravity="center_vertical"
+        android:paddingLeft="20.3dp"
+        android:paddingRight="20.7dp">
+
+        <ImageView
+            android:id="@+id/profile_img"
+            android:layout_width="45dp"
+            android:layout_height="45dp"
+            tools:src="@drawable/profile_close_search" />
+
+
+        <LinearLayout
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:layout_marginLeft="10.3dp"
+            android:orientation="vertical">
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal">
+
+                <TextView
+                    android:id="@+id/nick"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:includeFontPadding="false"
+                    android:textColor="@color/color_2c2c2c"
+                    android:textSize="16dp"
+                    android:textStyle="bold"
+                    tools:text="긴또깡" />
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:includeFontPadding="false"
+                    android:text=", "
+                    android:textColor="@color/color_2c2c2c"
+                    android:textSize="16dp"
+                    android:textStyle="bold" />
+
+                <TextView
+                    android:id="@+id/age"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:includeFontPadding="false"
+                    android:textColor="@color/color_2c2c2c"
+                    android:textSize="16dp"
+                    android:textStyle="bold"
+                    tools:text="31" />
+
+            </LinearLayout>
+
+            <TextView
+                android:id="@+id/date"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="6dp"
+                android:includeFontPadding="false"
+                android:textColor="@color/color_848d91"
+                android:textSize="11dp"
+                tools:text="5분전" />
+        </LinearLayout>
+
+        <TextView
+            android:id="@+id/btn_response"
+            android:layout_width="90dp"
+            android:layout_height="37dp"
+            android:background="@drawable/btn_s_sky"
+            android:textSize="14.7dp"
+            android:textColor="@color/color_white"
+            android:textStyle="bold"
+            android:gravity="center"
+            android:text="응답하기"
+            />
+    </LinearLayout>
+
+    <ImageView
+        android:layout_width="match_parent"
+        android:layout_height="1dp"
+        android:layout_marginLeft="20dp"
+        android:layout_marginRight="20dp"
+        android:background="#eceeef"/>
+
+</LinearLayout>

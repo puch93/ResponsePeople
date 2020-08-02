@@ -62,4 +62,5 @@ dependencies {
     implementation 'com.xw.repo:bubbleseekbar:3.20'
     implementation 'com.github.Jay-Goo:RangeSeekBar:v3.0.0'
     implementation 'com.github.chrisbanes:PhotoView:2.0.0'
+    implementation 'com.google.android.material:material:1.1.0'
 }

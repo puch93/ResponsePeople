@@ -3,6 +3,7 @@
     xmlns:app="http://schemas.android.com/apk/res-auto">
 
     <androidx.core.widget.NestedScrollView
+        android:id="@+id/nested_scroll_view"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:background="@color/color_white"
@@ -24,6 +25,18 @@
                 android:paddingRight="20dp"
                 android:paddingBottom="38.3dp"
                 android:visibility="visible">
+
+                <TextView
+                    android:id="@+id/image_fail_text"
+                    android:layout_width="wrap_content"
+                    android:visibility="gone"
+                    android:layout_height="wrap_content"
+                    android:includeFontPadding="false"
+                    android:text="프로필 사진이 반려되었습니다. 다시 등록해주세요."
+                    android:textColor="@color/color_e60012"
+                    android:textSize="13.2dp"
+                    android:layout_marginBottom="5dp"
+                    android:textStyle="bold" />
 
                 <TextView
                     android:layout_width="wrap_content"
@@ -908,6 +921,7 @@
                     android:src="@drawable/sel_join_next_btn" />
 
                 <TextView
+                    android:id="@+id/btn_next_text"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_gravity="center"

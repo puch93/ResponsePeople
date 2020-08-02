@@ -63,6 +63,8 @@ import kr.co.core.responsepeople.server.netUtil.HttpResult;
 import kr.co.core.responsepeople.server.netUtil.NetUrls;
 import kr.co.core.responsepeople.util.AppPreference;
 import kr.co.core.responsepeople.util.Common;
+import kr.co.core.responsepeople.util.LogUtil;
+import kr.co.core.responsepeople.util.MemberUtil;
 import kr.co.core.responsepeople.util.OnPhotoAfterAction;
 import kr.co.core.responsepeople.util.StringUtil;
 
@@ -71,7 +73,7 @@ import static android.app.Activity.RESULT_OK;
 public class Join04Frag extends BaseFrag implements View.OnClickListener {
     FragmentJoin04Binding binding;
     Activity act;
-    Fragment frag;
+    public static Fragment frag;
 
     // image
     private ArrayList<String> images = new ArrayList<>();
@@ -88,6 +90,7 @@ public class Join04Frag extends BaseFrag implements View.OnClickListener {
     private EtcProfileAdapter adapter_interest;
     private EtcProfileAdapter adapter_ideal;
 
+
     TextView selectedView;
     static final int PROFILE = 1001;
     static final int BIRTH = 1002;
@@ -99,11 +102,77 @@ public class Join04Frag extends BaseFrag implements View.OnClickListener {
 
     private AppCompatDialog progressDialog;
 
-    boolean fromLogin = false;
+    private String fromType = "";
 
-    public void setFromLogin(boolean fromLogin) {
-        this.fromLogin = fromLogin;
+
+    public void setFromType(String fromType) {
+        this.fromType = fromType;
     }
+
+    public void imageConfirmed() {
+        LogUtil.logI("imageConfirmed called");
+        setProgressDialogDismiss();
+
+        BaseFrag fragment = new Join05Frag();
+        ((JoinAct) act).replaceFragment(fragment);
+    }
+
+    public void imageFailed() {
+        LogUtil.logI("imageFailed called");
+        setProgressDialogDismiss();
+
+        Common.showToast(act, "이미지를 재등록해주세요");
+
+        act.runOnUiThread(new Runnable() {
+            @Override
+            public void run() {
+                binding.nestedScrollView.scrollTo(0,0);
+                binding.imageFailText.setVisibility(View.VISIBLE);
+                binding.btnNext.setOnClickListener(view -> {
+                    // 프로필 사진 재검수 요청
+                    if (images.size() < 4) {
+                        Common.showToast(act, "이미지를 3장이상 등록해주세요");
+                    } else {
+                        doRequestCheck();
+                    }
+                });
+
+                images = new ArrayList<>();
+                images.add(null);
+                adapter.setList(images);
+
+                binding.nick.setClickable(false);
+                binding.nick.setEnabled(false);
+                binding.intro.setClickable(false);
+                binding.intro.setEnabled(false);
+
+                binding.location.setClickable(false);
+                binding.birth.setClickable(false);
+                binding.height.setClickable(false);
+                binding.body.setClickable(false);
+                binding.edu.setClickable(false);
+                binding.job.setClickable(false);
+                binding.drink.setClickable(false);
+                binding.smoke.setClickable(false);
+                binding.religion.setClickable(false);
+                binding.salary.setClickable(false);
+
+                adapter_charm.setClickable(false);
+                adapter_interest.setClickable(false);
+                adapter_ideal.setClickable(false);
+
+                binding.btnNextText.setText("재검수 요청하기");
+
+                // 재검수 요청일때
+                if (images.size() < 4) {
+                    binding.btnNext.setSelected(false);
+                } else {
+                    binding.btnNext.setSelected(true);
+                }
+            }
+        });
+    }
+
 
     @Nullable
     @Override
@@ -116,70 +185,82 @@ public class Join04Frag extends BaseFrag implements View.OnClickListener {
         progressDialog.setCancelable(false);
         progressDialog.getWindow().setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
         progressDialog.setContentView(R.layout.dialog_state_image);
-        progressDialog.setOnCancelListener(new DialogInterface.OnCancelListener() {
-            @Override
-            public void onCancel(DialogInterface dialogInterface) {
-                act.finish();
-                act.finishAffinity();
-            }
-        });
+//        progressDialog.setOnCancelListener(new DialogInterface.OnCancelListener() {
+//            @Override
+//            public void onCancel(DialogInterface dialogInterface) {
+//                act.finish();
+//                act.finishAffinity();
+//            }
+//        });
 
         setRecyclerView();
 
-        if (fromLogin) {
-            setFromLoginLayout();
-        } else {
 
+        if (StringUtil.isNull(fromType)) {
             setClickListener();
             setTextWatcher();
 
             binding.btnNext.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View view) {
-                    matcher_nick = VALID_NICK.matcher(binding.nick.getText().toString());
+                    if (StringUtil.isNull(fromType)) {
+                        matcher_nick = VALID_NICK.matcher(binding.nick.getText().toString());
 
-                    if (images.size() < 3) {
-                        Common.showToast(act, "이미지를 3장이상 등록해주세요");
-                    } else if (binding.nick.length() == 0 || !matcher_nick.matches()) {
-                        Common.showToast(act, "닉네임을 확인해주세요");
-                    } else if (binding.location.length() == 0) {
-                        Common.showToast(act, "지역을 선택해주세요");
-                    } else if (binding.birth.length() == 0) {
-                        Common.showToast(act, "생년월일을 선택해주세요");
-                    } else if (binding.height.length() == 0) {
-                        Common.showToast(act, "키를 선택해주세요");
-                    } else if (binding.body.length() == 0) {
-                        Common.showToast(act, "체형을 선택해주세요");
-                    } else if (binding.edu.length() == 0) {
-                        Common.showToast(act, "학력을 선택해주세요");
-                    } else if (binding.job.length() == 0) {
-                        Common.showToast(act, "직업을 선택해주세요");
-                    } else if (binding.drink.length() == 0) {
-                        Common.showToast(act, "음주여부를 선택해주세요");
-                    } else if (binding.smoke.length() == 0) {
-                        Common.showToast(act, "흡연여부를 선택해주세요");
-                    } else if (binding.religion.length() == 0) {
-                        Common.showToast(act, "종교를 선택해주세요");
-                    } else if (binding.salary.length() == 0) {
-                        Common.showToast(act, "연봉을 선택해주세요");
-                    } else if (binding.intro.length() == 0) {
-                        Common.showToast(act, "소개말을 입력해주세요");
-                    } else if (list_charm.size() < 2) {
-                        Common.showToast(act, "매력포인트를 선택해주세요");
-                    } else if (list_interest.size() < 2) {
-                        Common.showToast(act, "관심사를 선택해주세요");
-                    } else if (list_ideal.size() < 2) {
-                        Common.showToast(act, "이상형을 선택해주세요");
-                    } else {
-                        nextProcess();
-//                        doReCheckTest();
+                        if (images.size() < 4) {
+                            Common.showToast(act, "이미지를 3장이상 등록해주세요");
+                        } else if (binding.nick.length() == 0 || !matcher_nick.matches()) {
+                            Common.showToast(act, "닉네임을 확인해주세요");
+                        } else if (binding.location.length() == 0) {
+                            Common.showToast(act, "지역을 선택해주세요");
+                        } else if (binding.birth.length() == 0) {
+                            Common.showToast(act, "생년월일을 선택해주세요");
+                        } else if (binding.height.length() == 0) {
+                            Common.showToast(act, "키를 선택해주세요");
+                        } else if (binding.body.length() == 0) {
+                            Common.showToast(act, "체형을 선택해주세요");
+                        } else if (binding.edu.length() == 0) {
+                            Common.showToast(act, "학력을 선택해주세요");
+                        } else if (binding.job.length() == 0) {
+                            Common.showToast(act, "직업을 선택해주세요");
+                        } else if (binding.drink.length() == 0) {
+                            Common.showToast(act, "음주여부를 선택해주세요");
+                        } else if (binding.smoke.length() == 0) {
+                            Common.showToast(act, "흡연여부를 선택해주세요");
+                        } else if (binding.religion.length() == 0) {
+                            Common.showToast(act, "종교를 선택해주세요");
+                        } else if (binding.salary.length() == 0) {
+                            Common.showToast(act, "연봉을 선택해주세요");
+                        } else if (binding.intro.length() == 0) {
+                            Common.showToast(act, "소개말을 입력해주세요");
+                        } else if (list_charm.size() < 2) {
+                            Common.showToast(act, "매력포인트를 선택해주세요");
+                        } else if (list_interest.size() < 2) {
+                            Common.showToast(act, "관심사를 선택해주세요");
+                        } else if (list_ideal.size() < 2) {
+                            Common.showToast(act, "이상형을 선택해주세요");
+                        } else {
+                            nextProcess();
+                        }
                     }
                 }
             });
+        } else if (fromType.equalsIgnoreCase("image")) {
+            setProgressDialogShow();
+            setFromLoginLayout();
+        } else if (fromType.equalsIgnoreCase("image_fail")) {
+            imageFailed();
+            setFromLoginLayout();
         }
 
         return binding.getRoot();
     }
+
+    @Override
+    public void onDestroy() {
+        super.onDestroy();
+        frag = null;
+    }
+
     private void doTestEditProfile() {
         ReqBasic server = new ReqBasic(act, NetUrls.DOMAIN) {
             @Override
@@ -188,7 +269,7 @@ public class Join04Frag extends BaseFrag implements View.OnClickListener {
                     try {
                         JSONObject jo = new JSONObject(resultData.getResult());
 
-                        if( StringUtil.getStr(jo, "result").equalsIgnoreCase("Y")) {
+                        if (StringUtil.getStr(jo, "result").equalsIgnoreCase("Y")) {
 
                         } else {
 
@@ -234,7 +315,8 @@ public class Join04Frag extends BaseFrag implements View.OnClickListener {
     }
 
 
-    private void doReCheckTest() {
+    // 재검수요청
+    private void doRequestCheck() {
         ReqBasic server = new ReqBasic(act, NetUrls.DOMAIN) {
             @Override
             public void onAfter(int resultCode, HttpResult resultData) {
@@ -243,9 +325,9 @@ public class Join04Frag extends BaseFrag implements View.OnClickListener {
                         JSONObject jo = new JSONObject(resultData.getResult());
 
                         if (StringUtil.getStr(jo, "result").equalsIgnoreCase("Y")) {
-
                         } else {
-
+                            setProgressDialogShow();
+                            Common.showToast(act, StringUtil.getStr(jo, "message"));
                         }
 
                     } catch (JSONException e) {
@@ -260,11 +342,11 @@ public class Join04Frag extends BaseFrag implements View.OnClickListener {
 
         server.setTag("Request ReCheck");
         server.addParams("dbControl", NetUrls.REQUEST_CHECK);
-        server.addParams("m_idx", "29");
+        server.addParams("m_idx", AppPreference.getProfilePref(act, AppPreference.PREF_MIDX));
         // 파일
-        ArrayList<String> list_test = adapter.getList();
-        for (int i = 1; i < list_test.size(); i++) {
-            String filePath = list_test.get(i);
+        ArrayList<String> list_image = adapter.getList();
+        for (int i = 1; i < list_image.size(); i++) {
+            String filePath = list_image.get(i);
             File file = new File(filePath);
             server.addFileParams("m_profile" + i, file);
             server.addParams("m_profile" + i + "ck", "Y");
@@ -283,18 +365,18 @@ public class Join04Frag extends BaseFrag implements View.OnClickListener {
     }
 
     private void setFromLoginLayout() {
-        setProgressDialogShow();
-
         try {
             JSONObject jo = new JSONObject(AppPreference.getProfilePref(act, AppPreference.PREF_JSON));
             JSONArray ja = jo.getJSONArray("data");
             JSONObject job = ja.getJSONObject(0);
 
-            for (int i = 1; i < 7; i++) {
-                if (!StringUtil.isNull(StringUtil.getStr(job, "m_profile" + i))) {
-                    images.add(NetUrls.DOMAIN_ORIGIN + StringUtil.getStr(job, "m_profile" + i));
-                } else {
-                    break;
+            if (fromType.equalsIgnoreCase("image")) {
+                for (int i = 1; i < 7; i++) {
+                    if (!StringUtil.isNull(StringUtil.getStr(job, "m_profile" + i))) {
+                        images.add(NetUrls.DOMAIN_ORIGIN + StringUtil.getStr(job, "m_profile" + i));
+                    } else {
+                        break;
+                    }
                 }
             }
 
@@ -326,7 +408,8 @@ public class Join04Frag extends BaseFrag implements View.OnClickListener {
             act.runOnUiThread(new Runnable() {
                 @Override
                 public void run() {
-                    adapter.setList(images);
+                    if (fromType.equalsIgnoreCase("image"))
+                        adapter.setList(images);
 
                     binding.nick.setText(m_nick);
                     binding.location.setText(m_location);
@@ -361,6 +444,10 @@ public class Join04Frag extends BaseFrag implements View.OnClickListener {
 
                         if (StringUtil.getStr(jo, "result").equalsIgnoreCase("Y")) {
                             setProgressDialogShow();
+                            JSONArray ja = jo.getJSONArray("data");
+                            JSONObject job = ja.getJSONObject(0);
+
+                            MemberUtil.setJoinProcess(act, StringUtil.getStr(job, "m_id"), StringUtil.getStr(job, "m_pw"));
                         } else {
                             Common.showToast(act, "message");
                         }
@@ -458,7 +545,7 @@ public class Join04Frag extends BaseFrag implements View.OnClickListener {
     private boolean checkAllProcess() {
         matcher_nick = VALID_NICK.matcher(binding.nick.getText().toString());
 
-        if (images.size() < 3) {
+        if (images.size() < 4) {
             return false;
         } else if (binding.nick.length() == 0 || !matcher_nick.matches()) {
             return false;
@@ -520,6 +607,18 @@ public class Join04Frag extends BaseFrag implements View.OnClickListener {
             public void deleteButtonClicked() {
                 binding.expandView.setVisibility(View.GONE);
                 images = adapter.getList();
+
+                if (StringUtil.isNull(fromType)) {
+                    // 일반회원가입일때
+                    nextProcess();
+                } else {
+                    // 재검수 요청일때
+                    if (images.size() < 4) {
+                        binding.btnNext.setSelected(false);
+                    } else {
+                        binding.btnNext.setSelected(true);
+                    }
+                }
             }
         });
         binding.recyclerView.setLayoutManager(new LinearLayoutManager(act, RecyclerView.HORIZONTAL, false));
@@ -664,8 +763,10 @@ public class Join04Frag extends BaseFrag implements View.OnClickListener {
         JoinAct.joinData.setImages(adapter.getList());
 
         Log.i(StringUtil.TAG, "joinData: " + JoinAct.joinData);
-//        doJoin();
-        doTestEditProfile();
+
+        doJoin();
+//        doReCheckTest();
+//        doTestEditProfile();
     }
 
 
@@ -812,10 +913,20 @@ public class Join04Frag extends BaseFrag implements View.OnClickListener {
                     break;
             }
 
-            if (checkAllProcess()) {
-                binding.btnNext.setSelected(true);
+            if (StringUtil.isNull(fromType)) {
+                // 일반회원가입일때
+                if (checkAllProcess()) {
+                    binding.btnNext.setSelected(true);
+                } else {
+                    binding.btnNext.setSelected(false);
+                }
             } else {
-                binding.btnNext.setSelected(false);
+                // 재검수 요청일때
+                if (images.size() < 4) {
+                    binding.btnNext.setSelected(false);
+                } else {
+                    binding.btnNext.setSelected(true);
+                }
             }
         } else {
             Log.i(StringUtil.TAG, "onActivityResult: RESULT_CANCEL");

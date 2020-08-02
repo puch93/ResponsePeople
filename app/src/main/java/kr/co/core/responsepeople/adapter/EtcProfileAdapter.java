@@ -23,6 +23,8 @@ public class EtcProfileAdapter extends RecyclerView.Adapter<EtcProfileAdapter.Vi
     private ArrayList<EtcData> list = new ArrayList<>();
     private String type;
 
+    private boolean clickable = true;
+
     public EtcProfileAdapter(Fragment frag, Activity act, ArrayList<EtcData> list, String type) {
         this.act = act;
         this.frag = frag;
@@ -34,6 +36,10 @@ public class EtcProfileAdapter extends RecyclerView.Adapter<EtcProfileAdapter.Vi
     public void setList(ArrayList<EtcData> list) {
         this.list = list;
         notifyDataSetChanged();
+    }
+
+    public void setClickable(boolean clickable) {
+        this.clickable = clickable;
     }
 
 
@@ -52,10 +58,12 @@ public class EtcProfileAdapter extends RecyclerView.Adapter<EtcProfileAdapter.Vi
             holder.contents.setVisibility(View.GONE);
             holder.btn_add.setVisibility(View.VISIBLE);
             holder.btn_add.setOnClickListener(v -> {
-                frag.startActivityForResult(new Intent(act, EtcIdealAct.class)
-                        .putExtra("type", type)
-                        .putExtra("list", list)
-                        , 1004);
+                if (clickable) {
+                    frag.startActivityForResult(new Intent(act, EtcIdealAct.class)
+                                    .putExtra("type", type)
+                                    .putExtra("list", list)
+                            , 1004);
+                }
             });
         } else {
             holder.contents.setVisibility(View.VISIBLE);

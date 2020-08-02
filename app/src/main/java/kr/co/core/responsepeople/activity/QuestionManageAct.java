@@ -44,6 +44,14 @@ public class QuestionManageAct extends BaseAct {
         binding.recyclerView.setItemViewCacheSize(20);
 
         getQuestionList();
+
+        binding.btnBack.setOnClickListener(view -> {
+            finish();
+        });
+
+        binding.btnRegister.setOnClickListener(view -> {
+
+        });
     }
 
     private void getQuestionList() {

@@ -89,6 +89,10 @@ public class ProfileDetailAct extends BaseAct implements View.OnClickListener {
                 ConstraintLayout.LayoutParams params = (ConstraintLayout.LayoutParams) binding.viewPager.getLayoutParams();
                 params.height = height;
                 binding.viewPager.setLayoutParams(params);
+
+                ConstraintLayout.LayoutParams params_filter = (ConstraintLayout.LayoutParams) binding.blackFilter.getLayoutParams();
+                params.height = height;
+                binding.blackFilter.setLayoutParams(params);
             }
         });
 
