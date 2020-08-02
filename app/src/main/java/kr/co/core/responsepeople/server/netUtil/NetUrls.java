@@ -19,6 +19,7 @@ public class NetUrls {
     public static final String CHECK_ROOM = "getChatRoomNumber"; // 프로필 보기
     public static final String REQUEST_CHECK = "setRequestProfile"; // 가입시 프로필사진 재검수요청
     public static final String EDIT_PROFILE = "setMobileaProfileEdit"; // 내 정보 수정
+    public static final String RECOMMEND_LIST = "getRecommendList"; // 홈탭 - 추천회원 리스트 가져오기
 
     public static final String QUESTION_MY_LIST = "getQuestionList"; // 내 질문지 리스트 가져오기
     public static final String DELETE = "delQuestion"; // 내 질문지 리스트 가져오기

@@ -22,6 +22,7 @@ import org.json.JSONException;
 import org.json.JSONObject;
 
 import kr.co.core.responsepeople.R;
+import kr.co.core.responsepeople.activity.EvaluationBeforeAct;
 import kr.co.core.responsepeople.activity.JoinAct;
 import kr.co.core.responsepeople.activity.MainAct;
 import kr.co.core.responsepeople.databinding.FragmentJoin03Binding;
@@ -238,9 +239,10 @@ public class Join05Frag extends BaseFrag implements View.OnClickListener {
                         JSONObject jo = new JSONObject(resultData.getResult());
 
                         if (StringUtil.getStr(jo, "result").equalsIgnoreCase("Y")) {
-
+                            act.startActivity(new Intent(act, EvaluationBeforeAct.class));
+                            act.finish();
                         } else {
-
+                            Common.showToast(act, StringUtil.getStr(jo, "message"));
                         }
 
                     } catch (JSONException e) {

@@ -12,6 +12,7 @@ import android.view.View;
 import kr.co.core.responsepeople.R;
 import kr.co.core.responsepeople.databinding.ActivityMainBinding;
 import kr.co.core.responsepeople.fragment.BaseFrag;
+import kr.co.core.responsepeople.fragment.HomeFrag;
 import kr.co.core.responsepeople.fragment.OnlineFrag;
 import kr.co.core.responsepeople.util.BackPressCloseHandler;
 
@@ -65,6 +66,9 @@ public class MainAct extends BaseAct implements View.OnClickListener {
     public void onClick(View view) {
         switch (view.getId()) {
             case R.id.menu01_area:
+                switchLayout(view);
+                replaceFragment(new HomeFrag(), "home");
+                break;
             case R.id.menu02_area:
             case R.id.menu03_area:
             case R.id.menu04_area:
