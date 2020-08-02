@@ -20,7 +20,15 @@ public class NetUrls {
     public static final String REQUEST_CHECK = "setRequestProfile"; // 가입시 프로필사진 재검수요청
     public static final String EDIT_PROFILE = "setMobileaProfileEdit"; // 내 정보 수정
     public static final String RECOMMEND_LIST = "getRecommendList"; // 홈탭 - 추천회원 리스트 가져오기
+    public static final String REALTIME_LIST = "setTestMemberList"; // 홈탭 - 실시간 평가회원 리스트 가져오기
+    public static final String PREFER_LIST = "getMatchingMember"; // 추천탭 - 선호설정에 해당하는 인원 가져오기
+    public static final String MY_INFO = "getMyProfile"; // 내 정보 가져오기
+    public static final String LOGOUT = "setMobilelogout"; // 내 정보 가져오기
+    public static final String NEAR_LIST = "setDistanceMemberList"; // 내 위치반경 10km 회원 가져오기
+    public static final String QUESTION_RESPONSE_LIST = "getAnswerMember"; // 내 질문 응답한 이성 리스트
+    public static final String LIKE = "setFollow"; // 내 질문 응답한 이성 리스트
 
     public static final String QUESTION_MY_LIST = "getQuestionList"; // 내 질문지 리스트 가져오기
     public static final String DELETE = "delQuestion"; // 내 질문지 리스트 가져오기
 }
+

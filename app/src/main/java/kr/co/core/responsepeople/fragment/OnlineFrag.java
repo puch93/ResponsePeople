@@ -55,7 +55,12 @@ public class OnlineFrag extends BaseFrag implements View.OnClickListener {
         act = getActivity();
 
         manager = new GridLayoutManager(act, 2);
-        adapter = new MemberAdapter(act, list);
+        adapter = new MemberAdapter(act, list, new MemberAdapter.CustomClickListener() {
+            @Override
+            public void likeClicked() {
+                list = adapter.getList();
+            }
+        });
         binding.recyclerView.setLayoutManager(manager);
         binding.recyclerView.setHasFixedSize(true);
         binding.recyclerView.setItemViewCacheSize(20);
@@ -122,7 +127,7 @@ public class OnlineFrag extends BaseFrag implements View.OnClickListener {
                                 String m_profile1 = StringUtil.getStr(job, "m_profile1");
                                 boolean m_salary_result = StringUtil.getStr(job, "m_salary_result").equalsIgnoreCase("Y");
                                 boolean m_profile_result = StringUtil.getStr(job, "m_profile_result").equalsIgnoreCase("Y");
-                                boolean f_idx = !StringUtil.isNull(StringUtil.getStr(jo, "f_idx"));
+                                boolean f_idx = !StringUtil.isNull(StringUtil.getStr(job, "f_idx"));
 
                                 list.add(new MemberData(m_idx, m_nick, m_age, m_job, m_location, m_salary, m_profile1, m_profile_result, f_idx, m_salary_result));
                             }

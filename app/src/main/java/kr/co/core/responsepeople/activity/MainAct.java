@@ -13,7 +13,10 @@ import kr.co.core.responsepeople.R;
 import kr.co.core.responsepeople.databinding.ActivityMainBinding;
 import kr.co.core.responsepeople.fragment.BaseFrag;
 import kr.co.core.responsepeople.fragment.HomeFrag;
+import kr.co.core.responsepeople.fragment.NearFrag;
 import kr.co.core.responsepeople.fragment.OnlineFrag;
+import kr.co.core.responsepeople.fragment.RecommendFrag;
+import kr.co.core.responsepeople.fragment.ResponseFrag;
 import kr.co.core.responsepeople.util.BackPressCloseHandler;
 
 public class MainAct extends BaseAct implements View.OnClickListener {
@@ -23,6 +26,7 @@ public class MainAct extends BaseAct implements View.OnClickListener {
     FragmentManager fragmentManager;
     private BackPressCloseHandler backPressCloseHandler;
     private int currentPos = 0;
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -45,6 +49,11 @@ public class MainAct extends BaseAct implements View.OnClickListener {
         binding.menu01Area.performClick();
     }
 
+    @Override
+    public void onBackPressed() {
+        backPressCloseHandler.onBackPressed();
+    }
+
     private void switchLayout(View view) {
         binding.menu01Area.setSelected(false);
         binding.menu02Area.setSelected(false);
@@ -58,6 +67,7 @@ public class MainAct extends BaseAct implements View.OnClickListener {
     public void replaceFragment(BaseFrag frag, String tag) {
         /* replace fragment */
         FragmentTransaction transaction = fragmentManager.beginTransaction();
+        transaction.setCustomAnimations(R.anim.anim_fade_in, R.anim.anim_fade_out);
         transaction.replace(R.id.replace_area, frag, tag);
         transaction.commit();
     }
@@ -70,12 +80,23 @@ public class MainAct extends BaseAct implements View.OnClickListener {
                 replaceFragment(new HomeFrag(), "home");
                 break;
             case R.id.menu02_area:
+                switchLayout(view);
+                replaceFragment(new RecommendFrag(), "recommend");
+                break;
             case R.id.menu03_area:
-            case R.id.menu04_area:
-            case R.id.menu05_area:
                 switchLayout(view);
                 replaceFragment(new OnlineFrag(), "online");
                 break;
+            case R.id.menu04_area:
+                switchLayout(view);
+                replaceFragment(new NearFrag(), "near");
+                break;
+            case R.id.menu05_area:
+                switchLayout(view);
+                replaceFragment(new ResponseFrag(), "response");
+                break;
+
+
 
             case R.id.btn_question:
                 startActivity(new Intent(act, QuestionManageAct.class));

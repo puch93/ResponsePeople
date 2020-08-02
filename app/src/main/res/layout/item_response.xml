@@ -177,7 +177,7 @@
                         android:layout_height="10dp"
                         android:indeterminate="false"
                         android:max="100"
-                        android:progress="100"
+                        android:progress="92"
                         android:progressDrawable="@drawable/progress_bar_gradient_response" />
 
                     <LinearLayout
@@ -225,7 +225,7 @@
 
 
                 <TextView
-                    android:id="@+id/score"
+                    android:id="@+id/progressText"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:includeFontPadding="false"

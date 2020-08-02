@@ -15,8 +15,6 @@ import androidx.annotation.NonNull;
 import androidx.cardview.widget.CardView;
 import androidx.recyclerview.widget.RecyclerView;
 
-import com.bumptech.glide.Glide;
-
 import org.json.JSONException;
 import org.json.JSONObject;
 
@@ -32,19 +30,13 @@ import kr.co.core.responsepeople.util.AppPreference;
 import kr.co.core.responsepeople.util.Common;
 import kr.co.core.responsepeople.util.StringUtil;
 
-public class MemberAdapter extends RecyclerView.Adapter<MemberAdapter.ViewHolder> {
+public class HomeAdapter extends RecyclerView.Adapter<HomeAdapter.ViewHolder> {
     private Activity act;
-
-    public ArrayList<MemberData> getList() {
-        return list;
-    }
-
     private ArrayList<MemberData> list;
 
-    public MemberAdapter(Activity act, ArrayList<MemberData> list, CustomClickListener customClickListener) {
+    public HomeAdapter(Activity act, ArrayList<MemberData> list) {
         this.act = act;
         this.list = list;
-        this.customClickListener = customClickListener;
     }
 
     public void setList(ArrayList<MemberData> list) {
@@ -52,27 +44,19 @@ public class MemberAdapter extends RecyclerView.Adapter<MemberAdapter.ViewHolder
         notifyDataSetChanged();
     }
 
-    public interface CustomClickListener {
-        void likeClicked();
-    }
-
-    CustomClickListener customClickListener;
-
     @NonNull
     @Override
     public ViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
-        View view = LayoutInflater.from(parent.getContext()).inflate(R.layout.item_member, parent, false);
-        MemberAdapter.ViewHolder viewHolder = new MemberAdapter.ViewHolder(view);
+        View view = LayoutInflater.from(parent.getContext()).inflate(R.layout.item_home, parent, false);
+        HomeAdapter.ViewHolder viewHolder = new HomeAdapter.ViewHolder(view);
 
-        int height = (parent.getMeasuredWidth() - act.getResources().getDimensionPixelSize(R.dimen.rcv_height_member_minus)) / 2;
+        int height = (parent.getMeasuredWidth() - act.getResources().getDimensionPixelSize(R.dimen.rcv_height_home_minus));
 
         if (height <= 0) {
-            height = act.getResources().getDimensionPixelSize(R.dimen.rcv_height_member_default);
-        } else {
-            height = (int) (height * 1.25);
+            height = act.getResources().getDimensionPixelSize(R.dimen.rcv_height_home_default);
         }
 
-        FrameLayout.LayoutParams params = (FrameLayout.LayoutParams) viewHolder.card_view.getLayoutParams();
+        LinearLayout.LayoutParams params = (LinearLayout.LayoutParams) viewHolder.card_view.getLayoutParams();
         params.height = height;
         return viewHolder;
     }
@@ -94,9 +78,6 @@ public class MemberAdapter extends RecyclerView.Adapter<MemberAdapter.ViewHolder
 
         Common.processProfileImageRec(act, holder.profile_img, data.getProfile_img(), data.isImage_ok(), 5, 3);
         holder.btn_like.setSelected(data.isLike());
-        holder.btn_like.setOnClickListener(view -> {
-            doLike(data.getIdx(), i);
-        });
 
         holder.itemView.setOnClickListener(v -> {
             checkProfileRead(data.getIdx());
@@ -131,49 +112,6 @@ public class MemberAdapter extends RecyclerView.Adapter<MemberAdapter.ViewHolder
             btn_question = view.findViewById(R.id.btn_question);
         }
     }
-
-    private void doLike(String t_idx, int position) {
-        ReqBasic server = new ReqBasic(act, NetUrls.DOMAIN) {
-            @Override
-            public void onAfter(int resultCode, HttpResult resultData) {
-                if (resultData.getResult() != null) {
-                    try {
-                        JSONObject jo = new JSONObject(resultData.getResult());
-
-                        if( StringUtil.getStr(jo, "result").equalsIgnoreCase("Y")) {
-                            act.runOnUiThread(new Runnable() {
-                                @Override
-                                public void run() {
-                                    MemberData data = list.get(position);
-                                    data.setLike(!data.isLike());
-                                    list.set(position, data);
-                                    notifyDataSetChanged();
-
-                                    customClickListener.likeClicked();
-                                }
-                            });
-                        } else {
-
-                        }
-
-                    } catch (JSONException e) {
-                        e.printStackTrace();
-                        Common.showToastNetwork(act);
-                    }
-                } else {
-                    Common.showToastNetwork(act);
-                }
-            }
-        };
-
-        server.setTag("Like Member");
-        server.addParams("dbControl", NetUrls.LIKE);
-        server.addParams("m_idx", AppPreference.getProfilePref(act, AppPreference.PREF_MIDX));
-        server.addParams("t_idx", t_idx);
-        server.execute(true, true);
-    }
-
-
 
     private void checkProfileRead(String y_idx) {
         ReqBasic server = new ReqBasic(act, NetUrls.DOMAIN) {

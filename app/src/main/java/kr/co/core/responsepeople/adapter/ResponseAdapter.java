@@ -9,13 +9,12 @@ import android.view.ViewGroup;
 import android.widget.FrameLayout;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
+import android.widget.ProgressBar;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
 import androidx.cardview.widget.CardView;
 import androidx.recyclerview.widget.RecyclerView;
-
-import com.bumptech.glide.Glide;
 
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -24,7 +23,7 @@ import java.util.ArrayList;
 
 import kr.co.core.responsepeople.R;
 import kr.co.core.responsepeople.activity.ProfileDetailAct;
-import kr.co.core.responsepeople.data.MemberData;
+import kr.co.core.responsepeople.data.ResponseData;
 import kr.co.core.responsepeople.server.ReqBasic;
 import kr.co.core.responsepeople.server.netUtil.HttpResult;
 import kr.co.core.responsepeople.server.netUtil.NetUrls;
@@ -32,54 +31,40 @@ import kr.co.core.responsepeople.util.AppPreference;
 import kr.co.core.responsepeople.util.Common;
 import kr.co.core.responsepeople.util.StringUtil;
 
-public class MemberAdapter extends RecyclerView.Adapter<MemberAdapter.ViewHolder> {
+public class ResponseAdapter extends RecyclerView.Adapter<ResponseAdapter.ViewHolder> {
     private Activity act;
+    private ArrayList<ResponseData> list;
 
-    public ArrayList<MemberData> getList() {
-        return list;
-    }
-
-    private ArrayList<MemberData> list;
-
-    public MemberAdapter(Activity act, ArrayList<MemberData> list, CustomClickListener customClickListener) {
+    public ResponseAdapter(Activity act, ArrayList<ResponseData> list) {
         this.act = act;
         this.list = list;
-        this.customClickListener = customClickListener;
     }
 
-    public void setList(ArrayList<MemberData> list) {
+    public void setList(ArrayList<ResponseData> list) {
         this.list = list;
         notifyDataSetChanged();
     }
 
-    public interface CustomClickListener {
-        void likeClicked();
-    }
-
-    CustomClickListener customClickListener;
-
     @NonNull
     @Override
     public ViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
-        View view = LayoutInflater.from(parent.getContext()).inflate(R.layout.item_member, parent, false);
-        MemberAdapter.ViewHolder viewHolder = new MemberAdapter.ViewHolder(view);
+        View view = LayoutInflater.from(parent.getContext()).inflate(R.layout.item_response, parent, false);
+        ResponseAdapter.ViewHolder viewHolder = new ResponseAdapter.ViewHolder(view);
 
-        int height = (parent.getMeasuredWidth() - act.getResources().getDimensionPixelSize(R.dimen.rcv_height_member_minus)) / 2;
+        int height = (parent.getMeasuredWidth() - act.getResources().getDimensionPixelSize(R.dimen.rcv_height_home_minus));
 
         if (height <= 0) {
-            height = act.getResources().getDimensionPixelSize(R.dimen.rcv_height_member_default);
-        } else {
-            height = (int) (height * 1.25);
+            height = act.getResources().getDimensionPixelSize(R.dimen.rcv_height_home_default);
         }
 
-        FrameLayout.LayoutParams params = (FrameLayout.LayoutParams) viewHolder.card_view.getLayoutParams();
+        LinearLayout.LayoutParams params = (LinearLayout.LayoutParams) viewHolder.card_view.getLayoutParams();
         params.height = height;
         return viewHolder;
     }
 
     @Override
     public void onBindViewHolder(@NonNull ViewHolder holder, int i) {
-        MemberData data = list.get(i);
+        ResponseData data = list.get(i);
 
         holder.nick.setText(data.getNick());
         holder.age.setText(data.getAge());
@@ -94,13 +79,15 @@ public class MemberAdapter extends RecyclerView.Adapter<MemberAdapter.ViewHolder
 
         Common.processProfileImageRec(act, holder.profile_img, data.getProfile_img(), data.isImage_ok(), 5, 3);
         holder.btn_like.setSelected(data.isLike());
-        holder.btn_like.setOnClickListener(view -> {
-            doLike(data.getIdx(), i);
-        });
 
         holder.itemView.setOnClickListener(v -> {
             checkProfileRead(data.getIdx());
         });
+
+        holder.progressBar.setProgress(data.getProgress());
+        holder.progressText.setText(String.valueOf(data.getProgress()));
+
+
     }
 
     @Override
@@ -109,11 +96,12 @@ public class MemberAdapter extends RecyclerView.Adapter<MemberAdapter.ViewHolder
     }
 
     class ViewHolder extends RecyclerView.ViewHolder {
-        TextView nick, age, job, location, salary;
+        TextView nick, age, job, location, salary, progressText;
         ImageView profile_img;
         FrameLayout btn_like, btn_question;
         View itemView;
         CardView card_view;
+        ProgressBar progressBar;
 
         ViewHolder(@NonNull View view) {
             super(view);
@@ -126,54 +114,13 @@ public class MemberAdapter extends RecyclerView.Adapter<MemberAdapter.ViewHolder
             location = view.findViewById(R.id.location);
             salary = view.findViewById(R.id.salary);
             profile_img = view.findViewById(R.id.profile_img);
+            progressBar = view.findViewById(R.id.progressBar);
+            progressText = view.findViewById(R.id.progressText);
 
             btn_like = view.findViewById(R.id.btn_like);
             btn_question = view.findViewById(R.id.btn_question);
         }
     }
-
-    private void doLike(String t_idx, int position) {
-        ReqBasic server = new ReqBasic(act, NetUrls.DOMAIN) {
-            @Override
-            public void onAfter(int resultCode, HttpResult resultData) {
-                if (resultData.getResult() != null) {
-                    try {
-                        JSONObject jo = new JSONObject(resultData.getResult());
-
-                        if( StringUtil.getStr(jo, "result").equalsIgnoreCase("Y")) {
-                            act.runOnUiThread(new Runnable() {
-                                @Override
-                                public void run() {
-                                    MemberData data = list.get(position);
-                                    data.setLike(!data.isLike());
-                                    list.set(position, data);
-                                    notifyDataSetChanged();
-
-                                    customClickListener.likeClicked();
-                                }
-                            });
-                        } else {
-
-                        }
-
-                    } catch (JSONException e) {
-                        e.printStackTrace();
-                        Common.showToastNetwork(act);
-                    }
-                } else {
-                    Common.showToastNetwork(act);
-                }
-            }
-        };
-
-        server.setTag("Like Member");
-        server.addParams("dbControl", NetUrls.LIKE);
-        server.addParams("m_idx", AppPreference.getProfilePref(act, AppPreference.PREF_MIDX));
-        server.addParams("t_idx", t_idx);
-        server.execute(true, true);
-    }
-
-
 
     private void checkProfileRead(String y_idx) {
         ReqBasic server = new ReqBasic(act, NetUrls.DOMAIN) {

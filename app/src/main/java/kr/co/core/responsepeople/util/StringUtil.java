@@ -122,7 +122,7 @@ public class StringUtil {
         try {
             if (jo.has(key)) {
                 s = jo.getString(key);
-                if (s.equalsIgnoreCase("null"))
+                if (StringUtil.isNull(s) || s.equalsIgnoreCase("null"))
                     s = "";
             } else {
                 s = "";

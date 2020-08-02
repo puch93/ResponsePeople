@@ -6,6 +6,10 @@ import android.widget.Toast;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import kr.co.core.responsepeople.server.ReqBasic;
+import kr.co.core.responsepeople.server.netUtil.HttpResult;
+import kr.co.core.responsepeople.server.netUtil.NetUrls;
+
 public class BackPressCloseHandler {
 	
 	private long backKeyPressedTime = 0;
@@ -24,13 +28,44 @@ public class BackPressCloseHandler {
 		}
 		
 		if(System.currentTimeMillis() <= backKeyPressedTime + 2000) {
-//			doLogout();
+			doLogout();
 
 			act.moveTaskToBack(true);
 			act.finish();
 			
 			toast.cancel();
 		}
+	}
+
+	private void doLogout() {
+		ReqBasic server = new ReqBasic(act, NetUrls.DOMAIN) {
+			@Override
+			public void onAfter(int resultCode, HttpResult resultData) {
+				if (resultData.getResult() != null) {
+					try {
+						JSONObject jo = new JSONObject(resultData.getResult());
+
+						if( StringUtil.getStr(jo, "result").equalsIgnoreCase("Y")) {
+							act.finish();
+							act.finishAffinity();
+						} else {
+							Common.showToast(act, StringUtil.getStr(jo, "message"));
+						}
+
+					} catch (JSONException e) {
+						e.printStackTrace();
+						Common.showToastNetwork(act);
+					}
+				} else {
+					Common.showToastNetwork(act);
+				}
+			}
+		};
+
+		server.setTag("Logout");
+		server.addParams("dbControl", NetUrls.LOGOUT);
+		server.addParams("m_idx", AppPreference.getProfilePref(act, AppPreference.PREF_MIDX));
+		server.execute(true, false);
 	}
 
 	private void showGuide() {

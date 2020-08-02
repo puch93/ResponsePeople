@@ -89,7 +89,7 @@ public class ChatAct extends BaseAct implements View.OnClickListener {
         binding = DataBindingUtil.setContentView(this, R.layout.activity_chat, null);
         act = this;
 
-        room_idx = getIntent().getStringExtra("room_idx").replace("P","");
+        room_idx = getIntent().getStringExtra("room_idx").replace("R","");
         t_idx = getIntent().getStringExtra("t_idx");
 
         getOtherProfile();
@@ -373,12 +373,10 @@ public class ChatAct extends BaseAct implements View.OnClickListener {
             IO.Options opts = new IO.Options();
             opts.callFactory = okHttpClient;
             opts.webSocketFactory = okHttpClient;
-
             mSocket = IO.socket(ChatValues.SOCKET_URL);
             mSocket.on(Socket.EVENT_CONNECT, onConnect);
             mSocket.on(ChatValues.CHATTING_HISTORY, onChatHistory);
-            mSocket.on(ChatValues.GET_READS, getReads);
-            mSocket.on(ChatValues.CHATTING_SYSTEM_MSG, onChatReceive);
+            mSocket.on(ChatValues.CHATTING_READ, getReads);
             mSocket.connect();
             System.out.println("socket setup!!! ");
         } catch (URISyntaxException e) {
@@ -397,15 +395,21 @@ public class ChatAct extends BaseAct implements View.OnClickListener {
     private Emitter.Listener onConnect = new Emitter.Listener() {
         @Override
         public void call(Object... args) {
-            JSONObject sendData = new JSONObject();
+            JSONObject setRoomListData = new JSONObject();
+            JSONObject readaddData = new JSONObject();
             Log.e(StringUtil.TAG_CHAT, "onConnect");
-            System.out.println("socket onConnect : " + sendData);
             try {
-                sendData.put(ChatValues.ROOMIDX, room_idx);
-                sendData.put(ChatValues.TALKER, AppPreference.getProfilePref(act, AppPreference.PREF_MIDX));
-                mSocket.emit(ChatValues.CHATTING_HISTORY, sendData);
+                setRoomListData.put(ChatValues.SITEIDX, "1");
+                setRoomListData.put(ChatValues.TALKER, AppPreference.getProfilePref(act, AppPreference.PREF_MIDX));
+                mSocket.emit(ChatValues.CHATTING_HISTORY, setRoomListData);
+                Log.i(StringUtil.TAG, "call setRoomList Put: " + setRoomListData);
 
-                Log.e(StringUtil.TAG, "onConnect Put: " + sendData);
+
+                readaddData.put(ChatValues.SITEIDX, "1");
+                readaddData.put(ChatValues.ROOMIDX, room_idx);
+                readaddData.put(ChatValues.TALKER, AppPreference.getProfilePref(act, AppPreference.PREF_MIDX));
+                mSocket.emit(ChatValues.CHATTING_READ, readaddData);
+                Log.i(StringUtil.TAG, "call readadd Put: " + readaddData);
             } catch (JSONException e) {
                 e.printStackTrace();
             }
@@ -418,7 +422,7 @@ public class ChatAct extends BaseAct implements View.OnClickListener {
         public void call(Object... args) {
             Log.e(StringUtil.TAG_CHAT, "onChatHistory");
             JSONObject rcvData = (JSONObject) args[0];
-            LogUtil.logLarge("rcvData(getChats): " + rcvData);
+            LogUtil.logLarge("onChatHistory rcvData(getChats): " + rcvData);
 
             try {
                 list = new ArrayList<>();
