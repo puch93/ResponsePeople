@@ -5,6 +5,7 @@ import androidx.databinding.DataBindingUtil;
 import androidx.recyclerview.widget.LinearLayoutManager;
 
 import android.app.Activity;
+import android.content.Intent;
 import android.os.Bundle;
 
 import org.json.JSONArray;
@@ -17,6 +18,7 @@ import kr.co.core.responsepeople.R;
 import kr.co.core.responsepeople.adapter.QuestionManagerAdpater;
 import kr.co.core.responsepeople.data.QuestionManageData;
 import kr.co.core.responsepeople.databinding.ActivityQuestionManageBinding;
+import kr.co.core.responsepeople.dialog.RegisterQuestion01Dlg;
 import kr.co.core.responsepeople.server.ReqBasic;
 import kr.co.core.responsepeople.server.netUtil.HttpResult;
 import kr.co.core.responsepeople.server.netUtil.NetUrls;
@@ -26,7 +28,7 @@ import kr.co.core.responsepeople.util.StringUtil;
 
 public class QuestionManageAct extends BaseAct {
     ActivityQuestionManageBinding binding;
-    Activity act;
+    public static Activity act;
 
     QuestionManagerAdpater adapter;
     ArrayList<QuestionManageData> list = new ArrayList<>();
@@ -50,11 +52,13 @@ public class QuestionManageAct extends BaseAct {
         });
 
         binding.btnRegister.setOnClickListener(view -> {
-
+            startActivity(new Intent(act, RegisterQuestion01Dlg.class));
+            overridePendingTransition(R.anim.open, R.anim.close);
         });
     }
 
-    private void getQuestionList() {
+    public void getQuestionList() {
+        list = new ArrayList<>();
         ReqBasic server = new ReqBasic(act, NetUrls.DOMAIN) {
             @Override
             public void onAfter(int resultCode, HttpResult resultData) {

@@ -11,4 +11,11 @@
 
     <string name="tag01">tag_type</string>
     <string name="tag02">tag_view</string>
+
+
+    <!-- 인앱 -->
+    <string name="pay_item_name">item_name</string>
+    <string name="pay_item_order">item_order</string>
+    <string name="pay_item_code">item_code</string>
+    <string name="pay_item_price">item_price</string>
 </resources>

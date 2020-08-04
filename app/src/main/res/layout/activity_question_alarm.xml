@@ -57,7 +57,7 @@
             app:tabBackground="@android:color/transparent"
             app:tabGravity="fill"
             app:tabIndicatorColor="@color/color_2a3348"
-            app:tabIndicatorFullWidth="false"
+            app:tabIndicatorFullWidth="true"
             app:tabMode="fixed"
             app:tabRippleColor="@null"
             app:tabSelectedTextColor="@color/color_2a3348"
@@ -67,12 +67,12 @@
                 android:id="@+id/tab_item_01"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="Popular" />
+                android:text="받은 질문" />
 
             <com.google.android.material.tabs.TabItem
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="Newest" />
+                android:text="응답한 질문" />
 
         </com.google.android.material.tabs.TabLayout>
 

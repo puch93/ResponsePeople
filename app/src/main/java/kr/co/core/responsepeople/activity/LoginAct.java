@@ -66,11 +66,13 @@ public class LoginAct extends BaseAct {
                             String m_id = StringUtil.getStr(job, "m_id");
                             String m_pass = StringUtil.getStr(job, "m_pass");
                             String m_profile1 = StringUtil.getStr(job, "m_profile1");
+                            String m_birth = StringUtil.getStr(job, "m_birth");
 
                             AppPreference.setProfilePref(act, AppPreference.PREF_MIDX, m_idx);
                             AppPreference.setProfilePref(act, AppPreference.PREF_GENDER, m_gender);
                             AppPreference.setProfilePref(act, AppPreference.PREF_ID, m_id);
                             AppPreference.setProfilePref(act, AppPreference.PREF_PW, m_pass);
+                            AppPreference.setProfilePref(act, AppPreference.PREF_AGE, StringUtil.calcAge(m_birth.substring(0, 4)));
                             AppPreference.setProfilePref(act, AppPreference.PREF_IMAGE, NetUrls.DOMAIN_ORIGIN + m_profile1);
 
                             if (binding.ckAutoLogin.isChecked())

@@ -59,10 +59,17 @@ public class EtcProfileAdapter extends RecyclerView.Adapter<EtcProfileAdapter.Vi
             holder.btn_add.setVisibility(View.VISIBLE);
             holder.btn_add.setOnClickListener(v -> {
                 if (clickable) {
-                    frag.startActivityForResult(new Intent(act, EtcIdealAct.class)
-                                    .putExtra("type", type)
-                                    .putExtra("list", list)
-                            , 1004);
+                    if (frag != null) {
+                        frag.startActivityForResult(new Intent(act, EtcIdealAct.class)
+                                        .putExtra("type", type)
+                                        .putExtra("list", list)
+                                , 1004);
+                    } else {
+                        act.startActivityForResult(new Intent(act, EtcIdealAct.class)
+                                        .putExtra("type", type)
+                                        .putExtra("list", list)
+                                , 1004);
+                    }
                 }
             });
         } else {

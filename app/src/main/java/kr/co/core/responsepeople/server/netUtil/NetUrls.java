@@ -27,8 +27,13 @@ public class NetUrls {
     public static final String NEAR_LIST = "setDistanceMemberList"; // 내 위치반경 10km 회원 가져오기
     public static final String QUESTION_RESPONSE_LIST = "getAnswerMember"; // 내 질문 응답한 이성 리스트
     public static final String LIKE = "setFollow"; // 내 질문 응답한 이성 리스트
+    public static final String CHAT_PUSH = "setPush"; // 채팅 푸시
+    public static final String CHAT_UPLOAD_IMAGE = "setChattingImgUpload"; // 채팅 이미지 업로드
+    public static final String CHAT_LIST = "setRoomList"; // 채팅방 리스트
+    public static final String PAYMENT_ITEM = "setMobilePaymentlist"; // 결제 아이템 리스트
+    public static final String PAYMENT = "setMobilePayment"; // 결제
 
     public static final String QUESTION_MY_LIST = "getQuestionList"; // 내 질문지 리스트 가져오기
-    public static final String DELETE = "delQuestion"; // 내 질문지 리스트 가져오기
+    public static final String QUESTION_DELETE = "delQuestion"; // 질문지 삭제하기
+    public static final String QUESTION_SAVE = "setQuestionSave"; // 질문지 추가하기
 }
-

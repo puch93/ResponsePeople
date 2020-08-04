@@ -51,6 +51,7 @@
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:gravity="center_horizontal"
+                        android:textStyle="bold"
                         android:textColor="@color/color_2a3348"
                         android:textSize="16dp"
                         tools:text="꼰듀esfp" />
@@ -59,6 +60,7 @@
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:gravity="center_horizontal"
+                        android:textStyle="bold"
                         android:text=","
                         android:textColor="@color/color_2a3348"
                         android:textSize="16dp" />
@@ -66,6 +68,7 @@
                     <TextView
                         android:id="@+id/age"
                         android:layout_width="wrap_content"
+                        android:textStyle="bold"
                         android:layout_height="wrap_content"
                         android:gravity="center_horizontal"
                         android:textColor="@color/color_2a3348"
@@ -154,6 +157,7 @@
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:layout_marginTop="10dp"
+                            android:layout_marginLeft="2dp"
                             android:orientation="horizontal">
 
                             <TextView
@@ -170,7 +174,7 @@
                                 android:layout_width="wrap_content"
                                 android:layout_height="wrap_content"
                                 android:includeFontPadding="false"
-                                android:text="·"
+                                android:text=" · "
                                 android:textColor="@color/color_848d91"
                                 android:textSize="13dp"
                                 android:textStyle="bold" />
@@ -189,7 +193,7 @@
                                 android:layout_width="wrap_content"
                                 android:layout_height="wrap_content"
                                 android:includeFontPadding="false"
-                                android:text="·"
+                                android:text=" · "
                                 android:textColor="@color/color_848d91"
                                 android:textSize="13dp"
                                 android:textStyle="bold" />
@@ -210,6 +214,7 @@
 
 
                 <FrameLayout
+                    android:id="@+id/btn_edit"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_marginLeft="76dp"
@@ -247,8 +252,8 @@
 
                 <LinearLayout
                     android:layout_width="match_parent"
-                    android:layout_marginTop="7dp"
                     android:layout_height="80dp"
+                    android:layout_marginTop="7dp"
                     android:gravity="center_vertical"
                     android:orientation="horizontal">
 
@@ -258,34 +263,33 @@
                         android:layout_weight="1"
                         android:gravity="center"
                         android:orientation="vertical">
+
                         <TextView
                             android:id="@+id/count_receive"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
-                            android:textSize="22dp"
-                            android:textColor="@color/color_669cff"
-                            android:textStyle="bold"
                             android:gravity="center_horizontal"
                             android:includeFontPadding="false"
-                            tools:text="12"
-                            />
+                            android:textColor="@color/color_669cff"
+                            android:textSize="22dp"
+                            android:textStyle="bold"
+                            tools:text="12" />
 
                         <TextView
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
-                            android:includeFontPadding="false"
                             android:layout_marginTop="12dp"
-                            android:textSize="13dp"
-                            android:textStyle="bold"
-                            android:textColor="#3c4449"
+                            android:includeFontPadding="false"
                             android:text="받은 질문"
-                            />
+                            android:textColor="#3c4449"
+                            android:textSize="13dp"
+                            android:textStyle="bold" />
                     </LinearLayout>
 
                     <ImageView
                         android:layout_width="1dp"
                         android:layout_height="40dp"
-                        android:background="@color/color_e3e6e8"/>
+                        android:background="@color/color_e3e6e8" />
 
                     <LinearLayout
                         android:layout_width="0dp"
@@ -293,88 +297,86 @@
                         android:layout_weight="1"
                         android:gravity="center"
                         android:orientation="vertical">
+
                         <TextView
                             android:id="@+id/count_response"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
-                            android:textSize="22dp"
-                            android:textColor="@color/color_669cff"
-                            android:textStyle="bold"
                             android:gravity="center_horizontal"
                             android:includeFontPadding="false"
-                            tools:text="12"
-                            />
+                            android:textColor="@color/color_669cff"
+                            android:textSize="22dp"
+                            android:textStyle="bold"
+                            tools:text="12" />
 
                         <TextView
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
-                            android:includeFontPadding="false"
                             android:layout_marginTop="12dp"
-                            android:textSize="13dp"
-                            android:textStyle="bold"
-                            android:textColor="#3c4449"
+                            android:includeFontPadding="false"
                             android:text="응답한 질문"
-                            />
+                            android:textColor="#3c4449"
+                            android:textSize="13dp"
+                            android:textStyle="bold" />
                     </LinearLayout>
 
                 </LinearLayout>
 
                 <FrameLayout
                     android:layout_width="match_parent"
-                    android:layout_marginTop="12.7dp"
-                    android:layout_height="wrap_content">
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="12.7dp">
 
                     <ImageView
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:adjustViewBounds="true"
-                        android:src="@drawable/heart_box"/>
+                        android:src="@drawable/heart_box" />
 
                     <LinearLayout
                         android:layout_width="match_parent"
-                        android:gravity="center_vertical"
                         android:layout_height="match_parent"
+                        android:gravity="center_vertical"
                         android:orientation="horizontal">
 
                         <Space
                             android:layout_width="0dp"
                             android:layout_height="match_parent"
-                            android:layout_weight="21.3"/>
+                            android:layout_weight="21.3" />
+
                         <TextView
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
-                            android:textSize="14dp"
-                            android:textColor="#3c4449"
-                            android:textStyle="bold"
                             android:text="내 보유 하트"
-                            />
+                            android:textColor="#3c4449"
+                            android:textSize="14dp"
+                            android:textStyle="bold" />
 
                         <Space
                             android:layout_width="0dp"
                             android:layout_height="match_parent"
-                            android:layout_weight="66.7"/>
+                            android:layout_weight="66.7" />
 
 
                         <ImageView
                             android:layout_width="17dp"
                             android:layout_height="17dp"
-                            android:src="@drawable/icon_h_heart"/>
+                            android:src="@drawable/icon_h_heart" />
 
                         <TextView
                             android:id="@+id/count_heart"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:layout_marginLeft="10dp"
+                            android:textColor="@color/color_2c2c2c"
                             android:textSize="22dp"
                             android:textStyle="bold"
-                            android:textColor="@color/color_2c2c2c"
-                            tools:text="120"
-                            />
+                            tools:text="120" />
 
                         <Space
                             android:layout_width="0dp"
                             android:layout_height="match_parent"
-                            android:layout_weight="24.7"/>
+                            android:layout_weight="24.7" />
 
 
                         <TextView
@@ -386,12 +388,12 @@
                             android:text="충전 >"
                             android:textColor="@color/color_white"
                             android:textSize="16dp"
-                            android:textStyle="bold"/>
+                            android:textStyle="bold" />
 
                         <Space
                             android:layout_width="0dp"
                             android:layout_height="match_parent"
-                            android:layout_weight="15"/>
+                            android:layout_weight="15" />
 
                     </LinearLayout>
                 </FrameLayout>
@@ -413,51 +415,50 @@
                 android:id="@+id/menu_tier"
                 android:layout_width="match_parent"
                 android:layout_height="67dp"
+                android:gravity="center_vertical"
                 android:paddingLeft="15dp"
-                android:paddingRight="9dp"
-                android:gravity="center_vertical">
+                android:paddingRight="9dp">
 
                 <ImageView
                     android:layout_width="22dp"
                     android:layout_height="22dp"
-                    android:src="@drawable/icon_type"/>
+                    android:src="@drawable/icon_type" />
 
                 <TextView
                     android:layout_width="0dp"
-                    android:layout_weight="1"
                     android:layout_height="wrap_content"
-                    android:includeFontPadding="false"
-                    android:textStyle="bold"
                     android:layout_marginLeft="14.7dp"
-                    android:textSize="18dp"
-                    android:textColor="@color/color_2c2c2c"
+                    android:layout_weight="1"
+                    android:includeFontPadding="false"
                     android:text="내 프로필 등급"
-                    />
+                    android:textColor="@color/color_2c2c2c"
+                    android:textSize="18dp"
+                    android:textStyle="bold" />
 
                 <ImageView
                     android:id="@+id/icon_tier"
                     android:layout_width="20dp"
                     android:layout_height="20dp"
-                    tools:src="@drawable/icon_gold"/>
+                    tools:src="@drawable/icon_gold" />
 
 
                 <TextView
                     android:id="@+id/tier"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:textSize="14dp"
-                    android:textStyle="bold"
                     android:layout_marginLeft="10dp"
                     android:layout_marginRight="9dp"
                     android:textColor="#cc95989d"
-                    tools:text="골드"
-                    />
+                    android:textSize="14dp"
+                    android:textStyle="bold"
+                    tools:text="골드" />
 
                 <ImageView
                     android:layout_width="33dp"
                     android:layout_height="33dp"
-                    android:src="@drawable/btn_more_2"/>
+                    android:src="@drawable/btn_more_2" />
             </LinearLayout>
+
             <ImageView
                 android:layout_width="match_parent"
                 android:layout_height="1dp"
@@ -467,32 +468,32 @@
                 android:id="@+id/menu_prefer"
                 android:layout_width="match_parent"
                 android:layout_height="67dp"
+                android:gravity="center_vertical"
                 android:paddingLeft="15dp"
-                android:paddingRight="9dp"
-                android:gravity="center_vertical">
+                android:paddingRight="9dp">
 
                 <ImageView
                     android:layout_width="22dp"
                     android:layout_height="22dp"
-                    android:src="@drawable/icon_type"/>
+                    android:src="@drawable/icon_type" />
 
                 <TextView
                     android:layout_width="0dp"
-                    android:layout_weight="1"
                     android:layout_height="wrap_content"
-                    android:includeFontPadding="false"
-                    android:textStyle="bold"
                     android:layout_marginLeft="14.7dp"
-                    android:textSize="18dp"
-                    android:textColor="@color/color_2c2c2c"
+                    android:layout_weight="1"
+                    android:includeFontPadding="false"
                     android:text="선호 설정"
-                    />
+                    android:textColor="@color/color_2c2c2c"
+                    android:textSize="18dp"
+                    android:textStyle="bold" />
 
                 <ImageView
                     android:layout_width="33dp"
                     android:layout_height="33dp"
-                    android:src="@drawable/btn_more_2"/>
+                    android:src="@drawable/btn_more_2" />
             </LinearLayout>
+
             <ImageView
                 android:layout_width="match_parent"
                 android:layout_height="1dp"
@@ -502,32 +503,32 @@
                 android:id="@+id/menu_like"
                 android:layout_width="match_parent"
                 android:layout_height="67dp"
+                android:gravity="center_vertical"
                 android:paddingLeft="15dp"
-                android:paddingRight="9dp"
-                android:gravity="center_vertical">
+                android:paddingRight="9dp">
 
                 <ImageView
                     android:layout_width="22dp"
                     android:layout_height="22dp"
-                    android:src="@drawable/icon_fav"/>
+                    android:src="@drawable/icon_fav" />
 
                 <TextView
                     android:layout_width="0dp"
-                    android:layout_weight="1"
                     android:layout_height="wrap_content"
-                    android:includeFontPadding="false"
-                    android:textStyle="bold"
                     android:layout_marginLeft="14.7dp"
-                    android:textSize="18dp"
-                    android:textColor="@color/color_2c2c2c"
+                    android:layout_weight="1"
+                    android:includeFontPadding="false"
                     android:text="나를 찜한 사람"
-                    />
+                    android:textColor="@color/color_2c2c2c"
+                    android:textSize="18dp"
+                    android:textStyle="bold" />
 
                 <ImageView
                     android:layout_width="33dp"
                     android:layout_height="33dp"
-                    android:src="@drawable/btn_more_2"/>
+                    android:src="@drawable/btn_more_2" />
             </LinearLayout>
+
             <ImageView
                 android:layout_width="match_parent"
                 android:layout_height="1dp"
@@ -535,33 +536,33 @@
 
 
             <LinearLayout
+                android:id="@+id/menu_block"
                 android:layout_width="match_parent"
                 android:layout_height="67dp"
+                android:gravity="center_vertical"
                 android:paddingLeft="15dp"
-                android:paddingRight="9dp"
-                android:gravity="center_vertical">
+                android:paddingRight="9dp">
 
                 <ImageView
                     android:layout_width="22dp"
                     android:layout_height="22dp"
-                    android:src="@drawable/icon_block"/>
+                    android:src="@drawable/icon_block" />
 
                 <TextView
                     android:layout_width="0dp"
-                    android:layout_weight="1"
                     android:layout_height="wrap_content"
-                    android:includeFontPadding="false"
-                    android:textStyle="bold"
                     android:layout_marginLeft="14.7dp"
-                    android:textSize="18dp"
-                    android:textColor="@color/color_2c2c2c"
+                    android:layout_weight="1"
+                    android:includeFontPadding="false"
                     android:text="지인 만나지 않기"
-                    />
+                    android:textColor="@color/color_2c2c2c"
+                    android:textSize="18dp"
+                    android:textStyle="bold" />
 
                 <ImageView
                     android:layout_width="33dp"
                     android:layout_height="33dp"
-                    android:src="@drawable/btn_more_2"/>
+                    android:src="@drawable/btn_more_2" />
             </LinearLayout>
 
             <ImageView
@@ -576,27 +577,27 @@
 
 
             <LinearLayout
+                android:id="@+id/menu_customer"
                 android:layout_width="match_parent"
                 android:layout_height="67dp"
+                android:gravity="center_vertical"
                 android:paddingLeft="15dp"
-                android:paddingRight="9dp"
-                android:gravity="center_vertical">
+                android:paddingRight="9dp">
 
                 <TextView
                     android:layout_width="0dp"
-                    android:layout_weight="1"
                     android:layout_height="wrap_content"
+                    android:layout_weight="1"
                     android:includeFontPadding="false"
-                    android:textStyle="bold"
-                    android:textSize="18dp"
-                    android:textColor="@color/color_848d91"
                     android:text="고객센터"
-                    />
+                    android:textColor="@color/color_848d91"
+                    android:textSize="18dp"
+                    android:textStyle="bold" />
 
                 <ImageView
                     android:layout_width="33dp"
                     android:layout_height="33dp"
-                    android:src="@drawable/btn_more_2"/>
+                    android:src="@drawable/btn_more_2" />
             </LinearLayout>
 
             <ImageView

@@ -20,6 +20,7 @@ import android.view.ViewGroup;
 import android.view.ViewTreeObserver;
 import android.view.WindowManager;
 import android.widget.FrameLayout;
+import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
@@ -163,6 +164,18 @@ public class Join04Frag extends BaseFrag implements View.OnClickListener {
 
                 binding.btnNextText.setText("재검수 요청하기");
 
+                binding.checkImgNick.setSelected(true);
+                binding.checkImgLocation.setSelected(true);
+                binding.checkImgBirth.setSelected(true);
+                binding.checkImgHeight.setSelected(true);
+                binding.checkImgBody.setSelected(true);
+                binding.checkImgEdu.setSelected(true);
+                binding.checkImgJob.setSelected(true);
+                binding.checkImgDrink.setSelected(true);
+                binding.checkImgSmoke.setSelected(true);
+                binding.checkImgReligion.setSelected(true);
+                binding.checkImgSalary.setSelected(true);
+
                 // 재검수 요청일때
                 if (images.size() < 4) {
                     binding.btnNext.setSelected(false);
@@ -185,16 +198,10 @@ public class Join04Frag extends BaseFrag implements View.OnClickListener {
         progressDialog.setCancelable(false);
         progressDialog.getWindow().setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
         progressDialog.setContentView(R.layout.dialog_state_image);
-//        progressDialog.setOnCancelListener(new DialogInterface.OnCancelListener() {
-//            @Override
-//            public void onCancel(DialogInterface dialogInterface) {
-//                act.finish();
-//                act.finishAffinity();
-//            }
-//        });
 
+
+        setLayout();
         setRecyclerView();
-
 
         if (StringUtil.isNull(fromType)) {
             setClickListener();
@@ -255,63 +262,42 @@ public class Join04Frag extends BaseFrag implements View.OnClickListener {
         return binding.getRoot();
     }
 
+    private void setLayout() {
+        binding.location.setTag(R.string.tag01, binding.checkImgLocation);
+        binding.birth.setTag(R.string.tag01, binding.checkImgBirth);
+        binding.height.setTag(R.string.tag01, binding.checkImgHeight);
+        binding.body.setTag(R.string.tag01, binding.checkImgBody);
+        binding.edu.setTag(R.string.tag01, binding.checkImgEdu);
+        binding.job.setTag(R.string.tag01, binding.checkImgJob);
+        binding.drink.setTag(R.string.tag01, binding.checkImgDrink);
+        binding.smoke.setTag(R.string.tag01, binding.checkImgSmoke);
+        binding.religion.setTag(R.string.tag01, binding.checkImgReligion);
+        binding.salary.setTag(R.string.tag01, binding.checkImgSalary);
+
+        binding.nick.addTextChangedListener(new TextWatcher() {
+            @Override
+            public void beforeTextChanged(CharSequence charSequence, int i, int i1, int i2) {
+            }
+
+            @Override
+            public void onTextChanged(CharSequence charSequence, int i, int i1, int i2) {
+            }
+
+            @Override
+            public void afterTextChanged(Editable editable) {
+                if (binding.nick.length() > 0) {
+                    binding.checkImgNick.setSelected(true);
+                } else {
+                    binding.checkImgNick.setSelected(false);
+                }
+            }
+        });
+    }
+
     @Override
     public void onDestroy() {
         super.onDestroy();
         frag = null;
-    }
-
-    private void doTestEditProfile() {
-        ReqBasic server = new ReqBasic(act, NetUrls.DOMAIN) {
-            @Override
-            public void onAfter(int resultCode, HttpResult resultData) {
-                if (resultData.getResult() != null) {
-                    try {
-                        JSONObject jo = new JSONObject(resultData.getResult());
-
-                        if (StringUtil.getStr(jo, "result").equalsIgnoreCase("Y")) {
-
-                        } else {
-
-                        }
-
-                    } catch (JSONException e) {
-                        e.printStackTrace();
-                        Common.showToastNetwork(act);
-                    }
-                } else {
-                    Common.showToastNetwork(act);
-                }
-            }
-        };
-
-        server.setTag("Edit Info");
-        server.addParams("dbControl", NetUrls.EDIT_PROFILE);
-        server.addParams("m_idx", AppPreference.getProfilePref(act, AppPreference.PREF_MIDX));
-        server.addParams("m_body", JoinAct.joinData.getBody());
-        server.addParams("m_religion", JoinAct.joinData.getReligion());
-        server.addParams("m_drink", JoinAct.joinData.getDrink());
-        server.addParams("m_smoke", JoinAct.joinData.getSmoke());
-        server.addParams("m_salary", JoinAct.joinData.getSalary());
-        server.addParams("m_charm", JoinAct.joinData.getCharm());
-        server.addParams("m_ideal", JoinAct.joinData.getIdeal());
-        server.addParams("m_interest", JoinAct.joinData.getInterest());
-        server.addParams("m_intro", JoinAct.joinData.getIntro());
-
-        // 파일
-        for (int i = 1; i < JoinAct.joinData.getImages().size(); i++) {
-            String filePath = JoinAct.joinData.getImages().get(i);
-            File file = new File(filePath);
-            server.addFileParams("m_profile" + i, file);
-            server.addParams("m_profile" + i + "ck", "Y");
-        }
-
-        if (null != JoinAct.joinData.getSalary_file()) {
-            server.addFileParams("m_salary_file", JoinAct.joinData.getSalary_file());
-        }
-
-
-        server.execute(true, false);
     }
 
 
@@ -325,8 +311,9 @@ public class Join04Frag extends BaseFrag implements View.OnClickListener {
                         JSONObject jo = new JSONObject(resultData.getResult());
 
                         if (StringUtil.getStr(jo, "result").equalsIgnoreCase("Y")) {
-                        } else {
                             setProgressDialogShow();
+                            Common.showToast(act, StringUtil.getStr(jo, "message"));
+                        } else {
                             Common.showToast(act, StringUtil.getStr(jo, "message"));
                         }
 
@@ -670,14 +657,14 @@ public class Join04Frag extends BaseFrag implements View.OnClickListener {
         binding.religion.setOnClickListener(this);
         binding.salary.setOnClickListener(this);
 
-        binding.location.setTag("location");
-        binding.height.setTag("height");
-        binding.body.setTag("body");
-        binding.edu.setTag("edu");
-        binding.job.setTag("job");
-        binding.drink.setTag("drink");
-        binding.smoke.setTag("smoke");
-        binding.religion.setTag("religion");
+        binding.location.setTag(R.string.tag02, "location");
+        binding.height.setTag(R.string.tag02, "height");
+        binding.body.setTag(R.string.tag02, "body");
+        binding.edu.setTag(R.string.tag02, "edu");
+        binding.job.setTag(R.string.tag02, "job");
+        binding.drink.setTag(R.string.tag02, "drink");
+        binding.smoke.setTag(R.string.tag02, "smoke");
+        binding.religion.setTag(R.string.tag02, "religion");
     }
 
     @Override
@@ -693,19 +680,21 @@ public class Join04Frag extends BaseFrag implements View.OnClickListener {
             case R.id.religion:
                 selectedView = (TextView) v;
                 startActivityForResult(new Intent(act, ProfileSimpleDlg.class)
-                                .putExtra("type", (String) v.getTag())
+                                .putExtra("type", (String) v.getTag(R.string.tag02))
                                 .putExtra("data", selectedView.getText().toString())
                         , PROFILE);
                 break;
 
             case R.id.birth:
+                selectedView = (TextView) v;
                 startActivityForResult(new Intent(act, ProfileBirthDlg.class)
-                                .putExtra("type", (String) v.getTag())
+                                .putExtra("type", (String) v.getTag(R.string.tag02))
                                 .putExtra("birth", binding.birth.getText().toString())
                         , BIRTH);
                 break;
 
             case R.id.salary:
+                selectedView = (TextView) v;
                 startActivityForResult(new Intent(act, SalaryAct.class), SALARY);
                 break;
         }
@@ -804,16 +793,20 @@ public class Join04Frag extends BaseFrag implements View.OnClickListener {
                     String salary = data.getStringExtra("salary");
                     binding.salary.setText(salary);
                     salary_file = (File) data.getSerializableExtra("file");
+
+                    ((ImageView) selectedView.getTag(R.string.tag01)).setSelected(true);
                     break;
 
                 case BIRTH:
                     String birth = data.getStringExtra("birth");
                     binding.birth.setText(birth);
+                    ((ImageView) selectedView.getTag(R.string.tag01)).setSelected(true);
                     break;
 
                 case PROFILE:
                     String value = data.getStringExtra("value");
                     selectedView.setText(value);
+                    ((ImageView) selectedView.getTag(R.string.tag01)).setSelected(true);
                     break;
 
 

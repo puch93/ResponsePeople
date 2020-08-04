@@ -116,7 +116,7 @@ public class QuestionManagerAdpater extends RecyclerView.Adapter<QuestionManager
             }
         };
         server.setTag("Delete Question");
-        server.addParams("dbControl", NetUrls.DELETE);
+        server.addParams("dbControl", NetUrls.QUESTION_DELETE);
         server.addParams("q_idx", q_idx);
         server.addParams("m_idx", AppPreference.getProfilePref(act, AppPreference.PREF_MIDX));
         server.execute(true, false);

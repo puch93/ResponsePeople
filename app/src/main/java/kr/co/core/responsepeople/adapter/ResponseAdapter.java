@@ -85,7 +85,7 @@ public class ResponseAdapter extends RecyclerView.Adapter<ResponseAdapter.ViewHo
         });
 
         holder.progressBar.setProgress(data.getProgress());
-        holder.progressText.setText(String.valueOf(data.getProgress()));
+        holder.progressText.setText(String.valueOf(data.getProgress()) + "%");
 
 
     }

@@ -21,7 +21,6 @@
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toTopOf="parent">
 
-                <!--TODO 백버튼-->
                 <ImageView
                     android:layout_width="30dp"
                     android:layout_height="30dp"

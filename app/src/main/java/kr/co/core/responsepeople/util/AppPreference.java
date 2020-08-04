@@ -12,6 +12,7 @@ public class AppPreference {
 
     public static final String PREF_ID = "id";
     public static final String PREF_PW = "pw";
+    public static final String PREF_AGE = "age";
     public static final String PREF_NICK = "nick";
     public static final String PREF_GENDER = "gender";
     public static final String PREF_IMAGE = "image";

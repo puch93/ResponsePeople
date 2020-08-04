@@ -44,7 +44,7 @@
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:includeFontPadding="false"
-                        android:text="응답한 이성"
+                        android:text="응답한 이성 "
                         android:textColor="@color/color_2c2c2c"
                         android:textSize="12dp"
                         android:textStyle="bold" />

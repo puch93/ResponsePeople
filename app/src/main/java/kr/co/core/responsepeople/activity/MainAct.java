@@ -9,6 +9,9 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
 
+import com.bumptech.glide.Glide;
+import com.bumptech.glide.load.resource.bitmap.CircleCrop;
+
 import org.json.JSONException;
 import org.json.JSONObject;
 
@@ -34,8 +37,6 @@ public class MainAct extends BaseAct implements View.OnClickListener {
 
     FragmentManager fragmentManager;
     private BackPressCloseHandler backPressCloseHandler;
-    private int currentPos = 0;
-
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -59,6 +60,13 @@ public class MainAct extends BaseAct implements View.OnClickListener {
         binding.menu01Area.performClick();
     }
 
+    @Override
+    protected void onResume() {
+        super.onResume();
+
+        if (!StringUtil.isNull(AppPreference.getProfilePref(act, AppPreference.PREF_IMAGE)))
+            Glide.with(act).load(AppPreference.getProfilePref(act, AppPreference.PREF_IMAGE)).transform(new CircleCrop()).into(binding.profileImg);
+    }
 
     @Override
     public void onBackPressed() {
@@ -108,13 +116,19 @@ public class MainAct extends BaseAct implements View.OnClickListener {
                 break;
 
 
-
             case R.id.btn_question:
                 startActivity(new Intent(act, QuestionManageAct.class));
                 break;
 
+            case R.id.btn_alarm:
+                startActivity(new Intent(act, QuestionAlarmAct.class));
+                break;
+            case R.id.btn_chat:
+                startActivity(new Intent(act, ChatListAct.class));
+                break;
             case R.id.btn_setting:
-                doLogout();
+//                doLogout();
+                startActivity(new Intent(act, MyPageAct.class));
                 break;
 
         }
@@ -129,7 +143,7 @@ public class MainAct extends BaseAct implements View.OnClickListener {
                     try {
                         JSONObject jo = new JSONObject(resultData.getResult());
 
-                        if( StringUtil.getStr(jo, "result").equalsIgnoreCase("Y")) {
+                        if (StringUtil.getStr(jo, "result").equalsIgnoreCase("Y")) {
                             AppPreference.setProfilePrefBool(act, AppPreference.AUTO_LOGIN, false);
                             startActivity(new Intent(act, LoginAct.class));
                             finish();

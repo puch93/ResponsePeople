@@ -62,6 +62,26 @@ public class Common {
     public static final int PHOTO_GALLERY = 103;
     public static final int PHOTO_CROP = 104;
 
+    public static final String ITEM_01_NAME = "하트 5개";
+    public static final String ITEM_02_NAME = "하트 10개";
+    public static final String ITEM_03_NAME = "하트 20개";
+    public static final String ITEM_04_NAME = "하트 30개";
+    public static final String ITEM_05_NAME = "하트 50개";
+    public static final String ITEM_06_NAME = "하트 100개";
+
+    public static final String ITEM_01_CODE = "item_heart_5";
+    public static final String ITEM_02_CODE = "item_heart_10";
+    public static final String ITEM_03_CODE = "item_heart_20";
+    public static final String ITEM_04_CODE = "item_heart_30";
+    public static final String ITEM_05_CODE = "item_heart_50";
+    public static final String ITEM_06_CODE = "item_heart_100";
+
+    public static final String ITEM_01_PRICE = "3300";
+    public static final String ITEM_02_PRICE = "5500";
+    public static final String ITEM_03_PRICE = "8800";
+    public static final String ITEM_04_PRICE = "11000";
+    public static final String ITEM_05_PRICE = "15500";
+    public static final String ITEM_06_PRICE = "26000";
 
     /* toast setting */
     public static void showToast(final Activity act, final String msg) {

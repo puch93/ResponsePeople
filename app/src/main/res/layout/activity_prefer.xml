@@ -1,0 +1,494 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools">
+
+    <ScrollView
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:fadingEdge="none"
+        android:fillViewport="true"
+        android:overScrollMode="never">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:orientation="vertical">
+
+
+            <androidx.constraintlayout.widget.ConstraintLayout
+                android:layout_width="match_parent"
+                android:layout_height="50dp">
+
+                <FrameLayout
+                    android:id="@+id/btn_back"
+                    android:layout_width="wrap_content"
+                    android:layout_height="match_parent"
+                    android:paddingLeft="15dp"
+                    android:paddingRight="10dp"
+                    app:layout_constraintBottom_toBottomOf="parent"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toTopOf="parent">
+
+                    <!--TODO 백버튼-->
+                    <ImageView
+                        android:layout_width="30dp"
+                        android:layout_height="30dp"
+                        android:layout_gravity="center"
+                        android:src="@drawable/btn_back" />
+                </FrameLayout>
+
+                <TextView
+                    android:id="@+id/title"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:gravity="center_horizontal"
+                    android:text="선호 설정"
+                    android:textColor="@color/color_2a3348"
+                    android:textSize="16dp"
+                    app:layout_constraintBottom_toBottomOf="parent"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toTopOf="parent" />
+
+            </androidx.constraintlayout.widget.ConstraintLayout>
+
+            <ImageView
+                android:layout_width="match_parent"
+                android:layout_height="1dp"
+                android:background="@color/color_f3f4f5"/>
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:orientation="vertical"
+                android:paddingLeft="20dp"
+                android:paddingTop="20dp"
+                android:paddingRight="20dp"
+                android:paddingBottom="47dp">
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:includeFontPadding="false"
+                    android:text="당신의 이상형에 가깝게"
+                    android:textColor="@color/color_2a3348"
+                    android:textSize="18dp"
+                    android:textStyle="bold" />
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="6dp"
+                    android:includeFontPadding="false"
+                    android:text="설정해주세요"
+                    android:textColor="@color/color_2a3348"
+                    android:textSize="18dp" />
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="43.3dp"
+                    android:gravity="center_vertical"
+                    android:orientation="horizontal">
+
+                    <TextView
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1"
+                        android:letterSpacing="-0.05"
+                        android:lineSpacingExtra="17.8sp"
+                        android:text="나이"
+                        android:textColor="#393939"
+                        android:textSize="13.2sp" />
+
+                    <TextView
+                        android:id="@+id/age_start"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:gravity="end"
+                        android:text="20"
+                        android:textColor="@color/color_669cff"
+                        android:textSize="14.7dp"
+                        android:textStyle="bold" />
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:gravity="end"
+                        android:text="세 ~ "
+                        android:textColor="@color/color_669cff"
+                        android:textSize="14.7dp"
+                        android:textStyle="bold" />
+
+                    <TextView
+                        android:id="@+id/age_end"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:gravity="end"
+                        android:text="55"
+                        android:textColor="@color/color_669cff"
+                        android:textSize="14.7dp"
+                        android:textStyle="bold" />
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:gravity="end"
+                        android:text="세"
+                        android:textColor="@color/color_669cff"
+                        android:textSize="14.7dp"
+                        android:textStyle="bold" />
+
+                    <TextView
+                        android:id="@+id/age_55"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:gravity="end"
+                        android:text="+"
+                        android:textColor="@color/color_669cff"
+                        android:textSize="14.7dp"
+                        android:textStyle="bold"
+                        android:visibility="visible" />
+
+                </LinearLayout>
+
+                <com.jaygoo.widget.RangeSeekBar
+                    android:id="@+id/seek_bar_age"
+                    android:layout_width="match_parent"
+                    android:layout_height="36dp"
+                    app:rsb_gravity="center"
+                    app:rsb_mode="range"
+                    app:rsb_progress_color="@color/color_669cff"
+                    app:rsb_progress_default_color="@color/color_e3e6e8"
+                    app:rsb_progress_height="4dp"
+                    app:rsb_thumb_drawable="@drawable/select_btn"
+                    app:rsb_thumb_height="20dp"
+                    app:rsb_thumb_inactivated_drawable="@drawable/select_btn"
+                    app:rsb_thumb_width="20dp" />
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="25dp"
+                    android:gravity="center_vertical"
+                    android:orientation="horizontal">
+
+                    <TextView
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1"
+                        android:letterSpacing="-0.05"
+                        android:lineSpacingExtra="17.8sp"
+                        android:text="거리"
+                        android:textColor="#393939"
+                        android:textSize="13.2sp" />
+
+                    <TextView
+                        android:id="@+id/distance"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:gravity="end"
+                        android:text="300"
+                        android:textColor="@color/color_669cff"
+                        android:textSize="14.7dp"
+                        android:textStyle="bold" />
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:gravity="end"
+                        android:text="km 이내"
+                        android:textColor="@color/color_669cff"
+                        android:textSize="14.7dp"
+                        android:textStyle="bold" />
+
+                </LinearLayout>
+
+                <com.jaygoo.widget.RangeSeekBar
+                    android:id="@+id/seek_bar_distance"
+                    android:layout_width="match_parent"
+                    android:layout_height="36dp"
+                    app:rsb_gravity="center"
+                    app:rsb_indicator_arrow_size="10dp"
+                    app:rsb_indicator_background_color="@color/colorAccent"
+                    app:rsb_mode="single"
+                    app:rsb_progress_color="@color/color_669cff"
+                    app:rsb_progress_default_color="@color/color_e3e6e8"
+                    app:rsb_progress_height="4dp"
+                    app:rsb_step_auto_bonding="true"
+                    app:rsb_step_color="@color/color_669cff"
+                    app:rsb_step_height="7dp"
+                    app:rsb_step_radius="5dp"
+                    app:rsb_step_width="7dp"
+                    app:rsb_steps="7"
+                    app:rsb_thumb_drawable="@drawable/select_btn"
+                    app:rsb_thumb_height="20dp"
+                    app:rsb_thumb_width="20dp" />
+
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="25dp"
+                    android:gravity="center_vertical"
+                    android:orientation="horizontal">
+
+                    <TextView
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1"
+                        android:letterSpacing="-0.05"
+                        android:lineSpacingExtra="17.8sp"
+                        android:text="키"
+                        android:textColor="#393939"
+                        android:textSize="13.2sp" />
+
+                    <TextView
+                        android:id="@+id/height_start"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:gravity="end"
+                        android:text="120"
+                        android:textColor="@color/color_669cff"
+                        android:textSize="14.7dp"
+                        android:textStyle="bold" />
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:gravity="end"
+                        android:text="cm ~ "
+                        android:textColor="@color/color_669cff"
+                        android:textSize="14.7dp"
+                        android:textStyle="bold" />
+
+                    <TextView
+                        android:id="@+id/height_end"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:gravity="end"
+                        android:text="200"
+                        android:textColor="@color/color_669cff"
+                        android:textSize="14.7dp"
+                        android:textStyle="bold" />
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:gravity="end"
+                        android:text="cm"
+                        android:textColor="@color/color_669cff"
+                        android:textSize="14.7dp"
+                        android:textStyle="bold" />
+
+                </LinearLayout>
+
+                <com.jaygoo.widget.RangeSeekBar
+                    android:id="@+id/seek_bar_height"
+                    android:layout_width="match_parent"
+                    android:layout_height="36dp"
+                    app:rsb_gravity="center"
+                    app:rsb_mode="range"
+                    app:rsb_progress_color="@color/color_669cff"
+                    app:rsb_progress_default_color="@color/color_e3e6e8"
+                    app:rsb_progress_height="4dp"
+                    app:rsb_thumb_drawable="@drawable/select_btn"
+                    app:rsb_thumb_height="20dp"
+                    app:rsb_thumb_inactivated_drawable="@drawable/select_btn"
+                    app:rsb_thumb_width="20dp" />
+
+                <LinearLayout
+                    android:id="@+id/area_edu"
+                    android:layout_width="match_parent"
+                    android:layout_height="45.3dp"
+                    android:layout_marginTop="16dp"
+                    android:gravity="center_vertical"
+                    android:orientation="horizontal">
+
+                    <TextView
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1"
+                        android:text="학력"
+                        android:textColor="@color/color_393939"
+                        android:textSize="13.2dp" />
+
+                    <TextView
+                        android:id="@+id/edu"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="상관없음"
+                        android:textColor="@color/color_669cff"
+                        android:textSize="14.8dp"
+                        android:textStyle="bold" />
+
+                </LinearLayout>
+
+                <ImageView
+                    android:layout_width="match_parent"
+                    android:layout_height="1px"
+                    android:background="@color/color_e3e6e8" />
+
+
+                <LinearLayout
+                    android:id="@+id/area_body"
+                    android:layout_width="match_parent"
+                    android:layout_height="45.3dp"
+                    android:layout_marginTop="10dp"
+                    android:gravity="center_vertical"
+                    android:orientation="horizontal">
+
+                    <TextView
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1"
+                        android:text="체형"
+                        android:textColor="@color/color_393939"
+                        android:textSize="13.2dp" />
+
+                    <TextView
+                        android:id="@+id/body"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="상관없음"
+                        android:textColor="@color/color_669cff"
+                        android:textSize="14.8dp"
+                        android:textStyle="bold" />
+
+                </LinearLayout>
+
+                <ImageView
+                    android:layout_width="match_parent"
+                    android:layout_height="1px"
+                    android:background="@color/color_e3e6e8" />
+
+                <LinearLayout
+                    android:id="@+id/area_religion"
+                    android:layout_width="match_parent"
+                    android:layout_height="45.3dp"
+                    android:layout_marginTop="10dp"
+                    android:gravity="center_vertical"
+                    android:orientation="horizontal">
+
+                    <TextView
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1"
+                        android:text="종교"
+                        android:textColor="@color/color_393939"
+                        android:textSize="13.2dp" />
+
+                    <TextView
+                        android:id="@+id/religion"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="상관없음"
+                        android:textColor="@color/color_669cff"
+                        android:textSize="14.8dp"
+                        android:textStyle="bold" />
+
+                </LinearLayout>
+
+                <ImageView
+                    android:layout_width="match_parent"
+                    android:layout_height="1px"
+                    android:background="@color/color_e3e6e8" />
+
+                <LinearLayout
+                    android:id="@+id/area_drink"
+                    android:layout_width="match_parent"
+                    android:layout_height="45.3dp"
+                    android:layout_marginTop="10dp"
+                    android:gravity="center_vertical"
+                    android:orientation="horizontal">
+
+                    <TextView
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1"
+                        android:text="음주"
+                        android:textColor="@color/color_393939"
+                        android:textSize="13.2dp" />
+
+                    <TextView
+                        android:id="@+id/drink"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="상관없음"
+                        android:textColor="@color/color_669cff"
+                        android:textSize="14.8dp"
+                        android:textStyle="bold" />
+
+                </LinearLayout>
+
+                <ImageView
+                    android:layout_width="match_parent"
+                    android:layout_height="1px"
+                    android:background="@color/color_e3e6e8" />
+
+                <LinearLayout
+                    android:id="@+id/area_smoke"
+                    android:layout_width="match_parent"
+                    android:layout_height="45.3dp"
+                    android:layout_marginTop="10dp"
+                    android:gravity="center_vertical"
+                    android:orientation="horizontal">
+
+                    <TextView
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1"
+                        android:text="흡연"
+                        android:textColor="@color/color_393939"
+                        android:textSize="13.2dp" />
+
+                    <TextView
+                        android:id="@+id/smoke"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="상관없음"
+                        android:textColor="@color/color_669cff"
+                        android:textSize="14.8dp"
+                        android:textStyle="bold" />
+
+                </LinearLayout>
+
+
+                <ImageView
+                    android:layout_width="match_parent"
+                    android:layout_height="1px"
+                    android:background="@color/color_e3e6e8" />
+
+                <Space
+                    android:layout_width="match_parent"
+                    android:layout_height="0dp"
+                    android:layout_weight="1" />
+
+                <FrameLayout
+                    android:id="@+id/btn_complete"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="38dp">
+
+                    <ImageView
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:adjustViewBounds="true"
+                        android:src="@drawable/btn_blue" />
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_gravity="center"
+                        android:text="설정완료"
+                        android:textColor="@color/color_white"
+                        android:textSize="20dp"
+                        android:textStyle="bold" />
+                </FrameLayout>
+
+            </LinearLayout>
+
+        </LinearLayout>
+    </ScrollView>
+</layout>

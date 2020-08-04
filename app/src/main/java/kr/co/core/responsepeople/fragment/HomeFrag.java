@@ -39,6 +39,7 @@ public class HomeFrag extends BaseFrag implements View.OnClickListener {
     HomeAdapter adapter;
     LinearLayoutManager manager;
     ArrayList<MemberData> list = new ArrayList<>();
+    ArrayList<MemberData> list_realTime = new ArrayList<>();
 
     @Nullable
     @Override
@@ -69,31 +70,43 @@ public class HomeFrag extends BaseFrag implements View.OnClickListener {
                         LogUtil.logLarge(jo.toString());
 
                         if (StringUtil.getStr(jo, "result").equalsIgnoreCase("Y")) {
-                            String total = StringUtil.getStr(jo, "total");
 
-//                            JSONArray ja = jo.getJSONArray("value");
-//                            for (int i = 0; i < ja.length(); i++) {
-//                                JSONObject job = ja.getJSONObject(i);
-//                                String m_idx = StringUtil.getStr(job, "m_idx");
-//                                String m_nick = StringUtil.getStr(job, "m_nick");
-//                                String m_age = StringUtil.calcAge(StringUtil.getStr(job, "m_birth").substring(0, 4));
-//                                String m_job = StringUtil.getStr(job, "m_job");
-//                                String m_location = StringUtil.getStr(job, "m_location");
-//                                String m_salary = StringUtil.getStr(job, "m_salary");
-//                                String m_profile1 = StringUtil.getStr(job, "m_profile1");
-//                                boolean m_salary_result = StringUtil.getStr(job, "m_salary_result").equalsIgnoreCase("Y");
-//                                boolean m_profile_result = StringUtil.getStr(job, "m_profile_result").equalsIgnoreCase("Y");
-//                                boolean f_idx = !StringUtil.isNull(StringUtil.getStr(job, "f_idx"));
-//
-//                                list.add(new MemberData(m_idx, m_nick, m_age, m_job, m_location, m_salary, m_profile1, m_profile_result, f_idx, m_salary_result));
-//                            }
-//
-//                            act.runOnUiThread(new Runnable() {
-//                                @Override
-//                                public void run() {
-//                                    adapter.setList(list);
-//                                }
-//                            });
+                            JSONArray ja = jo.getJSONArray("data");
+                            for (int i = 0; i < ja.length(); i++) {
+                                JSONObject job = ja.getJSONObject(i);
+                                String m_idx = StringUtil.getStr(job, "m_idx");
+                                String m_nick = StringUtil.getStr(job, "m_nick");
+                                String m_age = StringUtil.calcAge(StringUtil.getStr(job, "m_birth").substring(0, 4));
+                                String m_job = StringUtil.getStr(job, "m_job");
+                                String m_location = StringUtil.getStr(job, "m_location");
+                                String m_salary = StringUtil.getStr(job, "m_salary");
+                                String m_profile1 = StringUtil.getStr(job, "m_profile1");
+                                boolean m_salary_result = StringUtil.getStr(job, "m_salary_result").equalsIgnoreCase("Y");
+                                boolean m_profile_result = StringUtil.getStr(job, "m_profile_result").equalsIgnoreCase("Y");
+                                boolean f_idx = !StringUtil.isNull(StringUtil.getStr(job, "f_idx"));
+
+                                list_realTime.add(new MemberData(m_idx, m_nick, m_age, m_job, m_location, m_salary, m_profile1, m_profile_result, f_idx, m_salary_result));
+                            }
+
+                            act.runOnUiThread(new Runnable() {
+                                @Override
+                                public void run() {
+                                    if(list.size() > 0) {
+                                        MemberData data = list_realTime.get(0);
+                                        binding.nick.setText(data.getNick());
+                                        binding.age.setText(data.getAge());
+                                        binding.job.setText(data.getJob());
+                                        binding.location.setText(data.getLocation());
+                                        if (data.isSalary_ok()) {
+                                            binding.salary.setText(data.getSalary());
+                                        } else {
+                                            binding.salary.setText("연봉 검수중");
+                                        }
+
+                                        Common.processProfileImageRec(act, binding.profileImg, data.getProfile_img(), data.isImage_ok(), 5, 3);
+                                    }
+                                }
+                            });
                         } else {
 
                         }
@@ -108,7 +121,7 @@ public class HomeFrag extends BaseFrag implements View.OnClickListener {
             }
         };
 
-        server.setTag("Online Member");
+        server.setTag("RealTime Member");
         server.addParams("dbControl", NetUrls.REALTIME_LIST);
         server.addParams("m_idx", AppPreference.getProfilePref(act, AppPreference.PREF_MIDX));
         server.addParams("m_gender", AppPreference.getProfilePref(act, AppPreference.PREF_GENDER));
@@ -125,7 +138,6 @@ public class HomeFrag extends BaseFrag implements View.OnClickListener {
                         LogUtil.logLarge(jo.toString());
 
                         if (StringUtil.getStr(jo, "result").equalsIgnoreCase("Y")) {
-                            String total = StringUtil.getStr(jo, "total");
 
                             JSONArray ja = jo.getJSONArray("value");
                             for (int i = 0; i < ja.length(); i++) {

@@ -79,29 +79,34 @@ public class ResponseFrag extends BaseFrag implements View.OnClickListener {
                         LogUtil.logLarge(jo.toString());
 
                         if (StringUtil.getStr(jo, "result").equalsIgnoreCase("Y")) {
-                            String total = StringUtil.getStr(jo, "total");
 
                             JSONArray ja = jo.getJSONArray("data");
                             for (int i = 0; i < ja.length(); i++) {
-//                                JSONObject job = ja.getJSONObject(i);
-//                                String m_idx = StringUtil.getStr(job, "m_idx");
-//                                String m_nick = StringUtil.getStr(job, "m_nick");
-//                                String m_age = StringUtil.calcAge(StringUtil.getStr(job, "m_birth").substring(0, 4));
-//                                String m_job = StringUtil.getStr(job, "m_job");
-//                                String m_location = StringUtil.getStr(job, "m_location");
-//                                String m_salary = StringUtil.getStr(job, "m_salary");
-//                                String m_profile1 = StringUtil.getStr(job, "m_profile1");
-//                                boolean m_salary_result = StringUtil.getStr(job, "m_salary_result").equalsIgnoreCase("Y");
-//                                boolean m_profile_result = StringUtil.getStr(job, "m_profile_result").equalsIgnoreCase("Y");
-//                                boolean f_idx = !StringUtil.isNull(StringUtil.getStr(job, "f_idx"));
+                                JSONObject job = ja.getJSONObject(i);
+                                String m_idx = StringUtil.getStr(job, "m_idx");
+                                String m_nick = StringUtil.getStr(job, "m_nick");
+                                String m_age = StringUtil.calcAge(StringUtil.getStr(job, "m_birth").substring(0, 4));
+                                String m_job = StringUtil.getStr(job, "m_job");
+                                String m_location = StringUtil.getStr(job, "m_location");
+                                String m_salary = StringUtil.getStr(job, "m_salary");
+                                String m_profile1 = StringUtil.getStr(job, "m_profile1");
+                                int total_cnt = StringUtil.getInt(job, "total_cnt");
+                                int complet_cnt = StringUtil.getInt(job, "complet_cnt");
+                                int matching_cnt = StringUtil.getInt(job, "matching_cnt");
 
-//                                list.add(new ResponseData(m_idx, m_nick, m_age, m_job, m_location, m_salary, m_profile1, m_profile_result, f_idx, m_salary_result));
+                                int result = 30 + (int) (((double) complet_cnt / (double) total_cnt) * 100) + (matching_cnt * 5);
+
+                                boolean m_salary_result = StringUtil.getStr(job, "m_salary_result").equalsIgnoreCase("Y");
+                                boolean m_profile_result = StringUtil.getStr(job, "m_profile_result").equalsIgnoreCase("Y");
+                                boolean f_idx = !StringUtil.isNull(StringUtil.getStr(job, "f_idx"));
+
+                                list.add(new ResponseData(m_idx, m_nick, m_age, m_job, m_location, m_salary, m_profile1, result ,f_idx, m_salary_result, m_profile_result));
                             }
 
                             act.runOnUiThread(new Runnable() {
                                 @Override
                                 public void run() {
-                                    binding.count.setText(total);
+                                    binding.count.setText(String.valueOf(ja.length()));
                                     adapter.setList(list);
                                 }
                             });

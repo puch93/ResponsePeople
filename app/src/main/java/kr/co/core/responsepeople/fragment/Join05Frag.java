@@ -261,10 +261,8 @@ public class Join05Frag extends BaseFrag implements View.OnClickListener {
         server.addParams("m_idx", AppPreference.getProfilePref(act, AppPreference.PREF_MIDX));
         server.addParams("m_age", age);
         server.addParams("m_distance", distance);
-
+        server.addParams("m_height", height);
         //선택
-        if (!StringUtil.isNull(height) && !height.equalsIgnoreCase("상관없음"))
-            server.addParams("m_height", height);
         if (!StringUtil.isNull(edu) && !edu.equalsIgnoreCase("상관없음"))
             server.addParams("m_edu", edu);
         if (!StringUtil.isNull(body) && !body.equalsIgnoreCase("상관없음"))
