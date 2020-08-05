@@ -149,8 +149,10 @@ public class MyPageAct extends BaseAct implements View.OnClickListener {
 
             case R.id.menu_prefer:
                 startActivity(new Intent(act, PreferAct.class));
-            case R.id.menu_customer:
             case R.id.menu_like:
+                startActivity(new Intent(act, LikeAct.class));
+                break;
+            case R.id.menu_customer:
             case R.id.menu_block:
                 break;
         }

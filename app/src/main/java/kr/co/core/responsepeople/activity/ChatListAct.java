@@ -38,6 +38,10 @@ public class ChatListAct extends BaseAct {
         binding.recyclerView.setItemViewCacheSize(20);
 
         getChatList();
+
+        binding.btnBack.setOnClickListener(v -> {
+            finish();
+        });
     }
 
     private void getChatList() {

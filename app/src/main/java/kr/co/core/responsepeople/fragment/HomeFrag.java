@@ -7,9 +7,13 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.ViewTreeObserver;
+import android.widget.FrameLayout;
+import android.widget.LinearLayout;
+import android.widget.RatingBar;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
+import androidx.constraintlayout.widget.ConstraintLayout;
 import androidx.databinding.DataBindingUtil;
 import androidx.recyclerview.widget.GridLayoutManager;
 import androidx.recyclerview.widget.LinearLayoutManager;
@@ -57,7 +61,73 @@ public class HomeFrag extends BaseFrag implements View.OnClickListener {
         getRecommendList();
         getRealTimeMember();
 
+
+        binding.profileImg.post(new Runnable() {
+            @Override
+            public void run() {
+                int height = binding.profileImg.getMeasuredWidth();
+                Log.e(StringUtil.TAG, "getMeasuredWidth: " + height);
+                height = binding.profileImg.getWidth();
+                Log.e(StringUtil.TAG, "getWidth: " + height);
+                if (height <= 0) {
+                    height = getResources().getDimensionPixelSize(R.dimen.home_realtime_height);
+                }
+                FrameLayout.LayoutParams params = (FrameLayout.LayoutParams) binding.profileImg.getLayoutParams();
+                params.height = height;
+                binding.profileImg.setLayoutParams(params);
+            }
+        });
+
+
+        binding.ratingBar.setOnRatingBarChangeListener(new RatingBar.OnRatingBarChangeListener() {
+            @Override
+            public void onRatingChanged(RatingBar ratingBar, float rating, boolean fromUser) {
+                if (fromUser)
+                    LogUtil.logI("fromUser true");
+                else
+                    LogUtil.logI("fromUser false");
+
+                if (list_realTime.size() > 0)
+                    evaluationOther(String.valueOf((int) (rating * 2)), list_realTime.get(0).getIdx());
+
+                binding.ratingBar.setRating(0f);
+            }
+        });
+
         return binding.getRoot();
+    }
+
+    private void evaluationOther(String score, String t_idx) {
+        ReqBasic server = new ReqBasic(act, NetUrls.DOMAIN) {
+            @Override
+            public void onAfter(int resultCode, HttpResult resultData) {
+                if (resultData.getResult() != null) {
+                    try {
+                        JSONObject jo = new JSONObject(resultData.getResult());
+
+                        if (StringUtil.getStr(jo, "result").equalsIgnoreCase("Y")) {
+                            list_realTime.remove(0);
+                            setReaTimeLayout();
+                        } else {
+                            Common.showToast(act, StringUtil.getStr(jo, "message"));
+                        }
+
+                    } catch (JSONException e) {
+                        e.printStackTrace();
+                        Common.showToastNetwork(act);
+                    }
+                } else {
+                    Common.showToastNetwork(act);
+                }
+            }
+        };
+
+        server.setTag("Evaluation Other");
+        server.addParams("dbControl", NetUrls.EVALUATION);
+        server.addParams("m_idx", AppPreference.getProfilePref(act, AppPreference.PREF_MIDX));
+        server.addParams("t_idx", t_idx);
+        server.addParams("mark", score);
+        server.execute(true, true);
     }
 
     private void getRealTimeMember() {
@@ -70,6 +140,14 @@ public class HomeFrag extends BaseFrag implements View.OnClickListener {
                         LogUtil.logLarge(jo.toString());
 
                         if (StringUtil.getStr(jo, "result").equalsIgnoreCase("Y")) {
+
+                            act.runOnUiThread(new Runnable() {
+                                @Override
+                                public void run() {
+                                    binding.cardView.setVisibility(View.VISIBLE);
+                                    binding.areaNoMember.setVisibility(View.GONE);
+                                }
+                            });
 
                             JSONArray ja = jo.getJSONArray("data");
                             for (int i = 0; i < ja.length(); i++) {
@@ -88,27 +166,17 @@ public class HomeFrag extends BaseFrag implements View.OnClickListener {
                                 list_realTime.add(new MemberData(m_idx, m_nick, m_age, m_job, m_location, m_salary, m_profile1, m_profile_result, f_idx, m_salary_result));
                             }
 
+                            setReaTimeLayout();
+                        } else {
+                            LogUtil.logI("message: " + StringUtil.getStr(jo, "message"));
+
                             act.runOnUiThread(new Runnable() {
                                 @Override
                                 public void run() {
-                                    if(list.size() > 0) {
-                                        MemberData data = list_realTime.get(0);
-                                        binding.nick.setText(data.getNick());
-                                        binding.age.setText(data.getAge());
-                                        binding.job.setText(data.getJob());
-                                        binding.location.setText(data.getLocation());
-                                        if (data.isSalary_ok()) {
-                                            binding.salary.setText(data.getSalary());
-                                        } else {
-                                            binding.salary.setText("연봉 검수중");
-                                        }
-
-                                        Common.processProfileImageRec(act, binding.profileImg, data.getProfile_img(), data.isImage_ok(), 5, 3);
-                                    }
+                                    binding.cardView.setVisibility(View.GONE);
+                                    binding.areaNoMember.setVisibility(View.VISIBLE);
                                 }
                             });
-                        } else {
-
                         }
 
                     } catch (JSONException e) {
@@ -126,6 +194,31 @@ public class HomeFrag extends BaseFrag implements View.OnClickListener {
         server.addParams("m_idx", AppPreference.getProfilePref(act, AppPreference.PREF_MIDX));
         server.addParams("m_gender", AppPreference.getProfilePref(act, AppPreference.PREF_GENDER));
         server.execute(true, false);
+    }
+
+    private void setReaTimeLayout() {
+        act.runOnUiThread(new Runnable() {
+            @Override
+            public void run() {
+                if (list_realTime.size() > 0) {
+                    MemberData data = list_realTime.get(0);
+                    binding.nick.setText(data.getNick());
+                    binding.age.setText(data.getAge());
+                    binding.job.setText(data.getJob());
+                    binding.location.setText(data.getLocation());
+                    if (data.isSalary_ok()) {
+                        binding.salary.setText(data.getSalary());
+                    } else {
+                        binding.salary.setText("연봉 검수중");
+                    }
+
+                    Common.processProfileImageRec(act, binding.profileImg, data.getProfile_img(), data.isImage_ok(), 5, 3);
+                } else {
+                    // 멤버 다떨어졌을때 재검사
+                    getRealTimeMember();
+                }
+            }
+        });
     }
 
     private void getRecommendList() {

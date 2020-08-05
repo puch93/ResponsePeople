@@ -32,8 +32,11 @@ public class NetUrls {
     public static final String CHAT_LIST = "setRoomList"; // 채팅방 리스트
     public static final String PAYMENT_ITEM = "setMobilePaymentlist"; // 결제 아이템 리스트
     public static final String PAYMENT = "setMobilePayment"; // 결제
+    public static final String EVALUATION = "setPreference"; // 상대편 평가하기
+    public static final String LIKED = "getFollowMemberList"; // 상대편 평가하기
 
     public static final String QUESTION_MY_LIST = "getQuestionList"; // 내 질문지 리스트 가져오기
     public static final String QUESTION_DELETE = "delQuestion"; // 질문지 삭제하기
     public static final String QUESTION_SAVE = "setQuestionSave"; // 질문지 추가하기
 }
+

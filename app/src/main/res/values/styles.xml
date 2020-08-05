@@ -30,4 +30,8 @@
         <item name="android:textColorHighlight">@color/color_132439</item>
         <item name="android:textSize">27dp</item>
     </style>
+
+    <style name="CustomRatingBar" parent="@android:style/Widget.RatingBar">
+        <item name="android:progressDrawable">@drawable/ratingbar_stars</item>
+    </style>
 </resources>
