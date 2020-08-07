@@ -141,6 +141,7 @@ public class MyPageAct extends BaseAct implements View.OnClickListener {
 
             case R.id.btn_charge:
                 startActivity(new Intent(act, PaymentAct.class));
+                break;
             case R.id.btn_setting:
                 break;
             case R.id.menu_tier:
@@ -149,11 +150,14 @@ public class MyPageAct extends BaseAct implements View.OnClickListener {
 
             case R.id.menu_prefer:
                 startActivity(new Intent(act, PreferAct.class));
+                break;
             case R.id.menu_like:
                 startActivity(new Intent(act, LikeAct.class));
                 break;
             case R.id.menu_customer:
+                break;
             case R.id.menu_block:
+                startActivity(new Intent(act, BlockExplainAct.class));
                 break;
         }
     }

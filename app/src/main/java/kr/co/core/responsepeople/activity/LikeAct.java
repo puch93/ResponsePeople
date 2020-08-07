@@ -75,8 +75,6 @@ public class LikeAct extends BaseAct {
                                 boolean m_profile_result = StringUtil.getStr(job, "m_profile_result").equalsIgnoreCase("Y");
 
                                 list.add(new MemberData(m_idx, m_nick, m_age, m_job, m_location, null, m_profile1, m_profile_result, false, false));
-                                list.add(new MemberData(m_idx, m_nick, m_age, m_job, m_location, null, m_profile1, m_profile_result, false, false));
-                                list.add(new MemberData(m_idx, m_nick, m_age, m_job, m_location, null, m_profile1, m_profile_result, false, false));
                             }
 
                             act.runOnUiThread(new Runnable() {

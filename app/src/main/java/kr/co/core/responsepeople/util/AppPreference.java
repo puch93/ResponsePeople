@@ -16,6 +16,7 @@ public class AppPreference {
     public static final String PREF_NICK = "nick";
     public static final String PREF_GENDER = "gender";
     public static final String PREF_IMAGE = "image";
+    public static final String PREF_PHONE = "phone";
 
     public static final String PREF_LAT = "latitude";
     public static final String PREF_LON = "longitude";

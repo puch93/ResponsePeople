@@ -15,6 +15,7 @@ import kr.co.core.responsepeople.data.BaseData;
 
 public class BaseAdapter extends RecyclerView.Adapter<BaseAdapter.ViewHolder> {
     private Activity act;
+
     private ArrayList<BaseData> list;
 
     public BaseAdapter(Activity act, ArrayList<BaseData> list) {
@@ -25,6 +26,9 @@ public class BaseAdapter extends RecyclerView.Adapter<BaseAdapter.ViewHolder> {
     public void setList(ArrayList<BaseData> list) {
         this.list = list;
         notifyDataSetChanged();
+    }
+    public ArrayList<BaseData> getList() {
+        return list;
     }
 
     @NonNull

@@ -10,6 +10,7 @@
     <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE" />
     <uses-permission android:name="android.permission.ACCESS_FINE_LOCATION" />
     <uses-permission android:name="android.permission.ACCESS_COARSE_LOCATION" />
+    <uses-permission android:name="android.permission.READ_CONTACTS" />
 
     <application
         android:name=".util.CustomApplication"
@@ -22,6 +23,8 @@
         android:supportsRtl="true"
         android:theme="@style/AppTheme"
         tools:replace="android:icon,android:theme,android:allowBackup">
+        <activity android:name=".activity.BlockAct"/>
+        <activity android:name=".activity.BlockExplainAct"/>
         <activity android:name=".activity.LikeAct"/>
         <activity android:name=".activity.PreferAct"/>
         <activity android:name=".activity.TierAct" />
