@@ -54,6 +54,7 @@ public class PreferAct extends BaseAct implements View.OnClickListener {
     String religion;
     String drink;
     String smoke;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -63,6 +64,10 @@ public class PreferAct extends BaseAct implements View.OnClickListener {
         setClickListener();
 
         getMyInfo();
+
+        binding.btnBack.setOnClickListener(v -> {
+            finish();
+        });
     }
 
     private void setClickListener() {
@@ -110,7 +115,7 @@ public class PreferAct extends BaseAct implements View.OnClickListener {
                             String[] ages = m_age_p.split(",");
                             age_left = Integer.parseInt(ages[0]);
                             age_right = Integer.parseInt(ages[1]);
-                            if(age_right > 55) {
+                            if (age_right > 55) {
                                 age_right = 55;
                             }
 
@@ -191,7 +196,7 @@ public class PreferAct extends BaseAct implements View.OnClickListener {
                 binding.ageEnd.setText(String.valueOf((int) rightValue));
 
                 age_right = (int) rightValue;
-                if(rightValue >= 55.0 ) {
+                if (rightValue >= 55.0) {
                     age_right = 100;
                 }
 
@@ -339,7 +344,7 @@ public class PreferAct extends BaseAct implements View.OnClickListener {
                         JSONObject jo = new JSONObject(resultData.getResult());
 
                         if (StringUtil.getStr(jo, "result").equalsIgnoreCase("Y")) {
-                            act.startActivity(new Intent(act, EvaluationBeforeAct.class));
+                            Common.showToast(act, StringUtil.getStr(jo, "message"));
                             act.finish();
                         } else {
                             Common.showToast(act, StringUtil.getStr(jo, "message"));
@@ -373,6 +378,7 @@ public class PreferAct extends BaseAct implements View.OnClickListener {
             server.addParams("m_drink", drink);
         if (!StringUtil.isNull(smoke) && !smoke.equalsIgnoreCase("상관없음"))
             server.addParams("m_smoke", smoke);
+        server.addParams("m_pref_result", "Y");
         server.execute(true, false);
     }
 
@@ -384,7 +390,7 @@ public class PreferAct extends BaseAct implements View.OnClickListener {
                     try {
                         JSONObject jo = new JSONObject(resultData.getResult());
 
-                        if( StringUtil.getStr(jo, "result").equalsIgnoreCase("Y")) {
+                        if (StringUtil.getStr(jo, "result").equalsIgnoreCase("Y")) {
                             Common.showToast(act, StringUtil.getStr(jo, "message"));
 
                             JSONArray ja = jo.getJSONArray("data");

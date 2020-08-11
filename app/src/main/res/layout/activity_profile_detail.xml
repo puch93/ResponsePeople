@@ -28,13 +28,13 @@
                         android:id="@+id/view_pager"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        tools:layout_height="360dp"
                         android:scaleType="centerCrop"
                         app:layout_constraintBottom_toBottomOf="parent"
                         app:layout_constraintEnd_toEndOf="parent"
                         app:layout_constraintStart_toStartOf="parent"
                         app:layout_constraintTop_toTopOf="parent"
-                        tools:background="@color/color_c4c8cc" />
+                        tools:background="@color/color_c4c8cc"
+                        tools:layout_height="360dp" />
 
                     <ImageView
                         android:id="@+id/black_filter"
@@ -80,10 +80,11 @@
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:includeFontPadding="false"
-                            tools:text="정BTS"
                             android:textColor="@color/color_white"
                             android:textSize="22dp"
-                            android:textStyle="bold" />
+                            android:textStyle="bold"
+                            tools:text="정BTS" />
+
                         <TextView
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
@@ -92,15 +93,16 @@
                             android:textColor="@color/color_white"
                             android:textSize="22dp"
                             android:textStyle="bold" />
+
                         <TextView
                             android:id="@+id/age"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:includeFontPadding="false"
-                            tools:text="22"
                             android:textColor="@color/color_white"
                             android:textSize="22dp"
-                            android:textStyle="bold" />
+                            android:textStyle="bold"
+                            tools:text="22" />
 
                         <ImageView
                             android:id="@+id/icon_tier"
@@ -224,11 +226,11 @@
                         android:layout_marginTop="13dp"
                         android:includeFontPadding="false"
                         android:lineSpacingExtra="7dp"
+                        android:textColor="@color/color_cc2c2c2c"
+                        android:textSize="14dp"
                         tools:text="프리랜서 사진작가로 일하고 있는 젠틀남입니다 ^^
 일할땐 열심히 놀땐 미친듯이 놀자가 모토입니다.
-혼자인 시간이 길어져 이제는 좋은 인연 찾고자 합니다"
-                        android:textColor="@color/color_cc2c2c2c"
-                        android:textSize="14dp" />
+혼자인 시간이 길어져 이제는 좋은 인연 찾고자 합니다" />
                 </LinearLayout>
 
                 <ImageView
@@ -241,6 +243,105 @@
                     android:layout_height="7dp"
                     android:background="@color/color_f6f8f9" />
 
+                <LinearLayout
+                    android:id="@+id/area_eval_after"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="horizontal"
+                    android:paddingTop="30dp"
+                    android:paddingBottom="33dp"
+                    android:gravity="center"
+                    android:visibility="gone">
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:textSize="15dp"
+                        android:textStyle="bold"
+                        android:textColor="#95989d"
+                        android:text="별점"
+                        />
+
+                    <ImageView
+                        android:layout_width="22dp"
+                        android:layout_height="22dp"
+                        android:src="@drawable/btn_s_star"
+                        android:layout_marginRight="5dp"
+                        android:layout_marginLeft="10dp"/>
+
+                    <TextView
+                        android:id="@+id/score"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:textSize="15dp"
+                        android:textStyle="bold"
+                        android:textColor="#2c2c2c"
+                        tools:text="8"
+                        />
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:textSize="15dp"
+                        android:textStyle="bold"
+                        android:textColor="#2c2c2c"
+                        android:text="점"
+                        />
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:textSize="15dp"
+                        android:textStyle="bold"
+                        android:textColor="#95989d"
+                        android:text="을 주었습니다"
+                        />
+                </LinearLayout>
+
+                <LinearLayout
+                    android:id="@+id/area_eval_before"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="vertical"
+                    android:paddingLeft="21dp"
+                    android:paddingTop="19.7dp"
+                    android:paddingRight="21dp"
+                    android:paddingBottom="28.3dp"
+                    android:visibility="gone">
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:includeFontPadding="false"
+                        android:text="별점 주기"
+                        android:textColor="@color/color_2c2c2c"
+                        android:textSize="18dp"
+                        android:textStyle="bold" />
+
+                    <RatingBar
+                        android:id="@+id/ratingBar"
+                        style="@style/CustomRatingBar"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_gravity="center_horizontal"
+                        android:layout_marginTop="15dp"
+                        android:numStars="5"
+                        android:rating="0"
+                        android:stepSize="0.5"
+                        app:layout_constraintBottom_toBottomOf="parent"
+                        app:layout_constraintEnd_toEndOf="parent"
+                        app:layout_constraintStart_toStartOf="parent" />
+                </LinearLayout>
+
+                <ImageView
+                    android:layout_width="match_parent"
+                    android:layout_height="1dp"
+                    android:background="@color/color_ebedef" />
+
+                <ImageView
+                    android:layout_width="match_parent"
+                    android:layout_height="7dp"
+                    android:background="@color/color_f6f8f9" />
 
                 <LinearLayout
                     android:layout_width="match_parent"
@@ -248,9 +349,9 @@
                     android:orientation="vertical"
                     android:paddingLeft="21dp"
                     android:paddingTop="22dp"
-                    android:visibility="visible"
                     android:paddingRight="21dp"
-                    android:paddingBottom="31.3dp">
+                    android:paddingBottom="31.3dp"
+                    android:visibility="visible">
 
                     <TextView
                         android:layout_width="wrap_content"
@@ -587,7 +688,7 @@
 
                 <Space
                     android:layout_width="match_parent"
-                    android:layout_height="150dp"/>
+                    android:layout_height="150dp" />
 
             </LinearLayout>
         </androidx.core.widget.NestedScrollView>
@@ -625,31 +726,30 @@
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:adjustViewBounds="true"
-                        android:src="@drawable/btn_m_blue"/>
+                        android:src="@drawable/btn_m_blue" />
 
                     <LinearLayout
                         android:layout_width="wrap_content"
-                        android:gravity="center_vertical"
                         android:layout_height="wrap_content"
                         android:layout_gravity="center"
+                        android:gravity="center_vertical"
                         android:orientation="horizontal">
 
                         <TextView
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
-                            android:textSize="18dp"
-                            android:textColor="@color/color_white"
-                            android:includeFontPadding="false"
-                            android:textStyle="bold"
                             android:gravity="center_horizontal"
+                            android:includeFontPadding="false"
                             android:text="질문 보내기"
-                            />
+                            android:textColor="@color/color_white"
+                            android:textSize="18dp"
+                            android:textStyle="bold" />
 
                         <ImageView
                             android:layout_width="24dp"
-                            android:layout_marginLeft="13.7dp"
                             android:layout_height="24dp"
-                            android:src="@drawable/btn_s_q"/>
+                            android:layout_marginLeft="13.7dp"
+                            android:src="@drawable/btn_s_q" />
                     </LinearLayout>
 
                 </FrameLayout>
@@ -664,50 +764,50 @@
                     <FrameLayout
                         android:id="@+id/btn_chat"
                         android:layout_width="match_parent"
-                        android:layout_marginTop="12.7dp"
-                        android:layout_height="wrap_content">
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="12.7dp">
 
                         <ImageView
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
                             android:adjustViewBounds="true"
-                            android:src="@drawable/btn_m_purple"/>
+                            android:src="@drawable/btn_m_purple" />
 
                         <LinearLayout
                             android:layout_width="wrap_content"
-                            android:gravity="center_vertical"
                             android:layout_height="wrap_content"
                             android:layout_gravity="center"
+                            android:gravity="center_vertical"
                             android:orientation="horizontal">
 
                             <TextView
                                 android:layout_width="wrap_content"
                                 android:layout_height="wrap_content"
-                                android:textSize="18dp"
-                                android:textColor="@color/color_white"
-                                android:includeFontPadding="false"
-                                android:textStyle="bold"
                                 android:gravity="center_horizontal"
+                                android:includeFontPadding="false"
                                 android:text="채팅하기"
-                                />
+                                android:textColor="@color/color_white"
+                                android:textSize="18dp"
+                                android:textStyle="bold" />
 
                             <ImageView
                                 android:layout_width="24dp"
-                                android:layout_marginLeft="13.7dp"
                                 android:layout_height="24dp"
-                                android:src="@drawable/btn_s_chat"/>
+                                android:layout_marginLeft="13.7dp"
+                                android:src="@drawable/btn_s_chat" />
                         </LinearLayout>
                     </FrameLayout>
+
                     <TextView
                         android:layout_width="50dp"
                         android:layout_height="25dp"
-                        android:background="@drawable/free_bg"
-                        android:includeFontPadding="false"
                         android:layout_gravity="right"
-                        android:text="Free"
+                        android:background="@drawable/free_bg"
                         android:gravity="center"
+                        android:includeFontPadding="false"
+                        android:text="Free"
                         android:textColor="@color/color_white"
-                        android:textStyle="bold"/>
+                        android:textStyle="bold" />
                 </FrameLayout>
             </LinearLayout>
         </LinearLayout>

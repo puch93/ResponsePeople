@@ -1,6 +1,7 @@
 package kr.co.core.responsepeople.fragment;
 
 import android.app.Activity;
+import android.content.Intent;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -19,6 +20,7 @@ import org.json.JSONObject;
 import java.util.ArrayList;
 
 import kr.co.core.responsepeople.R;
+import kr.co.core.responsepeople.activity.ProfileDetailAct;
 import kr.co.core.responsepeople.adapter.MemberAdapter;
 import kr.co.core.responsepeople.data.MemberData;
 import kr.co.core.responsepeople.databinding.FragmentRecommendBinding;
@@ -30,6 +32,8 @@ import kr.co.core.responsepeople.util.Common;
 import kr.co.core.responsepeople.util.LogUtil;
 import kr.co.core.responsepeople.util.StringUtil;
 
+import static android.app.Activity.RESULT_OK;
+
 public class RecommendFrag extends BaseFrag implements View.OnClickListener {
     FragmentRecommendBinding binding;
     Activity act;
@@ -37,6 +41,7 @@ public class RecommendFrag extends BaseFrag implements View.OnClickListener {
     MemberAdapter adapter;
     GridLayoutManager manager;
     ArrayList<MemberData> list = new ArrayList<>();
+    int currentPos = -1;
 
     @Nullable
     @Override
@@ -45,10 +50,15 @@ public class RecommendFrag extends BaseFrag implements View.OnClickListener {
         act = getActivity();
 
         manager = new GridLayoutManager(act, 2);
-        adapter = new MemberAdapter(act, list, new MemberAdapter.CustomClickListener() {
+        adapter = new MemberAdapter(act, this, list, new MemberAdapter.CustomClickListener() {
             @Override
             public void likeClicked() {
                 list = adapter.getList();
+            }
+        }, new MemberAdapter.CurrentPosListener() {
+            @Override
+            public void getCurrentIndex(int position) {
+                currentPos = position;
             }
         });
         binding.recyclerView.setLayoutManager(manager);
@@ -59,6 +69,21 @@ public class RecommendFrag extends BaseFrag implements View.OnClickListener {
         getMyInfo();
 
         return binding.getRoot();
+    }
+
+    @Override
+    public void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+        if (resultCode == RESULT_OK) {
+            if (requestCode == ProfileDetailAct.TYPE_LIKE) {
+                if (currentPos >= 0) {
+                    MemberData memberData = list.get(currentPos);
+                    memberData.setLike(data.getBooleanExtra("result", false));
+                    list.set(currentPos, memberData);
+                    adapter.setList(list);
+                }
+            }
+        }
     }
 
     private void getMyInfo() {
@@ -126,7 +151,7 @@ public class RecommendFrag extends BaseFrag implements View.OnClickListener {
                                 String m_salary = StringUtil.getStr(job, "m_salary");
                                 String m_profile1 = StringUtil.getStr(job, "m_profile1");
                                 boolean m_salary_result = StringUtil.getStr(job, "m_salary_result").equalsIgnoreCase("Y");
-                                boolean m_profile_result = StringUtil.getStr(job, "m_profile_result").equalsIgnoreCase("Y");
+                                boolean m_profile_result = StringUtil.getStr(job, "m_profile1_result").equalsIgnoreCase("Y");
                                 boolean f_idx = !StringUtil.isNull(StringUtil.getStr(job, "f_idx"));
 
                                 list.add(new MemberData(m_idx, m_nick, m_age, m_job, m_location, m_salary, m_profile1, m_profile_result, f_idx, m_salary_result));

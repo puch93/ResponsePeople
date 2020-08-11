@@ -16,6 +16,7 @@ import com.bumptech.glide.Glide;
 
 import jp.wasabeef.glide.transformations.BlurTransformation;
 import kr.co.core.responsepeople.R;
+import kr.co.core.responsepeople.data.ImageData;
 import kr.co.core.responsepeople.databinding.ItemProfileImageBinding;
 import kr.co.core.responsepeople.util.Common;
 import kr.co.core.responsepeople.util.StringUtil;
@@ -23,8 +24,7 @@ import kr.co.core.responsepeople.util.StringUtil;
 public class ImageFrag extends BaseFrag {
     private ItemProfileImageBinding binding;
     private AppCompatActivity act;
-    private String image;
-    private boolean isImageOk;
+    ImageData imageData;
 
     @Nullable
     @Override
@@ -32,14 +32,13 @@ public class ImageFrag extends BaseFrag {
         binding = DataBindingUtil.inflate(inflater, R.layout.item_profile_image, container, false);
         act = (AppCompatActivity) getActivity();
 
-        Common.processProfileImageRec(act, binding.ivProfile, image, isImageOk, 5, 3);
+        Common.processProfileImageRec(act, binding.ivProfile, imageData.getImageUrl(), imageData.isPass(), 5, 3);
 
         return binding.getRoot();
     }
 
 
-    public void setData(String image, boolean isImageOk) {
-        this.image = image;
-        this.isImageOk = isImageOk;
+    public void setData(ImageData imageData) {
+        this.imageData = imageData;
     }
 }

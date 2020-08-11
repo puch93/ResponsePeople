@@ -29,6 +29,10 @@ public class AppPreference {
     public static final String STATE_COMPLETE = "join_complete"; // 평가완료
     public static final String AUTO_LOGIN = "auto_login"; // 자동로그인
 
+    public static final String PREF_SET_CHAT = "chat"; // 채팅푸시
+    public static final String PREF_SET_LIKE = ""; // 좋아요푸시
+    public static final String PREF_SET_QUESTION = ""; // 질문지푸시
+
 
     // profile string
     public static void setProfilePref(Context context, String key, String value) {
@@ -53,8 +57,12 @@ public class AppPreference {
     }
     public static boolean getProfilePrefBool(Context context, String key) {
         SharedPreferences pref = context.getSharedPreferences("profile", context.MODE_PRIVATE);
-        return pref.getBoolean(key, false);
+        if(key.equalsIgnoreCase(PREF_SET_CHAT) || key.equalsIgnoreCase(PREF_SET_LIKE) || key.equalsIgnoreCase(PREF_SET_QUESTION))
+            return pref.getBoolean(key, true);
+        else
+            return pref.getBoolean(key, false);
     }
+
 
     // profile string
     public static void setProfilePrefLong(Context context, String key, long value) {

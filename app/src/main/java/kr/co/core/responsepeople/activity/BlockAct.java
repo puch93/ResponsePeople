@@ -8,10 +8,16 @@ import android.net.Uri;
 import android.os.Bundle;
 import android.provider.ContactsContract;
 import android.util.Log;
+import android.view.View;
+import android.widget.CompoundButton;
 
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.databinding.DataBindingUtil;
 import androidx.recyclerview.widget.LinearLayoutManager;
+
+import org.json.JSONArray;
+import org.json.JSONException;
+import org.json.JSONObject;
 
 import java.util.ArrayList;
 
@@ -19,8 +25,12 @@ import kr.co.core.responsepeople.R;
 import kr.co.core.responsepeople.adapter.BlockAdapter;
 import kr.co.core.responsepeople.data.BlockData;
 import kr.co.core.responsepeople.databinding.ActivityBlockBinding;
+import kr.co.core.responsepeople.server.ReqBasic;
+import kr.co.core.responsepeople.server.netUtil.HttpResult;
+import kr.co.core.responsepeople.server.netUtil.NetUrls;
 import kr.co.core.responsepeople.util.AppPreference;
 import kr.co.core.responsepeople.util.Common;
+import kr.co.core.responsepeople.util.LogUtil;
 import kr.co.core.responsepeople.util.StringUtil;
 
 public class BlockAct extends BaseAct {
@@ -53,9 +63,7 @@ public class BlockAct extends BaseAct {
             finish();
         });
 
-        binding.btnBlock.setOnClickListener(v -> {
-            Common.showToast(act, "list: " + list);
-        });
+        getBlockList();
     }
 
     private void getContacts(final String hp) {
@@ -105,12 +113,6 @@ public class BlockAct extends BaseAct {
                         number = number.replace("//", "");
 
                         if (!hp.equalsIgnoreCase(number)) {
-//                            if (StringUtil.isNull(total)) {
-//                                total = number;
-//                            } else {
-//                                total += "," + number;
-//                            }
-
                             list.add(new BlockData(number, name, false));
                         }
                     }
@@ -124,7 +126,7 @@ public class BlockAct extends BaseAct {
                 runOnUiThread(new Runnable() {
                     @Override
                     public void run() {
-                        adapter.setList(list);
+                        binding.count.setText(String.valueOf(list.size()));
                     }
                 });
                 //실제
@@ -133,5 +135,69 @@ public class BlockAct extends BaseAct {
 //                setKnowPeople("01077475545");
             }
         }).start();
+
+
+    }
+
+    private void getBlockList() {
+        ReqBasic server = new ReqBasic(act, NetUrls.DOMAIN) {
+            @Override
+            public void onAfter(int resultCode, HttpResult resultData) {
+                if (resultData.getResult() != null) {
+                    try {
+                        JSONObject jo = new JSONObject(resultData.getResult());
+
+                        if (StringUtil.getStr(jo, "result").equalsIgnoreCase("Y")) {
+                            JSONArray ja = jo.getJSONArray("value");
+                            ArrayList<String> nums = new ArrayList<>();
+                            for (int i = 0; i < ja.length(); i++) {
+                                JSONObject job = ja.getJSONObject(i);
+                                nums.add(StringUtil.getStr(job, "mb_hp"));
+                            }
+
+                            if (nums.size() != 0) {
+                                for (int i = 0; i < list.size(); i++) {
+                                    for (int j = 0; j < nums.size(); j++) {
+                                        if (list.get(i).getNumber().equalsIgnoreCase(nums.get(j))) {
+                                            BlockData data = list.get(i);
+                                            data.setSelected(true);
+                                            list.set(i, data);
+                                        }
+                                    }
+                                }
+                            }
+
+
+                            runOnUiThread(new Runnable() {
+                                @Override
+                                public void run() {
+                                    adapter.setList(list);
+                                }
+                            });
+
+                        } else {
+                            runOnUiThread(new Runnable() {
+                                @Override
+                                public void run() {
+                                    adapter.setList(list);
+                                }
+                            });
+
+                        }
+
+                    } catch (JSONException e) {
+                        e.printStackTrace();
+                        Common.showToastNetwork(act);
+                    }
+                } else {
+                    Common.showToastNetwork(act);
+                }
+            }
+        };
+
+        server.setTag("Block List");
+        server.addParams("dbControl", NetUrls.BLOCK_LIST);
+        server.addParams("m_idx", AppPreference.getProfilePref(act, AppPreference.PREF_MIDX));
+        server.execute(true, false);
     }
 }

@@ -113,6 +113,7 @@ public class ChatAdapter extends RecyclerView.Adapter<ChatAdapter.ViewHolder> {
 
         switch (type) {
             case "text":
+            case "out":
                 if (data.getUser_idx().equalsIgnoreCase(midx))
                     return TYPE_ME_TEXT;
                 else

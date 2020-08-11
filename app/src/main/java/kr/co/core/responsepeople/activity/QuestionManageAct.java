@@ -90,7 +90,7 @@ public class QuestionManageAct extends BaseAct {
                             });
 
                         } else {
-                            Common.showToast(act, StringUtil.getStr(jo, "message"));
+//                            Common.showToast(act, StringUtil.getStr(jo, "message"));
                         }
 
                     } catch (JSONException e) {

@@ -13,6 +13,7 @@ import android.graphics.BitmapFactory;
 import android.media.MediaScannerConnection;
 import android.net.Uri;
 import android.os.Bundle;
+import android.os.Environment;
 import android.text.Editable;
 import android.text.TextWatcher;
 import android.util.Log;
@@ -28,9 +29,13 @@ import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import java.io.BufferedInputStream;
 import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
+import java.io.IOException;
+import java.net.URL;
+import java.net.URLConnection;
 import java.util.ArrayList;
 
 import kr.co.core.responsepeople.R;
@@ -305,27 +310,76 @@ public class EditAct extends BaseAct implements View.OnClickListener {
         server.addParams("m_interest", interest);
         server.addParams("m_intro", binding.intro.getText().toString());
 
-        // 파일
-        for (int i = 1; i < adapter.getList().size(); i++) {
-            File file = null;
+        new Thread() {
+            @Override
+            public void run() {
+                super.run();
 
-            if (adapter.getList().get(i).contains("http")) {
-                file = Common.downloadImage(adapter.getList().get(i));
-                Log.i(StringUtil.TAG, "file name" + i + ": " + file.getName());
-            } else {
-                file = new File(adapter.getList().get(i));
+                // 파일
+                for (int i = 1; i < images.size(); i++) {
+                    File file = null;
+
+                    if (images.get(i).contains("http")) {
+                        file = downloadImage(images.get(i));
+                        Log.i(StringUtil.TAG, "file name" + i + ": " + file.getName());
+                    } else {
+                        file = new File(images.get(i));
+                    }
+
+                    server.addFileParams("m_profile" + i, file);
+                    server.addParams("m_profile" + i + "ck", "Y");
+                }
+
+                if (null != salary_file) {
+                    server.addFileParams("m_salary_file", salary_file);
+                }
+
+                server.execute(true, true);
             }
+        }.start();
+    }
 
-            server.addFileParams("m_profile" + i, file);
-            server.addParams("m_profile" + i + "ck", "Y");
+    public File downloadImage(String imgUrl) {
+        Bitmap img = null;
+        File f = null;
+        Log.e(StringUtil.TAG, "imgUrl: " + imgUrl);
+
+        try {
+            f = createImageFile();
+            URL url = new URL(imgUrl);
+            URLConnection conn = url.openConnection();
+
+            int nSize = conn.getContentLength();
+            BufferedInputStream bis = new BufferedInputStream(conn.getInputStream(), nSize);
+            img = BitmapFactory.decodeStream(bis);
+
+            bis.close();
+
+            FileOutputStream out = new FileOutputStream(f);
+            img.compress(Bitmap.CompressFormat.PNG, 100, out);
+            out.close();
+
+            img.recycle();
+
+        } catch (Exception e) {
+            e.printStackTrace();
         }
 
-        if (null != salary_file) {
-            server.addFileParams("m_salary_file", salary_file);
+        return f;
+    }
+
+    private File createImageFile() throws IOException {
+//        String timeStamp = new SimpleDateFormat("HHmmss").format(new Date());
+//        String imageFileName = "thefiven" + timeStamp;
+        String imageFileName = String.valueOf(System.currentTimeMillis());
+
+        File storageDir = new File(Environment.getExternalStorageDirectory().getAbsolutePath() + "/RESPONSEPEOPLE");
+
+        if (!storageDir.exists()) {
+            storageDir.mkdirs();
         }
 
-
-        server.execute(true, false);
+        return File.createTempFile(imageFileName, ".png", storageDir);
     }
 
     @Override

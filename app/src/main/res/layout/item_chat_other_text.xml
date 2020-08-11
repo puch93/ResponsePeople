@@ -47,7 +47,7 @@
                     android:textSize="11dp"
                     android:textColor="@color/color_2c2c2c"
                     android:textStyle="bold"
-                    tools:text=", "
+                    android:text=", "
                     />
 
                 <TextView

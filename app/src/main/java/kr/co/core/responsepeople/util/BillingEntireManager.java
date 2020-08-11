@@ -317,7 +317,7 @@ public class BillingEntireManager implements PurchasesUpdatedListener {
                             }
 
                         } else {
-
+                            afterListener.sendMessage(StringUtil.getStr(jo, "message"), false);
                         }
 
                     } catch (JSONException e) {

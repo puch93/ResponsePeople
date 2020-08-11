@@ -37,7 +37,11 @@ import java.util.Timer;
 import java.util.TimerTask;
 
 import kr.co.core.responsepeople.R;
+import kr.co.core.responsepeople.activity.ChatAct;
+import kr.co.core.responsepeople.activity.ChatListAct;
+import kr.co.core.responsepeople.activity.EvaluationBeforeAct;
 import kr.co.core.responsepeople.activity.MainAct;
+import kr.co.core.responsepeople.activity.PushAct;
 import kr.co.core.responsepeople.fragment.BaseFrag;
 import kr.co.core.responsepeople.fragment.Join04Frag;
 import kr.co.core.responsepeople.server.ReqBasic;
@@ -76,29 +80,207 @@ public class MyFirebaseMessagingService extends FirebaseMessagingService {
         JSONObject jo = new JSONObject(remoteMessage.getData());
         String type = StringUtil.getStr(jo, "type");
         String m_idx = StringUtil.getStr(jo, "m_idx");
+
+
         if (!StringUtil.isNull(type) && !StringUtil.isNull(m_idx)) {
-                switch (type) {
-                    case "image":
-                        if (Join04Frag.frag != null) {
-                            LogUtil.logI("Join04Frag.frag != null");
-                            ((Join04Frag) Join04Frag.frag).imageConfirmed();
-                        }
-                        break;
+            switch (type) {
+                case "image":
+                    if (Join04Frag.frag != null) {
+                        LogUtil.logI("Join04Frag.frag != null");
+                        ((Join04Frag) Join04Frag.frag).imageConfirmed();
 
-                    case "image_fail":
-                        if (Join04Frag.frag != null) {
-                            LogUtil.logI("Join04Frag.frag != null");
-                            ((Join04Frag) Join04Frag.frag).imageFailed();
-                        }
+                        sendDefaultNotification("알림", "프로필 사진 검수가 완료되었습니다", 101);
+                    }
+                    break;
 
-                        break;
-                }
+                case "image_fail":
+                    if (Join04Frag.frag != null) {
+                        LogUtil.logI("Join04Frag.frag != null");
+                        ((Join04Frag) Join04Frag.frag).imageFailed();
+
+                        sendDefaultNotification("알림", "프로필 사진을 다시 등록해주세요", 101);
+                    }
+                    break;
+
+
+                case "chat":
+                    // 채팅 알람 설정확인
+                    if (AppPreference.getProfilePrefBool(ctx, AppPreference.PREF_SET_CHAT)) {
+                        // 나에게 오는 푸시가 맞으면 (인덱스로 비교)
+                        if (!m_idx.equalsIgnoreCase(AppPreference.getProfilePref(ctx, AppPreference.PREF_MIDX))) {
+                            if (ChatListAct.act != null) {
+                                ((ChatListAct) ChatListAct.act).getChatList();
+                            }
+
+                            String room_idx = StringUtil.getStr(jo, "chat_idx");
+                            if (ChatAct.real_act == null || !room_idx.equalsIgnoreCase(ChatAct.room_idx)) {
+                                sendChattingNotification(jo);
+                            }
+                        }
+                    } else {
+                        LogUtil.logI("채팅 알림 비활성화");
+                    }
+                    break;
+
+                case "follow":
+                    if (AppPreference.getProfilePrefBool(ctx, AppPreference.PREF_SET_LIKE))
+                        sendDefaultNotification("찜 알림", StringUtil.getStr(jo, "m_nick") + "님이 회원님을 찜 했습니다", 1);
+                    else
+                        LogUtil.logI("찜 알림 비활성화");
+                    break;
+
+                case "question":
+                    if (AppPreference.getProfilePrefBool(ctx, AppPreference.PREF_SET_QUESTION))
+                        sendDefaultNotification("질문지 알림", StringUtil.getStr(jo, "m_nick") + "님이 회원님에게 질문을 전송했습니다", 2);
+                    else
+                        LogUtil.logI("질문지 알림 비활성화");
+                    break;
+
+
+                case "preference":
+                    if (EvaluationBeforeAct.act != null) {
+                        ((EvaluationBeforeAct) EvaluationBeforeAct.act).doLogin();
+                    }
+                    break;
+            }
 
         } else {
+            if (!StringUtil.isNull(type) && type.equalsIgnoreCase("push")) {
+                sendSitePUsh(jo);
+            }
+
             if (StringUtil.isNull(type))
                 LogUtil.logI(ctx.getClass().getSimpleName() + " --> type is null");
             if (StringUtil.isNull(m_idx))
                 LogUtil.logI(ctx.getClass().getSimpleName() + " --> m_idx is null");
         }
+    }
+
+
+    private void sendDefaultNotification(String title, String message, int channelNum) {
+        if (MainAct.act != null) {
+            ((MainAct) MainAct.act).getQuestionCount(NetUrls.QUESTION_RECEIVED);
+        }
+
+
+        //매니저 설정
+        NotificationManagerCompat notificationManager = NotificationManagerCompat.from(this);
+
+        //채널설정
+        if (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.O) {
+            NotificationChannel channel = new NotificationChannel("default", "응답남녀", NotificationManager.IMPORTANCE_DEFAULT);
+            channel.setDescription("응답남녀 알림설정");
+
+            notificationManager.createNotificationChannel(channel);
+        }
+
+        //인텐트 설정
+        Intent intent = null;
+        intent = new Intent(ctx, PushAct.class);
+        intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+        PendingIntent pendingIntent = PendingIntent.getActivity(ctx, 0, intent, PendingIntent.FLAG_CANCEL_CURRENT);
+
+        //노티 설정
+        Notification notification = new NotificationCompat.Builder(ctx, "default")
+                .setContentTitle(title)
+                .setContentText(message)
+                .setAutoCancel(true)
+                .setSmallIcon(R.drawable.app_icon)
+                .setContentIntent(pendingIntent)
+                .build();
+
+        //푸시 날리기
+        notificationManager.notify(channelNum, notification);
+    }
+
+    private void sendSitePUsh(JSONObject jo) {
+        String b_title = StringUtil.getStr(jo, "b_title");
+        String type = StringUtil.getStr(jo, "type");
+        String b_url = StringUtil.getStr(jo, "b_url");
+        String b_contents = StringUtil.getStr(jo, "b_contents");
+
+
+        //매니저 설정
+        NotificationManagerCompat notificationManager = NotificationManagerCompat.from(this);
+
+        //채널설정
+        if (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.O) {
+            NotificationChannel channel = new NotificationChannel("default", "응답남녀", NotificationManager.IMPORTANCE_DEFAULT);
+            channel.setDescription("응답남녀 알림설정");
+
+            notificationManager.createNotificationChannel(channel);
+        }
+
+        //인텐트 설정
+        Intent intent = null;
+        if (StringUtil.isNull(b_url)) {
+            intent = new Intent(ctx, PushAct.class);
+            intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+        } else {
+            intent = new Intent(Intent.ACTION_VIEW, Uri.parse(b_url));
+        }
+        intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+        intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+        PendingIntent pendingIntent = PendingIntent.getActivity(ctx, 0, intent, PendingIntent.FLAG_CANCEL_CURRENT);
+
+        //노티 설정
+        Notification notification = null;
+        notification = new NotificationCompat.Builder(ctx, "default")
+                .setContentTitle(b_title)
+                .setContentText(b_contents)
+                .setAutoCancel(true)
+                .setSmallIcon(R.drawable.app_icon)
+                .setContentIntent(pendingIntent)
+                .build();
+
+        //푸시 날리기
+        notificationManager.notify(10, notification);
+    }
+
+
+    private void sendChattingNotification(JSONObject jo) {
+        String m_nick = StringUtil.getStr(jo, "m_nick");
+        String msg = Common.decodeEmoji(StringUtil.getStr(jo, "msg"));
+        String type = StringUtil.getStr(jo, "type");
+        String m_idx = StringUtil.getStr(jo, "m_idx");
+        String chat_idx = StringUtil.getStr(jo, "chat_idx");
+
+        String title = m_nick + "님의 채팅";
+
+        if (Common.isImage(msg)) {
+            msg = "이미지";
+        }
+
+        //매니저 설정
+        NotificationManagerCompat notificationManager = NotificationManagerCompat.from(this);
+
+        //채널설정
+        if (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.O) {
+            NotificationChannel channel = new NotificationChannel("default", "응답남녀", NotificationManager.IMPORTANCE_DEFAULT);
+            channel.setDescription("응답남녀 알림설정");
+
+            notificationManager.createNotificationChannel(channel);
+        }
+
+        //인텐트 설정
+        Intent intent = new Intent(ctx, ChatAct.class)
+                .putExtra("room_idx", chat_idx);
+
+
+        intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+        intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+        PendingIntent pendingIntent = PendingIntent.getActivity(ctx, 0, intent, PendingIntent.FLAG_CANCEL_CURRENT);
+
+        //노티 설정
+        Notification notification = new NotificationCompat.Builder(ctx, "default")
+                .setContentTitle(title)
+                .setContentText(msg)
+                .setAutoCancel(true)
+                .setSmallIcon(R.drawable.app_icon)
+                .setContentIntent(pendingIntent)
+                .build();
+
+        //푸시 날리기
+        notificationManager.notify(0, notification);
     }
 }

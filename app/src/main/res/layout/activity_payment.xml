@@ -80,13 +80,14 @@
                     android:src="@drawable/icon_h_heart" />
 
                 <TextView
+                    android:id="@+id/count_heart"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:includeFontPadding="false"
                     android:textColor="@color/color_2c2c2c"
                     android:textSize="30dp"
                     android:textStyle="bold"
-                    tools:text="120" />
+                    android:text="0" />
 
             </LinearLayout>
 

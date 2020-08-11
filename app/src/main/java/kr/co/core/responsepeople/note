@@ -27,3 +27,21 @@ private void do() {
              server.addParams("", );
              server.execute(true, false);
          }
+
+
+         http://qnating.adamstore.co.kr/lib/control.siso?dbControl=setPreference&m_idx=38&t_idx=46&mark=1&view=ar
+         http://qnating.adamstore.co.kr/lib/control.siso?dbControl=setPreference&m_idx=39&t_idx=46&mark=1&view=ar
+         http://qnating.adamstore.co.kr/lib/control.siso?dbControl=setPreference&m_idx=40&t_idx=46&mark=1&view=ar
+         http://qnating.adamstore.co.kr/lib/control.siso?dbControl=setPreference&m_idx=41&t_idx=46&mark=1&view=ar
+         http://qnating.adamstore.co.kr/lib/control.siso?dbControl=setPreference&m_idx=42&t_idx=46&mark=1&view=ar
+
+
+         http://qnating.adamstore.co.kr/lib/control.siso?dbControl=setPreference&m_idx=43&t_idx=50&mark=1&view=ar
+         http://qnating.adamstore.co.kr/lib/control.siso?dbControl=setPreference&m_idx=44&t_idx=50&mark=1&view=ar
+         http://qnating.adamstore.co.kr/lib/control.siso?dbControl=setPreference&m_idx=45&t_idx=50&mark=1&view=ar
+         http://qnating.adamstore.co.kr/lib/control.siso?dbControl=setPreference&m_idx=46&t_idx=50&mark=1&view=ar
+         http://qnating.adamstore.co.kr/lib/control.siso?dbControl=setPreference&m_idx=47&t_idx=50&mark=1&view=ar
+
+
+
+         http://qnating.adamstore.co.kr/lib/control.siso?dbControl=setMobileLoginCk&m_id=testw01&m_pass=aaaaaaa1&fcm=dxO04xU_R1-Be_O3j_jQf4:APA91bF82j6w3eBWhb1UdOUaiwK2bcH8lPVJfqtHa0fEgw1Miw1dc5o0puI77VmtfRphUAqksPq-VvTGS9CXa7NyESFx8FoB6crzEiN6VEfT_On5HzYtkzE6Ri7HbMpBrTJ5Fm_l25NZ&imei=3550c8176a291cee&m_x=35.1747788&m_y=129.1268501&view=ar

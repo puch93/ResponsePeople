@@ -1,7 +1,11 @@
 package kr.co.core.responsepeople.fragment;
 
 import android.app.Activity;
+import android.app.AlarmManager;
+import android.app.PendingIntent;
+import android.content.Context;
 import android.content.Intent;
+import android.os.Build;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -21,6 +25,8 @@ import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import java.util.Calendar;
+
 import kr.co.core.responsepeople.R;
 import kr.co.core.responsepeople.activity.EvaluationBeforeAct;
 import kr.co.core.responsepeople.activity.JoinAct;
@@ -28,6 +34,7 @@ import kr.co.core.responsepeople.activity.MainAct;
 import kr.co.core.responsepeople.databinding.FragmentJoin03Binding;
 import kr.co.core.responsepeople.databinding.FragmentJoin05Binding;
 import kr.co.core.responsepeople.dialog.ProfileSimpleDlg;
+import kr.co.core.responsepeople.receiver.AlarmReceiver;
 import kr.co.core.responsepeople.server.ReqBasic;
 import kr.co.core.responsepeople.server.netUtil.HttpResult;
 import kr.co.core.responsepeople.server.netUtil.NetUrls;
@@ -216,7 +223,7 @@ public class Join05Frag extends BaseFrag implements View.OnClickListener {
                 break;
 
             case R.id.btn_complete:
-                age = binding.ageStart.getText().toString() + "," + binding.ageEnd.getText().toString();
+                age = binding.ageStart.getText().toString() + "," + (binding.ageEnd.getText().toString().equalsIgnoreCase("55") ? "100" : binding.ageEnd.getText().toString()) ;
                 distance = binding.distance.getText().toString();
                 height = binding.heightStart.getText().toString() + "," + binding.heightEnd.getText().toString();
                 edu = binding.edu.getText().toString();
@@ -239,6 +246,7 @@ public class Join05Frag extends BaseFrag implements View.OnClickListener {
                         JSONObject jo = new JSONObject(resultData.getResult());
 
                         if (StringUtil.getStr(jo, "result").equalsIgnoreCase("Y")) {
+                            setAlarm();
                             act.startActivity(new Intent(act, EvaluationBeforeAct.class));
                             act.finish();
                         } else {
@@ -273,71 +281,83 @@ public class Join05Frag extends BaseFrag implements View.OnClickListener {
             server.addParams("m_drink", drink);
         if (!StringUtil.isNull(smoke) && !smoke.equalsIgnoreCase("상관없음"))
             server.addParams("m_smoke", smoke);
+        server.addParams("m_pref_result", "R");
         server.execute(true, false);
+
+
+
+
+//        if (!StringUtil.isNull(edu) && !edu.equalsIgnoreCase("상관없음"))
+//            server.addParams("m_edu", edu);
+//        else
+//            server.addParams("m_edu", "");
+//        if (!StringUtil.isNull(body) && !body.equalsIgnoreCase("상관없음"))
+//            server.addParams("m_body", body);
+//        else
+//            server.addParams("m_body", "");
+//        if (!StringUtil.isNull(religion) && !religion.equalsIgnoreCase("상관없음"))
+//            server.addParams("m_religion", religion);
+//        else
+//            server.addParams("m_religion", "");
+//        if (!StringUtil.isNull(drink) && !drink.equalsIgnoreCase("상관없음"))
+//            server.addParams("m_drink", drink);
+//        else
+//            server.addParams("m_drink", "");
+//        if (!StringUtil.isNull(smoke) && !smoke.equalsIgnoreCase("상관없음"))
+//            server.addParams("m_smoke", smoke);
+//        else
+//            server.addParams("m_smoke", "");
     }
 
-    private void checkLoginState() {
-        ReqBasic server = new ReqBasic(act, NetUrls.DOMAIN) {
-            @Override
-            public void onAfter(int resultCode, HttpResult resultData) {
-                if (resultData.getResult() != null) {
-                    try {
-                        JSONObject jo = new JSONObject(resultData.getResult());
+    private void setAlarm() {
+        /* initialize alarm service */
+        Calendar mCalendar = Calendar.getInstance();
 
-                        if( StringUtil.getStr(jo, "result").equalsIgnoreCase("Y")) {
-                            Common.showToast(act, StringUtil.getStr(jo, "message"));
+        /* set compare data */
+        int LAST_DAY_OF_YEAR = mCalendar.getMaximum(Calendar.DAY_OF_YEAR);
+        int NOW_DAY_OF_YEAR = mCalendar.get(Calendar.DAY_OF_YEAR);
 
-                            JSONArray ja = jo.getJSONArray("data");
-                            JSONObject job = ja.getJSONObject(0);
-                            String m_idx = StringUtil.getStr(job, "m_idx");
-                            String m_gender = StringUtil.getStr(job, "m_gender");
 
-                            AppPreference.setProfilePref(act, AppPreference.PREF_MIDX, m_idx);
-                            AppPreference.setProfilePref(act, AppPreference.PREF_GENDER, m_gender);
+        /* set calendar */
+        Calendar calendar01 = setCalendar(NOW_DAY_OF_YEAR, LAST_DAY_OF_YEAR);
 
-                            startActivity(new Intent(act, MainAct.class));
-                            act.finish();
-                        } else {
-                            JSONArray ja = jo.getJSONArray("data");
-                            JSONObject job = ja.getJSONObject(0);
-                            String type = StringUtil.getStr(jo, "type");
-                            String m_idx = StringUtil.getStr(job, "m_idx");
-                            String m_gender = StringUtil.getStr(job, "m_gender");
-                            AppPreference.setProfilePref(act, AppPreference.PREF_MIDX, m_idx);
-                            AppPreference.setProfilePref(act, AppPreference.PREF_GENDER, m_gender);
+        /* set alarm manager */
+        AlarmManager manager = (AlarmManager) act.getSystemService(Context.ALARM_SERVICE);
 
-                            switch (type) {
-//                                // 프로필 사진 검수중
-//                                case "image":
-//                                    AppPreference.setProfilePref(act, AppPreference.PREF_JSON, job.toString());
-//                                    startActivity(new Intent(act, JoinAct.class).putExtra("type", "image"));
-//                                    break;
+        /* set pending intent */
+        PendingIntent pendingIntent01 = PendingIntent.getBroadcast(act, 0, new Intent(act, AlarmReceiver.class).putExtra("idx", AppPreference.getProfilePref(act, AppPreference.PREF_MIDX)), PendingIntent.FLAG_UPDATE_CURRENT);
 
-                                case "prefer":
-                                    AppPreference.setProfilePref(act, AppPreference.PREF_JSON, job.toString());
-//                                    startActivity(new Intent(act, JoinAct.class).putExtra("type", "prefer"));
-                                    break;
-                            }
-                        }
+        /* register alarm (버전별로 따로) */
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
+            Log.e(StringUtil.TAG, "first");
+            manager.setExactAndAllowWhileIdle(AlarmManager.RTC_WAKEUP, calendar01.getTimeInMillis(), pendingIntent01);
+        } else if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.KITKAT) {
+            Log.e("TEST_HOME", "second");
+            manager.setExact(AlarmManager.RTC_WAKEUP, calendar01.getTimeInMillis(), pendingIntent01);
+        } else {
+            Log.e("TEST_HOME", "third");
+            manager.set(AlarmManager.RTC_WAKEUP, calendar01.getTimeInMillis(), pendingIntent01);
+        }
+    }
 
-                    } catch (JSONException e) {
-                        e.printStackTrace();
-                        Common.showToastNetwork(act);
-                    }
-                } else {
-                    Common.showToastNetwork(act);
-                }
-            }
-        };
+    private Calendar setCalendar(int NOW_DAY_OF_YEAR, int LAST_DAY_OF_YEAR) {
+        Calendar calendar = Calendar.getInstance();
 
-        server.setTag("Check Login State");
-        server.addParams("dbControl", NetUrls.LOGIN);
-        server.addParams("m_id", AppPreference.getProfilePref(act, AppPreference.PREF_ID));
-        server.addParams("m_pass", AppPreference.getProfilePref(act, AppPreference.PREF_PW));
-        server.addParams("fcm", AppPreference.getProfilePref(act, AppPreference.PREF_FCM));
-        server.addParams("imei", Common.getDeviceId(act));
-        server.addParams("m_x", AppPreference.getProfilePref(act, AppPreference.PREF_LAT));
-        server.addParams("m_y", AppPreference.getProfilePref(act, AppPreference.PREF_LON));
-        server.execute(true, false);
+        calendar.add(Calendar.MINUTE, 5);
+
+        // manager.set 할때 현재시간보다 이전 시간대면, 리시버가 바로 실행됨, 다음날로 지정해줘야 함 => ex) 세팅시간 8:00, 현재시간 9:20 이면, 다음날 8:00로 지정
+//        if (calendar.getTimeInMillis() < System.currentTimeMillis()) {
+//            Log.e(StringUtil.TAG, "현재시간보다 작음");
+//
+//            // 올해의 마지막 날일 경우
+//            if (NOW_DAY_OF_YEAR == LAST_DAY_OF_YEAR) {
+//                NOW_DAY_OF_YEAR = 1;
+//            } else {
+//                NOW_DAY_OF_YEAR++;
+//            }
+//            calendar.set(Calendar.DAY_OF_YEAR, NOW_DAY_OF_YEAR);
+//        }
+
+        return calendar;
     }
 }

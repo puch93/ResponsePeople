@@ -1,6 +1,5 @@
 package kr.co.core.responsepeople.activity;
 
-import androidx.appcompat.app.AppCompatActivity;
 import androidx.databinding.DataBindingUtil;
 
 import android.app.Activity;
@@ -14,7 +13,13 @@ import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import java.lang.reflect.Array;
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.LinkedHashMap;
+
 import kr.co.core.responsepeople.R;
+import kr.co.core.responsepeople.data.QuestionReceivedData;
 import kr.co.core.responsepeople.databinding.ActivityMyPageBinding;
 import kr.co.core.responsepeople.server.ReqBasic;
 import kr.co.core.responsepeople.server.netUtil.HttpResult;
@@ -27,6 +32,9 @@ import kr.co.core.responsepeople.util.StringUtil;
 public class MyPageAct extends BaseAct implements View.OnClickListener {
     ActivityMyPageBinding binding;
     Activity act;
+
+    ArrayList<String> list = new ArrayList<>();
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -47,6 +55,9 @@ public class MyPageAct extends BaseAct implements View.OnClickListener {
         binding.menuTier.setOnClickListener(this);
         binding.menuCustomer.setOnClickListener(this);
         binding.menuBlock.setOnClickListener(this);
+
+        getQuestionCount(NetUrls.QUESTION_RECEIVED);
+        getQuestionCount(NetUrls.QUESTION_ANSWER_LIST);
     }
 
     @Override
@@ -65,6 +76,8 @@ public class MyPageAct extends BaseAct implements View.OnClickListener {
                         JSONObject jo = new JSONObject(resultData.getResult());
 
                         if (StringUtil.getStr(jo, "result").equalsIgnoreCase("Y")) {
+                            String point = StringUtil.getStr(jo, "point");
+
                             JSONArray ja = jo.getJSONArray("data");
                             JSONObject job = ja.getJSONObject(0);
 
@@ -77,6 +90,11 @@ public class MyPageAct extends BaseAct implements View.OnClickListener {
                             boolean m_profile1_result = StringUtil.getStr(job, "m_profile1_result").equalsIgnoreCase("Y");
                             boolean m_salary_result = StringUtil.getStr(job, "m_salary_result").equalsIgnoreCase("Y");
 
+//                            String total_cnt = StringUtil.isNull(StringUtil.getStr(job, "total_cnt"))
+//                                    ? "0" : StringUtil.getStr(job, "total_cnt");
+//                            String answer_cnt = StringUtil.isNull(StringUtil.getStr(job, "answer_cnt"))
+//                                    ? "0" : StringUtil.getStr(job, "answer_cnt");
+
                             AppPreference.setProfilePref(act, AppPreference.PREF_IMAGE, NetUrls.DOMAIN_ORIGIN + m_profile1);
 
                             // 평점
@@ -86,13 +104,17 @@ public class MyPageAct extends BaseAct implements View.OnClickListener {
                             runOnUiThread(new Runnable() {
                                 @Override
                                 public void run() {
-                                    Common.processProfileImageCircle(act, binding.profileImg, m_profile1, m_profile1_result, 2, 5);
+                                    binding.countHeart.setText(point);
+//                                    binding.countReceive.setText(total_cnt);
+//                                    binding.countResponse.setText(answer_cnt);
+
+                                    Common.processProfileImageCircle(act, binding.profileImg, m_profile1, true, 2, 5);
 
                                     binding.nick.setText(m_nick);
                                     binding.age.setText(m_age);
                                     binding.jobTop.setText(m_job);
                                     binding.location.setText(m_location);
-                                    if(m_salary_result) {
+                                    if (m_salary_result) {
                                         binding.salary.setText(m_salary);
                                     } else {
                                         binding.salary.setText("연봉 검수중");
@@ -143,6 +165,7 @@ public class MyPageAct extends BaseAct implements View.OnClickListener {
                 startActivity(new Intent(act, PaymentAct.class));
                 break;
             case R.id.btn_setting:
+                startActivity(new Intent(act, AlarmAct.class));
                 break;
             case R.id.menu_tier:
                 startActivity(new Intent(act, TierAct.class));
@@ -155,10 +178,72 @@ public class MyPageAct extends BaseAct implements View.OnClickListener {
                 startActivity(new Intent(act, LikeAct.class));
                 break;
             case R.id.menu_customer:
+                startActivity(new Intent(act, CustomerAct.class));
                 break;
             case R.id.menu_block:
                 startActivity(new Intent(act, BlockExplainAct.class));
                 break;
         }
+    }
+
+
+    private void getQuestionCount(String dbControl) {
+        list = new ArrayList<>();
+        ReqBasic server = new ReqBasic(act, NetUrls.DOMAIN) {
+            @Override
+            public void onAfter(int resultCode, HttpResult resultData) {
+                if (resultData.getResult() != null) {
+                    try {
+                        JSONObject jo = new JSONObject(resultData.getResult());
+
+                        if (StringUtil.getStr(jo, "result").equalsIgnoreCase("Y")) {
+                            JSONArray ja = jo.getJSONArray("data");
+                            for (int i = 0; i < ja.length(); i++) {
+                                JSONObject job = ja.getJSONObject(i);
+
+                                String q_m_idx = StringUtil.getStr(job, "q_m_idx");
+
+
+                                if (!list.contains(q_m_idx))
+                                    list.add(q_m_idx);
+                            }
+
+                            act.runOnUiThread(new Runnable() {
+                                @Override
+                                public void run() {
+                                    if(dbControl.equalsIgnoreCase(NetUrls.QUESTION_ANSWER_LIST))
+                                        binding.countResponse.setText(String.valueOf(list.size()));
+                                    else
+                                        binding.countReceive.setText(String.valueOf(list.size()));
+
+                                }
+                            });
+                        } else {
+                            act.runOnUiThread(new Runnable() {
+                                @Override
+                                public void run() {
+                                    if(dbControl.equalsIgnoreCase(NetUrls.QUESTION_ANSWER_LIST))
+                                        binding.countResponse.setText("0");
+                                    else
+                                        binding.countReceive.setText("0");
+
+                                }
+                            });
+                        }
+
+                    } catch (JSONException e) {
+                        e.printStackTrace();
+                        Common.showToastNetwork(act);
+                    }
+                } else {
+                    Common.showToastNetwork(act);
+                }
+            }
+        };
+
+        server.setTag("Question " + dbControl);
+        server.addParams("dbControl", dbControl);
+        server.addParams("m_idx", AppPreference.getProfilePref(act, AppPreference.PREF_MIDX));
+        server.execute(true, false);
     }
 }

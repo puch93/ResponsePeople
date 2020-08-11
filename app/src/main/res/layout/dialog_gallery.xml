@@ -1,0 +1,58 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        tools:background="@color/color_e5e5e5">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="35dp"
+            android:layout_marginRight="35dp"
+            android:background="@drawable/sel_round_background"
+            android:orientation="vertical">
+
+
+            <TextView
+                android:id="@+id/btn_gallery"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:paddingLeft="27.3dp"
+                android:paddingTop="33.7dp"
+                android:paddingBottom="29dp"
+                android:paddingRight="27.3dp"
+                android:includeFontPadding="false"
+                android:textColor="@color/color_132439"
+                android:textSize="24dp"
+                android:textStyle="bold"
+                android:text="갤러리" />
+
+            <ImageView
+                android:layout_width="match_parent"
+                android:layout_height="1dp"
+                android:background="@color/color_f3f4f5" />
+
+            <TextView
+                android:id="@+id/btn_camera"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:paddingLeft="27.3dp"
+                android:paddingTop="33.7dp"
+                android:paddingBottom="29dp"
+                android:paddingRight="27.3dp"
+                android:includeFontPadding="false"
+                android:textColor="@color/color_132439"
+                android:textSize="24dp"
+                android:textStyle="bold"
+                android:text="카메라 촬영" />
+
+        </LinearLayout>
+
+
+    </LinearLayout>
+</layout>

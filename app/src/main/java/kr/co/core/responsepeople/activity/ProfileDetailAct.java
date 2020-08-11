@@ -11,6 +11,7 @@ import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
 import android.widget.FrameLayout;
+import android.widget.RatingBar;
 
 import com.google.android.flexbox.FlexWrap;
 import com.google.android.flexbox.FlexboxLayoutManager;
@@ -25,12 +26,15 @@ import java.util.Arrays;
 import kr.co.core.responsepeople.R;
 import kr.co.core.responsepeople.adapter.EtcFixAdapter;
 import kr.co.core.responsepeople.adapter.ImagePagerAdapter;
+import kr.co.core.responsepeople.data.ImageData;
+import kr.co.core.responsepeople.data.MemberData;
 import kr.co.core.responsepeople.databinding.ActivityProfileDetailBinding;
 import kr.co.core.responsepeople.server.ReqBasic;
 import kr.co.core.responsepeople.server.netUtil.HttpResult;
 import kr.co.core.responsepeople.server.netUtil.NetUrls;
 import kr.co.core.responsepeople.util.AppPreference;
 import kr.co.core.responsepeople.util.Common;
+import kr.co.core.responsepeople.util.LogUtil;
 import kr.co.core.responsepeople.util.StringUtil;
 
 public class ProfileDetailAct extends BaseAct implements View.OnClickListener {
@@ -40,7 +44,7 @@ public class ProfileDetailAct extends BaseAct implements View.OnClickListener {
     String y_idx;
 
     ImagePagerAdapter imagePagerAdapter;
-    ArrayList<String> list_image = new ArrayList<>();
+    ArrayList<ImageData> list_image = new ArrayList<>();
     FragmentManager fragmentManager;
 
     EtcFixAdapter adapter_charm;
@@ -50,6 +54,8 @@ public class ProfileDetailAct extends BaseAct implements View.OnClickListener {
     ArrayList<String> list_charm = new ArrayList<>();
     ArrayList<String> list_interest = new ArrayList<>();
     ArrayList<String> list_ideal = new ArrayList<>();
+
+    public static final int TYPE_LIKE = 10001;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -126,7 +132,44 @@ public class ProfileDetailAct extends BaseAct implements View.OnClickListener {
         binding.recyclerViewIdeal.setAdapter(adapter_ideal);
         binding.recyclerViewIdeal.setHasFixedSize(true);
         binding.recyclerViewIdeal.setItemViewCacheSize(20);
+    }
 
+    private void doLike(String t_idx) {
+        ReqBasic server = new ReqBasic(act, NetUrls.DOMAIN) {
+            @Override
+            public void onAfter(int resultCode, HttpResult resultData) {
+                if (resultData.getResult() != null) {
+                    try {
+                        JSONObject jo = new JSONObject(resultData.getResult());
+
+                        if( StringUtil.getStr(jo, "result").equalsIgnoreCase("Y")) {
+                            act.runOnUiThread(new Runnable() {
+                                @Override
+                                public void run() {
+                                    boolean select_state = !binding.btnLike.isSelected();
+                                    binding.btnLike.setSelected(select_state);
+                                    setResult(RESULT_OK, new Intent().putExtra("result", select_state));
+                                }
+                            });
+                        } else {
+
+                        }
+
+                    } catch (JSONException e) {
+                        e.printStackTrace();
+                        Common.showToastNetwork(act);
+                    }
+                } else {
+                    Common.showToastNetwork(act);
+                }
+            }
+        };
+
+        server.setTag("Like Member");
+        server.addParams("dbControl", NetUrls.LIKE);
+        server.addParams("m_idx", AppPreference.getProfilePref(act, AppPreference.PREF_MIDX));
+        server.addParams("t_idx", t_idx);
+        server.execute(true, true);
     }
     private void viewOtherProfile() {
         ReqBasic server = new ReqBasic(act, NetUrls.DOMAIN) {
@@ -142,8 +185,11 @@ public class ProfileDetailAct extends BaseAct implements View.OnClickListener {
 
                             for (int i = 1; i < 7; i++) {
                                 if (!StringUtil.isNull(StringUtil.getStr(job, "m_profile" + i))) {
-                                    list_image.add(StringUtil.getStr(job, "m_profile" + i));
+                                    list_image.add(new ImageData(StringUtil.getStr(job, "m_profile" + i), StringUtil.getStr(job, "m_profile"+ i +"_result").equalsIgnoreCase("Y")));
                                 } else {
+                                    if(i == 1) {
+                                        list_image.add(new ImageData("", true));
+                                    }
                                     break;
                                 }
                             }
@@ -160,7 +206,9 @@ public class ProfileDetailAct extends BaseAct implements View.OnClickListener {
                             String m_religion = StringUtil.getStr(job, "m_religion");
                             String m_salary = StringUtil.getStr(job, "m_salary");
                             String m_intro = StringUtil.getStr(job, "m_intro");
-                            boolean m_profile_result = StringUtil.getStr(job, "m_profile_result").equalsIgnoreCase("Y");
+                            String p_mark = StringUtil.getStr(job, "p_mark");
+                            boolean m_salary_result = StringUtil.getStr(job, "m_salary_result").equalsIgnoreCase("Y");
+                            boolean f_idx = !StringUtil.isNull(StringUtil.getStr(job, "f_idx"));
 
                             list_charm.addAll(Arrays.asList(StringUtil.getStr(job, "m_charm").split(",")));
 
@@ -171,22 +219,52 @@ public class ProfileDetailAct extends BaseAct implements View.OnClickListener {
                             act.runOnUiThread(new Runnable() {
                                 @Override
                                 public void run() {
-                                    imagePagerAdapter.setImageOk(m_profile_result);
+                                    if(StringUtil.isNull(p_mark)) {
+                                        binding.areaEvalAfter.setVisibility(View.GONE);
+                                        binding.areaEvalBefore.setVisibility(View.VISIBLE);
+                                        binding.ratingBar.setOnRatingBarChangeListener(new RatingBar.OnRatingBarChangeListener() {
+                                            @Override
+                                            public void onRatingChanged(RatingBar ratingBar, float rating, boolean fromUser) {
+                                                if (fromUser)
+                                                    LogUtil.logI("fromUser true");
+                                                else
+                                                    LogUtil.logI("fromUser false");
+
+                                                if (rating >= 1)
+                                                    evaluationOther(String.valueOf((int) (rating * 2)), y_idx);
+
+                                                binding.ratingBar.setRating(0f);
+                                            }
+                                        });
+                                    } else {
+                                        binding.areaEvalBefore.setVisibility(View.GONE);
+                                        binding.areaEvalAfter.setVisibility(View.VISIBLE);
+                                        binding.score.setText(p_mark);
+                                    }
+
+
+                                    binding.btnLike.setSelected(f_idx);
+
                                     imagePagerAdapter.setList(list_image);
 
                                     binding.nick.setText(m_nick);
                                     binding.age.setText(StringUtil.calcAge(m_birth.substring(0, 4)));
                                     binding.jobTop.setText(m_job);
                                     binding.location.setText(m_location);
-                                    binding.salaryTop.setText(m_salary);
+
+                                    if(m_salary_result) {
+                                        binding.salaryTop.setText(m_salary);
+                                        binding.salary.setText(m_salary);
+                                    } else{
+                                        binding.salaryTop.setText("연봉 검수중");
+                                        binding.salary.setText("연봉 검수중");
+                                    }
 
                                     binding.intro.setText(m_intro);
 
                                     binding.job.setText(m_job);
                                     binding.edu.setText(m_edu);
-                                    binding.salary.setText(m_salary);
 
-                                    binding.height.setText(m_height);
                                     binding.body.setText(m_body);
                                     binding.drink.setText(m_drink);
                                     binding.smoke.setText(m_smoke);
@@ -222,6 +300,37 @@ public class ProfileDetailAct extends BaseAct implements View.OnClickListener {
         server.execute(true, false);
     }
 
+    private void evaluationOther(String score, String t_idx) {
+        ReqBasic server = new ReqBasic(act, NetUrls.DOMAIN) {
+            @Override
+            public void onAfter(int resultCode, HttpResult resultData) {
+                if (resultData.getResult() != null) {
+                    try {
+                        JSONObject jo = new JSONObject(resultData.getResult());
+
+                        if (StringUtil.getStr(jo, "result").equalsIgnoreCase("Y")) {
+                            viewOtherProfile();
+                        } else {
+                            Common.showToast(act, StringUtil.getStr(jo, "message"));
+                        }
+
+                    } catch (JSONException e) {
+                        e.printStackTrace();
+                        Common.showToastNetwork(act);
+                    }
+                } else {
+                    Common.showToastNetwork(act);
+                }
+            }
+        };
+
+        server.setTag("Evaluation Other");
+        server.addParams("dbControl", NetUrls.EVALUATION);
+        server.addParams("m_idx", AppPreference.getProfilePref(act, AppPreference.PREF_MIDX));
+        server.addParams("t_idx", t_idx);
+        server.addParams("mark", score);
+        server.execute(true, true);
+    }
 
     private void checkRoom() {
         ReqBasic server = new ReqBasic(act, NetUrls.DOMAIN) {
@@ -267,9 +376,11 @@ public class ProfileDetailAct extends BaseAct implements View.OnClickListener {
                 break;
 
             case R.id.btn_like:
+                doLike(y_idx);
                 break;
 
             case R.id.btn_question:
+                act.startActivity(new Intent(act, QuestionSendAct.class).putExtra("t_idx", y_idx));
                 break;
 
             case R.id.btn_chat:

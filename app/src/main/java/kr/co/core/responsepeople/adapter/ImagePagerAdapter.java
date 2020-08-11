@@ -10,18 +10,14 @@ import androidx.fragment.app.FragmentStatePagerAdapter;
 
 import java.util.ArrayList;
 
+import kr.co.core.responsepeople.data.ImageData;
 import kr.co.core.responsepeople.fragment.ImageFrag;
 
 
 public class ImagePagerAdapter extends FragmentStatePagerAdapter {
-    ArrayList<String> list = new ArrayList<>();
-    boolean isImageOk;
+    ArrayList<ImageData> list = new ArrayList<>();
 
-    public void setImageOk(boolean isImageOk) {
-        this.isImageOk = isImageOk;
-    }
-
-    public ImagePagerAdapter(FragmentManager fm, ArrayList<String> list) {
+    public ImagePagerAdapter(FragmentManager fm, ArrayList<ImageData> list) {
         super(fm, BEHAVIOR_RESUME_ONLY_CURRENT_FRAGMENT);
         this.list = list;
     }
@@ -29,11 +25,11 @@ public class ImagePagerAdapter extends FragmentStatePagerAdapter {
     @Override
     public Fragment getItem(int i) {
         ImageFrag currentFragment = new ImageFrag();
-        currentFragment.setData(list.get(i), isImageOk);
+        currentFragment.setData(list.get(i));
         return currentFragment;
     }
 
-    public void setList(ArrayList<String> list) {
+    public void setList(ArrayList<ImageData> list) {
             this.list = list;
             notifyDataSetChanged();
     }

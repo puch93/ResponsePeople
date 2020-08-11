@@ -27,6 +27,7 @@ import java.util.TimerTask;
 
 import kr.co.core.responsepeople.R;
 import kr.co.core.responsepeople.activity.LoginAct;
+import kr.co.core.responsepeople.activity.ProfileDetailAct;
 import kr.co.core.responsepeople.adapter.MemberAdapter;
 import kr.co.core.responsepeople.data.MemberData;
 import kr.co.core.responsepeople.databinding.FragmentNearBinding;
@@ -40,6 +41,8 @@ import kr.co.core.responsepeople.util.GpsInfo;
 import kr.co.core.responsepeople.util.LogUtil;
 import kr.co.core.responsepeople.util.StringUtil;
 
+import static android.app.Activity.RESULT_OK;
+
 public class NearFrag extends BaseFrag implements View.OnClickListener {
     FragmentNearBinding binding;
     Activity act;
@@ -50,6 +53,7 @@ public class NearFrag extends BaseFrag implements View.OnClickListener {
     private GpsInfo gpsInfo;
 
     private Timer timer = new Timer();
+    int currentPos = -1;
 
     @Nullable
     @Override
@@ -65,10 +69,15 @@ public class NearFrag extends BaseFrag implements View.OnClickListener {
 
 
         manager = new GridLayoutManager(act, 2);
-        adapter = new MemberAdapter(act, list, new MemberAdapter.CustomClickListener() {
+        adapter = new MemberAdapter(act, this, list, new MemberAdapter.CustomClickListener() {
             @Override
             public void likeClicked() {
                 list = adapter.getList();
+            }
+        }, new MemberAdapter.CurrentPosListener() {
+            @Override
+            public void getCurrentIndex(int position) {
+                currentPos = position;
             }
         });
         binding.recyclerView.setLayoutManager(manager);
@@ -111,6 +120,21 @@ public class NearFrag extends BaseFrag implements View.OnClickListener {
         });
 
         return binding.getRoot();
+    }
+
+    @Override
+    public void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+        if(resultCode == RESULT_OK) {
+            if(requestCode == ProfileDetailAct.TYPE_LIKE) {
+                if(currentPos >= 0) {
+                    MemberData memberData = list.get(currentPos);
+                    memberData.setLike(data.getBooleanExtra("result", false));
+                    list.set(currentPos, memberData);
+                    adapter.setList(list);
+                }
+            }
+        }
     }
 
 
@@ -190,7 +214,7 @@ public class NearFrag extends BaseFrag implements View.OnClickListener {
                                 String m_salary = StringUtil.getStr(job, "m_salary");
                                 String m_profile1 = StringUtil.getStr(job, "m_profile1");
                                 boolean m_salary_result = StringUtil.getStr(job, "m_salary_result").equalsIgnoreCase("Y");
-                                boolean m_profile_result = StringUtil.getStr(job, "m_profile_result").equalsIgnoreCase("Y");
+                                boolean m_profile_result = StringUtil.getStr(job, "m_profile1_result").equalsIgnoreCase("Y");
                                 boolean f_idx = !StringUtil.isNull(StringUtil.getStr(job, "f_idx"));
 
                                 list.add(new MemberData(m_idx, m_nick, m_age, m_job, m_location, m_salary, m_profile1, m_profile_result, f_idx, m_salary_result));

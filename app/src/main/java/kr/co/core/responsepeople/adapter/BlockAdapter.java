@@ -9,10 +9,19 @@ import android.widget.TextView;
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
+import org.json.JSONException;
+import org.json.JSONObject;
+
 import java.util.ArrayList;
 
 import kr.co.core.responsepeople.R;
 import kr.co.core.responsepeople.data.BlockData;
+import kr.co.core.responsepeople.server.ReqBasic;
+import kr.co.core.responsepeople.server.netUtil.HttpResult;
+import kr.co.core.responsepeople.server.netUtil.NetUrls;
+import kr.co.core.responsepeople.util.AppPreference;
+import kr.co.core.responsepeople.util.Common;
+import kr.co.core.responsepeople.util.StringUtil;
 
 public class BlockAdapter extends RecyclerView.Adapter<BlockAdapter.ViewHolder> {
     private Activity act;
@@ -58,7 +67,37 @@ public class BlockAdapter extends RecyclerView.Adapter<BlockAdapter.ViewHolder> 
             notifyItemChanged(i);
 
             listener.clicked();
+            doBlock(data.getNumber());
         });
+    }
+
+    private void doBlock(String number) {
+        ReqBasic server = new ReqBasic(act, NetUrls.DOMAIN) {
+            @Override
+            public void onAfter(int resultCode, HttpResult resultData) {
+                if (resultData.getResult() != null) {
+                    try {
+                        JSONObject jo = new JSONObject(resultData.getResult());
+
+                        if( StringUtil.getStr(jo, "result").equalsIgnoreCase("Y")) {
+
+                        } else {
+
+                        }
+
+                    } catch (JSONException e) {
+                        e.printStackTrace();
+                    }
+                } else {
+                }
+            }
+        };
+
+        server.setTag("Block");
+        server.addParams("dbControl", NetUrls.BLOCK);
+        server.addParams("m_idx", AppPreference.getProfilePref(act, AppPreference.PREF_MIDX));
+        server.addParams("mb_hp", number);
+        server.execute(true, false);
     }
 
     @Override

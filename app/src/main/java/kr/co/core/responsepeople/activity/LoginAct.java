@@ -42,7 +42,7 @@ public class LoginAct extends BaseAct {
             }
         });
         binding.btnFind.setOnClickListener(v -> {
-
+            startActivity(new Intent(act, IdFindAct.class));
         });
         binding.btnJoin.setOnClickListener(v -> {
             startActivity(new Intent(act, JoinAct.class).putExtra("type", "default"));
@@ -69,6 +69,7 @@ public class LoginAct extends BaseAct {
                             String m_birth = StringUtil.getStr(job, "m_birth");
                             String m_hp = StringUtil.getStr(job, "m_hp");
 
+                            AppPreference.setProfilePref(act, AppPreference.PREF_JSON, jo.toString());
                             AppPreference.setProfilePref(act, AppPreference.PREF_MIDX, m_idx);
                             AppPreference.setProfilePref(act, AppPreference.PREF_GENDER, m_gender);
                             AppPreference.setProfilePref(act, AppPreference.PREF_ID, m_id);
@@ -92,17 +93,26 @@ public class LoginAct extends BaseAct {
                                 String m_idx = StringUtil.getStr(job, "m_idx");
                                 String m_gender = StringUtil.getStr(job, "m_gender");
                                 String m_id = StringUtil.getStr(job, "m_id");
+                                String m_hp = StringUtil.getStr(job, "m_hp");
+                                String m_birth = StringUtil.getStr(job, "m_birth");
+                                String m_profile1 = StringUtil.getStr(job, "m_profile1");
                                 String m_pass = StringUtil.getStr(job, "m_pass");
+                                int cnt = StringUtil.getInt(jo, "cnt");
 
+                                AppPreference.setProfilePref(act, AppPreference.PREF_JSON, jo.toString());
                                 AppPreference.setProfilePref(act, AppPreference.PREF_MIDX, m_idx);
                                 AppPreference.setProfilePref(act, AppPreference.PREF_GENDER, m_gender);
                                 AppPreference.setProfilePref(act, AppPreference.PREF_ID, m_id);
                                 AppPreference.setProfilePref(act, AppPreference.PREF_PW, m_pass);
+                                AppPreference.setProfilePref(act, AppPreference.PREF_PHONE, m_hp);
+                                AppPreference.setProfilePref(act, AppPreference.PREF_AGE, StringUtil.calcAge(m_birth.substring(0, 4)));
+                                AppPreference.setProfilePref(act, AppPreference.PREF_IMAGE, NetUrls.DOMAIN_ORIGIN + m_profile1);
+                                AppPreference.setProfilePrefBool(act, AppPreference.AUTO_LOGIN, true);
 
                                 if (!StringUtil.isNull(type)) {
                                     AppPreference.setProfilePref(act, AppPreference.PREF_JSON, jo.toString());
                                     // 로그인 완료회원 아니면 자동로그인 처리 (로그인시 페이지 이동 고정시킴)
-//                                    MemberUtil.setJoinProcess(act, StringUtil.getStr(job, "m_id"), StringUtil.getStr(job, "m_pw"));
+//                                    MemberUtil.setJoinProcess(act, StringUtil.getStr(job, "m_id"), StringUtil.getStr(job, "m_pass"));
 
 
                                     switch (type) {
@@ -120,7 +130,11 @@ public class LoginAct extends BaseAct {
                                             break;
                                         // 평가 중인 경우
                                         case "rating":
-                                            startActivity(new Intent(act, EvaluationBeforeAct.class));
+                                            if(cnt >= 5) {
+                                                startActivity(new Intent(act, EvaluationAfterAct.class));
+                                            } else {
+                                                startActivity(new Intent(act, EvaluationBeforeAct.class));
+                                            }
                                             break;
                                         // 평가 완료 안누른 회원
                                         case "waiting":
@@ -128,9 +142,7 @@ public class LoginAct extends BaseAct {
                                             break;
                                     }
 
-
-                                    //TODO 주석해제 해줘야함 나중에
-//                                    finish();
+                                    finish();
                                 }
                             }
                         }

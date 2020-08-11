@@ -6,6 +6,7 @@ import androidx.databinding.DataBindingUtil;
 import android.app.Activity;
 import android.os.Bundle;
 
+import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
@@ -21,13 +22,39 @@ public class TermAct extends BaseAct {
     ActivityTermBinding binding;
     Activity act;
 
+    public static final String TYPE_USE = "di_terms";
+    public static final String TYPE_PRIVATE = "di_personal_information";
+    public static final String TYPE_GPS = "di_location_information";
+
+    public String type = TYPE_USE;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         binding = DataBindingUtil.setContentView(this, R.layout.activity_term, null);
         act = this;
 
+        type = getIntent().getStringExtra("type");
+
+        switch (type) {
+            case TYPE_USE:
+                binding.title.setText("이용 약관");
+                break;
+            case TYPE_PRIVATE:
+                binding.title.setText("개인정보 처리방침");
+                break;
+            case TYPE_GPS:
+                binding.title.setText("위치정보서비스 이용약관");
+                break;
+            default:
+                finish();
+        }
+
         getTerm();
+
+        binding.btnBack.setOnClickListener(v -> {
+            finish();
+        });
     }
 
     private void getTerm() {
@@ -39,9 +66,21 @@ public class TermAct extends BaseAct {
                         JSONObject jo = new JSONObject(resultData.getResult());
 
                         if( StringUtil.getStr(jo, "result").equalsIgnoreCase("Y")) {
+                            JSONArray ja = jo.getJSONArray("data");
+                            JSONObject job = ja.getJSONObject(0);
+
+                            String terms = StringUtil.getStr(job, type);
+
+                            runOnUiThread(new Runnable() {
+                                @Override
+                                public void run() {
+                                    binding.contents.setText(terms);
+                                }
+                            });
 
                         } else {
-
+                            Common.showToast(act, StringUtil.getStr(jo, "message"));
+                            finish();
                         }
 
                     } catch (JSONException e) {

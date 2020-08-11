@@ -79,7 +79,9 @@
                     android:src="@drawable/btn_h_alarm" />
 
                 <TextView
+                    android:id="@+id/count_receive"
                     android:layout_width="wrap_content"
+                    android:visibility="gone"
                     android:layout_height="17dp"
                     android:layout_gravity="right"
                     android:layout_marginTop="8.3dp"

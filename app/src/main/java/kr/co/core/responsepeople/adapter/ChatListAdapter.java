@@ -1,6 +1,7 @@
 package kr.co.core.responsepeople.adapter;
 
 import android.app.Activity;
+import android.content.Intent;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -13,6 +14,7 @@ import androidx.recyclerview.widget.RecyclerView;
 import java.util.ArrayList;
 
 import kr.co.core.responsepeople.R;
+import kr.co.core.responsepeople.activity.ChatAct;
 import kr.co.core.responsepeople.data.ChatListData;
 import kr.co.core.responsepeople.util.Common;
 import kr.co.core.responsepeople.util.StringUtil;
@@ -53,6 +55,13 @@ public class ChatListAdapter extends RecyclerView.Adapter<ChatListAdapter.ViewHo
             holder.unread_count.setVisibility(View.VISIBLE);
             holder.unread_count.setText(data.getUnread_count());
         }
+
+        holder.itemView.setOnClickListener(v -> {
+            act.startActivity(new Intent(act, ChatAct.class)
+                    .putExtra("t_idx", data.getY_idx())
+                    .putExtra("room_idx", data.getRoom_idx())
+            );
+        });
     }
 
     @Override

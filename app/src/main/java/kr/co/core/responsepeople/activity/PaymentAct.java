@@ -7,6 +7,8 @@ import android.app.Activity;
 import android.os.Bundle;
 import android.view.View;
 
+import com.bumptech.glide.Glide;
+
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -18,6 +20,7 @@ import kr.co.core.responsepeople.databinding.ActivityPaymentBinding;
 import kr.co.core.responsepeople.server.ReqBasic;
 import kr.co.core.responsepeople.server.netUtil.HttpResult;
 import kr.co.core.responsepeople.server.netUtil.NetUrls;
+import kr.co.core.responsepeople.util.AppPreference;
 import kr.co.core.responsepeople.util.BillingEntireManager;
 import kr.co.core.responsepeople.util.Common;
 import kr.co.core.responsepeople.util.CustomApplication;
@@ -41,9 +44,9 @@ public class PaymentAct extends BaseAct implements View.OnClickListener {
         CustomApplication application = (CustomApplication) getApplication();
         manager = application.getManagerObject();
 
-
         getItemInfo();
         setLayout();
+        getMyInfo();
     }
 
     private void setLayout() {
@@ -119,6 +122,42 @@ public class PaymentAct extends BaseAct implements View.OnClickListener {
         server.addParams("dbControl", NetUrls.PAYMENT_ITEM);
         server.execute(true, false);
     }
+
+
+    private void getMyInfo() {
+        ReqBasic server = new ReqBasic(act, NetUrls.DOMAIN) {
+            @Override
+            public void onAfter(int resultCode, HttpResult resultData) {
+                if (resultData.getResult() != null) {
+                    try {
+                        JSONObject jo = new JSONObject(resultData.getResult());
+
+                        if (StringUtil.getStr(jo, "result").equalsIgnoreCase("Y")) {
+                            String point = StringUtil.getStr(jo, "point");
+
+                            runOnUiThread(new Runnable() {
+                                @Override
+                                public void run() {
+                                    binding.countHeart.setText(point);
+                                }
+                            });
+                        } else {
+                        }
+
+                    } catch (JSONException e) {
+                        e.printStackTrace();
+                    }
+                } else {
+                }
+            }
+        };
+
+        server.setTag("My Info");
+        server.addParams("dbControl", NetUrls.MY_INFO);
+        server.addParams("m_idx", AppPreference.getProfilePref(act, AppPreference.PREF_MIDX));
+        server.execute(true, false);
+    }
+
 
     @Override
     public void onClick(View v) {

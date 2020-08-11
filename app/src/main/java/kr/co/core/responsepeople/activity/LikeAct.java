@@ -2,8 +2,10 @@ package kr.co.core.responsepeople.activity;
 
 import android.app.Activity;
 import android.content.DialogInterface;
+import android.content.Intent;
 import android.os.Bundle;
 
+import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.databinding.DataBindingUtil;
 import androidx.recyclerview.widget.GridLayoutManager;
@@ -16,7 +18,6 @@ import java.util.ArrayList;
 
 import kr.co.core.responsepeople.R;
 import kr.co.core.responsepeople.adapter.LikeAdapter;
-import kr.co.core.responsepeople.adapter.MemberAdapter;
 import kr.co.core.responsepeople.data.MemberData;
 import kr.co.core.responsepeople.databinding.ActivityLikeBinding;
 import kr.co.core.responsepeople.server.ReqBasic;
@@ -33,6 +34,7 @@ public class LikeAct extends BaseAct {
     ArrayList<MemberData> list = new ArrayList<>();
     LikeAdapter adapter;
 
+    int currentPos = -1;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -51,6 +53,7 @@ public class LikeAct extends BaseAct {
             finish();
         });
     }
+
 
     private void getLikeList() {
         ReqBasic server = new ReqBasic(act, NetUrls.DOMAIN) {
@@ -72,7 +75,7 @@ public class LikeAct extends BaseAct {
                                 String m_job = StringUtil.getStr(job, "m_job");
                                 String m_location = StringUtil.getStr(job, "m_location");
                                 String m_profile1 = StringUtil.getStr(job, "m_profile1");
-                                boolean m_profile_result = StringUtil.getStr(job, "m_profile_result").equalsIgnoreCase("Y");
+                                boolean m_profile_result = StringUtil.getStr(job, "m_profile1_result").equalsIgnoreCase("Y");
 
                                 list.add(new MemberData(m_idx, m_nick, m_age, m_job, m_location, null, m_profile1, m_profile_result, false, false));
                             }
@@ -86,6 +89,7 @@ public class LikeAct extends BaseAct {
                                 }
                             });
                         } else {
+
                         }
 
                     } catch (JSONException e) {

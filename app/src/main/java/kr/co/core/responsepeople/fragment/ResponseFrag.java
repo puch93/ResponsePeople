@@ -1,6 +1,7 @@
 package kr.co.core.responsepeople.fragment;
 
 import android.app.Activity;
+import android.content.Intent;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Looper;
@@ -28,7 +29,9 @@ import java.util.Timer;
 import java.util.TimerTask;
 
 import kr.co.core.responsepeople.R;
+import kr.co.core.responsepeople.activity.ProfileDetailAct;
 import kr.co.core.responsepeople.adapter.ResponseAdapter;
+import kr.co.core.responsepeople.data.ResponseData;
 import kr.co.core.responsepeople.data.ResponseData;
 import kr.co.core.responsepeople.databinding.FragmentNearBinding;
 import kr.co.core.responsepeople.databinding.FragmentResponseBinding;
@@ -41,6 +44,8 @@ import kr.co.core.responsepeople.util.GpsInfo;
 import kr.co.core.responsepeople.util.LogUtil;
 import kr.co.core.responsepeople.util.StringUtil;
 
+import static android.app.Activity.RESULT_OK;
+
 public class ResponseFrag extends BaseFrag implements View.OnClickListener {
     FragmentResponseBinding binding;
     Activity act;
@@ -51,6 +56,7 @@ public class ResponseFrag extends BaseFrag implements View.OnClickListener {
 
     private Timer timer = new Timer();
 
+    int currentPos = -1;
     @Nullable
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
@@ -58,7 +64,17 @@ public class ResponseFrag extends BaseFrag implements View.OnClickListener {
         act = getActivity();
 
         manager = new LinearLayoutManager(act);
-        adapter = new ResponseAdapter(act, list);
+        adapter = new ResponseAdapter(act, this, list, new ResponseAdapter.CurrentPosListener() {
+            @Override
+            public void getCurrentIndex(int position) {
+                currentPos = position;
+            }
+        }, new ResponseAdapter.CustomClickListener() {
+            @Override
+            public void likeClicked() {
+                list = adapter.getList();
+            }
+        });
         binding.recyclerView.setLayoutManager(manager);
         binding.recyclerView.setHasFixedSize(true);
         binding.recyclerView.setItemViewCacheSize(20);
@@ -69,7 +85,24 @@ public class ResponseFrag extends BaseFrag implements View.OnClickListener {
         return binding.getRoot();
     }
 
+
+    @Override
+    public void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+        if(resultCode == RESULT_OK) {
+            if(requestCode == ProfileDetailAct.TYPE_LIKE) {
+                if(currentPos >= 0) {
+                    ResponseData responseData = list.get(currentPos);
+                    responseData.setLike(data.getBooleanExtra("result", false));
+                    list.set(currentPos, responseData);
+                    adapter.setList(list);
+                }
+            }
+        }
+    }
+
     private void getResponseList() {
+        list = new ArrayList<>();
         ReqBasic server = new ReqBasic(act, NetUrls.DOMAIN) {
             @Override
             public void onAfter(int resultCode, HttpResult resultData) {
@@ -94,10 +127,10 @@ public class ResponseFrag extends BaseFrag implements View.OnClickListener {
                                 int complet_cnt = StringUtil.getInt(job, "complet_cnt");
                                 int matching_cnt = StringUtil.getInt(job, "matching_cnt");
 
-                                int result = 30 + (int) (((double) complet_cnt / (double) total_cnt) * 100) + (matching_cnt * 5);
+                                int result = 30 + (int) (((double) complet_cnt / (double) total_cnt) * 50) + (matching_cnt * 5);
 
                                 boolean m_salary_result = StringUtil.getStr(job, "m_salary_result").equalsIgnoreCase("Y");
-                                boolean m_profile_result = StringUtil.getStr(job, "m_profile_result").equalsIgnoreCase("Y");
+                                boolean m_profile_result = StringUtil.getStr(job, "m_profile1_result").equalsIgnoreCase("Y");
                                 boolean f_idx = !StringUtil.isNull(StringUtil.getStr(job, "f_idx"));
 
                                 list.add(new ResponseData(m_idx, m_nick, m_age, m_job, m_location, m_salary, m_profile1, result ,f_idx, m_salary_result, m_profile_result));

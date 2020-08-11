@@ -49,7 +49,11 @@ import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 import kr.co.core.responsepeople.R;
+import kr.co.core.responsepeople.activity.EvaluationAfterAct;
+import kr.co.core.responsepeople.activity.EvaluationBeforeAct;
 import kr.co.core.responsepeople.activity.JoinAct;
+import kr.co.core.responsepeople.activity.LoginAct;
+import kr.co.core.responsepeople.activity.MainAct;
 import kr.co.core.responsepeople.activity.SalaryAct;
 import kr.co.core.responsepeople.adapter.EtcAdapter;
 import kr.co.core.responsepeople.adapter.EtcProfileAdapter;
@@ -114,8 +118,7 @@ public class Join04Frag extends BaseFrag implements View.OnClickListener {
         LogUtil.logI("imageConfirmed called");
         setProgressDialogDismiss();
 
-        BaseFrag fragment = new Join05Frag();
-        ((JoinAct) act).replaceFragment(fragment);
+        doLogin();
     }
 
     public void imageFailed() {
@@ -434,7 +437,11 @@ public class Join04Frag extends BaseFrag implements View.OnClickListener {
                             JSONArray ja = jo.getJSONArray("data");
                             JSONObject job = ja.getJSONObject(0);
 
-                            MemberUtil.setJoinProcess(act, StringUtil.getStr(job, "m_id"), StringUtil.getStr(job, "m_pw"));
+                            MemberUtil.setJoinProcess(act, StringUtil.getStr(job, "m_id"), StringUtil.getStr(job, "m_pass"));
+
+                            if(LoginAct.act != null) {
+                                LoginAct.act.finish();
+                            }
                         } else {
                             Common.showToast(act, "message");
                         }
@@ -595,16 +602,10 @@ public class Join04Frag extends BaseFrag implements View.OnClickListener {
                 binding.expandView.setVisibility(View.GONE);
                 images = adapter.getList();
 
-                if (StringUtil.isNull(fromType)) {
-                    // 일반회원가입일때
-                    nextProcess();
+                if (images.size() < 4) {
+                    binding.btnNext.setSelected(false);
                 } else {
-                    // 재검수 요청일때
-                    if (images.size() < 4) {
-                        binding.btnNext.setSelected(false);
-                    } else {
-                        binding.btnNext.setSelected(true);
-                    }
+                    binding.btnNext.setSelected(true);
                 }
             }
         });
@@ -924,5 +925,86 @@ public class Join04Frag extends BaseFrag implements View.OnClickListener {
         } else {
             Log.i(StringUtil.TAG, "onActivityResult: RESULT_CANCEL");
         }
+    }
+
+    private void doLogin() {
+        ReqBasic server = new ReqBasic(act, NetUrls.DOMAIN) {
+            @Override
+            public void onAfter(int resultCode, HttpResult resultData) {
+                if (resultData.getResult() != null) {
+                    try {
+                        JSONObject jo = new JSONObject(resultData.getResult());
+
+                        if (StringUtil.getStr(jo, "result").equalsIgnoreCase("Y")) {
+                            JSONArray ja = jo.getJSONArray("data");
+                            JSONObject job = ja.getJSONObject(0);
+                            String m_idx = StringUtil.getStr(job, "m_idx");
+                            String m_gender = StringUtil.getStr(job, "m_gender");
+                            String m_id = StringUtil.getStr(job, "m_id");
+                            String m_pass = StringUtil.getStr(job, "m_pass");
+                            String m_profile1 = StringUtil.getStr(job, "m_profile1");
+                            String m_birth = StringUtil.getStr(job, "m_birth");
+                            String m_hp = StringUtil.getStr(job, "m_hp");
+
+                            AppPreference.setProfilePref(act, AppPreference.PREF_JSON, jo.toString());
+                            AppPreference.setProfilePref(act, AppPreference.PREF_MIDX, m_idx);
+                            AppPreference.setProfilePref(act, AppPreference.PREF_GENDER, m_gender);
+                            AppPreference.setProfilePref(act, AppPreference.PREF_ID, m_id);
+                            AppPreference.setProfilePref(act, AppPreference.PREF_PW, m_pass);
+                            AppPreference.setProfilePref(act, AppPreference.PREF_AGE, StringUtil.calcAge(m_birth.substring(0, 4)));
+                            AppPreference.setProfilePref(act, AppPreference.PREF_IMAGE, NetUrls.DOMAIN_ORIGIN + m_profile1);
+                            AppPreference.setProfilePref(act, AppPreference.PREF_PHONE, m_hp);
+
+                            startActivity(new Intent(act, MainAct.class));
+                            act.finish();
+                        } else {
+                            Common.showToast(act, StringUtil.getStr(jo, "message"));
+
+                            if (jo.has("data")) {
+                                JSONArray ja = jo.getJSONArray("data");
+                                JSONObject job = ja.getJSONObject(0);
+                                String type = StringUtil.getStr(jo, "type");
+                                String m_idx = StringUtil.getStr(job, "m_idx");
+                                String m_gender = StringUtil.getStr(job, "m_gender");
+                                String m_id = StringUtil.getStr(job, "m_id");
+                                String m_hp = StringUtil.getStr(job, "m_hp");
+                                String m_pass = StringUtil.getStr(job, "m_pass");
+                                String m_birth = StringUtil.getStr(job, "m_birth");
+                                String m_profile1 = StringUtil.getStr(job, "m_profile1");
+
+                                AppPreference.setProfilePref(act, AppPreference.PREF_JSON, jo.toString());
+                                AppPreference.setProfilePref(act, AppPreference.PREF_MIDX, m_idx);
+                                AppPreference.setProfilePref(act, AppPreference.PREF_GENDER, m_gender);
+                                AppPreference.setProfilePref(act, AppPreference.PREF_ID, m_id);
+                                AppPreference.setProfilePref(act, AppPreference.PREF_PW, m_pass);
+                                AppPreference.setProfilePref(act, AppPreference.PREF_PHONE, m_hp);
+                                AppPreference.setProfilePref(act, AppPreference.PREF_AGE, StringUtil.calcAge(m_birth.substring(0, 4)));
+                                AppPreference.setProfilePref(act, AppPreference.PREF_IMAGE, NetUrls.DOMAIN_ORIGIN + m_profile1);
+                                AppPreference.setProfilePrefBool(act, AppPreference.AUTO_LOGIN, true);
+
+                                BaseFrag fragment = new Join05Frag();
+                                ((JoinAct) act).replaceFragment(fragment);
+                            }
+                        }
+
+                    } catch (JSONException e) {
+                        e.printStackTrace();
+                        Common.showToastNetwork(act);
+                    }
+                } else {
+                    Common.showToastNetwork(act);
+                }
+            }
+        };
+
+        server.setTag("Auto Login");
+        server.addParams("dbControl", NetUrls.LOGIN);
+        server.addParams("m_id", AppPreference.getProfilePref(act, AppPreference.PREF_ID));
+        server.addParams("m_pass", AppPreference.getProfilePref(act, AppPreference.PREF_PW));
+        server.addParams("fcm", AppPreference.getProfilePref(act, AppPreference.PREF_FCM));
+        server.addParams("imei", Common.getDeviceId(act));
+        server.addParams("m_x", AppPreference.getProfilePref(act, AppPreference.PREF_LAT));
+        server.addParams("m_y", AppPreference.getProfilePref(act, AppPreference.PREF_LON));
+        server.execute(true, false);
     }
 }

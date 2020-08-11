@@ -13,6 +13,7 @@ import android.widget.TextView;
 
 import androidx.annotation.NonNull;
 import androidx.cardview.widget.CardView;
+import androidx.fragment.app.Fragment;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.bumptech.glide.Glide;
@@ -24,6 +25,7 @@ import java.util.ArrayList;
 
 import kr.co.core.responsepeople.R;
 import kr.co.core.responsepeople.activity.ProfileDetailAct;
+import kr.co.core.responsepeople.activity.QuestionSendAct;
 import kr.co.core.responsepeople.data.MemberData;
 import kr.co.core.responsepeople.server.ReqBasic;
 import kr.co.core.responsepeople.server.netUtil.HttpResult;
@@ -34,6 +36,7 @@ import kr.co.core.responsepeople.util.StringUtil;
 
 public class MemberAdapter extends RecyclerView.Adapter<MemberAdapter.ViewHolder> {
     private Activity act;
+    private Fragment frag;
 
     public ArrayList<MemberData> getList() {
         return list;
@@ -41,10 +44,18 @@ public class MemberAdapter extends RecyclerView.Adapter<MemberAdapter.ViewHolder
 
     private ArrayList<MemberData> list;
 
-    public MemberAdapter(Activity act, ArrayList<MemberData> list, CustomClickListener customClickListener) {
+    CurrentPosListener currentPosListener;
+
+    public interface CurrentPosListener {
+        void getCurrentIndex(int position);
+    }
+
+    public MemberAdapter(Activity act, Fragment frag, ArrayList<MemberData> list, CustomClickListener customClickListener, CurrentPosListener currentPosListener) {
         this.act = act;
+        this.frag = frag;
         this.list = list;
         this.customClickListener = customClickListener;
+        this.currentPosListener = currentPosListener;
     }
 
     public void setList(ArrayList<MemberData> list) {
@@ -98,7 +109,11 @@ public class MemberAdapter extends RecyclerView.Adapter<MemberAdapter.ViewHolder
             doLike(data.getIdx(), i);
         });
 
+        holder.btn_question.setOnClickListener(v -> {
+            act.startActivity(new Intent(act, QuestionSendAct.class).putExtra("t_idx", data.getIdx()));
+        });
         holder.itemView.setOnClickListener(v -> {
+            currentPosListener.getCurrentIndex(i);
             checkProfileRead(data.getIdx());
         });
     }
@@ -140,7 +155,7 @@ public class MemberAdapter extends RecyclerView.Adapter<MemberAdapter.ViewHolder
                     try {
                         JSONObject jo = new JSONObject(resultData.getResult());
 
-                        if( StringUtil.getStr(jo, "result").equalsIgnoreCase("Y")) {
+                        if (StringUtil.getStr(jo, "result").equalsIgnoreCase("Y")) {
                             act.runOnUiThread(new Runnable() {
                                 @Override
                                 public void run() {
@@ -174,7 +189,6 @@ public class MemberAdapter extends RecyclerView.Adapter<MemberAdapter.ViewHolder
     }
 
 
-
     private void checkProfileRead(String y_idx) {
         ReqBasic server = new ReqBasic(act, NetUrls.DOMAIN) {
             @Override
@@ -185,10 +199,11 @@ public class MemberAdapter extends RecyclerView.Adapter<MemberAdapter.ViewHolder
 
                         if (StringUtil.getStr(jo, "result").equalsIgnoreCase("Y")) {
                             // 열람 했을 경우 (pay로 던지던 free로 던지던 상관없음)
-                            act.startActivity(new Intent(act, ProfileDetailAct.class)
-                                    .putExtra("type", "pay")
-                                    .putExtra("y_idx", y_idx)
-                            );
+                            frag.startActivityForResult(new Intent(act, ProfileDetailAct.class)
+                                            .putExtra("type", "pay")
+                                            .putExtra("y_idx", y_idx)
+                                    , ProfileDetailAct.TYPE_LIKE);
+
                         } else {
                             // 열람 안헀을 경우
                             check_1day_used(y_idx);
@@ -213,7 +228,7 @@ public class MemberAdapter extends RecyclerView.Adapter<MemberAdapter.ViewHolder
 
     /**
      * pv_type(free:1일무료사용할때, pay:일반적으로사용)
-     * */
+     */
     private void check_1day_used(String y_idx) {
         ReqBasic server = new ReqBasic(act, NetUrls.DOMAIN) {
             @Override
@@ -232,10 +247,10 @@ public class MemberAdapter extends RecyclerView.Adapter<MemberAdapter.ViewHolder
                                     showAlert(act, "프로필 보기", "1일무료 이용권을 사용하고 프로필을 확인하시겠습니까?", new Common.OnAlertAfter() {
                                         @Override
                                         public void onAfterOk() {
-                                            act.startActivity(new Intent(act, ProfileDetailAct.class)
-                                                    .putExtra("type", "free")
-                                                    .putExtra("y_idx", y_idx)
-                                            );
+                                            frag.startActivityForResult(new Intent(act, ProfileDetailAct.class)
+                                                            .putExtra("type", "free")
+                                                            .putExtra("y_idx", y_idx)
+                                                    , ProfileDetailAct.TYPE_LIKE);
                                         }
 
                                         @Override
@@ -248,10 +263,10 @@ public class MemberAdapter extends RecyclerView.Adapter<MemberAdapter.ViewHolder
                                     showAlert(act, "프로필 보기", "하트 5개를 소모하고 프로필을 확인하시겠습니까?", new Common.OnAlertAfter() {
                                         @Override
                                         public void onAfterOk() {
-                                            act.startActivity(new Intent(act, ProfileDetailAct.class)
-                                                    .putExtra("type", "pay")
-                                                    .putExtra("y_idx", y_idx)
-                                            );
+                                            frag.startActivityForResult(new Intent(act, ProfileDetailAct.class)
+                                                            .putExtra("type", "pay")
+                                                            .putExtra("y_idx", y_idx)
+                                                    , ProfileDetailAct.TYPE_LIKE);
                                         }
 
                                         @Override

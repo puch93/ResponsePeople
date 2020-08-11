@@ -14,6 +14,7 @@ import android.widget.TextView;
 
 import androidx.annotation.NonNull;
 import androidx.cardview.widget.CardView;
+import androidx.fragment.app.Fragment;
 import androidx.recyclerview.widget.RecyclerView;
 
 import org.json.JSONException;
@@ -23,6 +24,7 @@ import java.util.ArrayList;
 
 import kr.co.core.responsepeople.R;
 import kr.co.core.responsepeople.activity.ProfileDetailAct;
+import kr.co.core.responsepeople.data.MemberData;
 import kr.co.core.responsepeople.data.ResponseData;
 import kr.co.core.responsepeople.server.ReqBasic;
 import kr.co.core.responsepeople.server.netUtil.HttpResult;
@@ -33,11 +35,28 @@ import kr.co.core.responsepeople.util.StringUtil;
 
 public class ResponseAdapter extends RecyclerView.Adapter<ResponseAdapter.ViewHolder> {
     private Activity act;
+    private Fragment frag;
     private ArrayList<ResponseData> list;
+    CustomClickListener customClickListener;
+    CurrentPosListener currentPosListener;
 
-    public ResponseAdapter(Activity act, ArrayList<ResponseData> list) {
+    public interface CustomClickListener {
+        void likeClicked();
+    }
+    public interface CurrentPosListener {
+        void getCurrentIndex(int position);
+    }
+
+    public ArrayList<ResponseData> getList() {
+        return list;
+    }
+
+    public ResponseAdapter(Activity act,Fragment frag, ArrayList<ResponseData> list, CurrentPosListener currentPosListener, CustomClickListener customClickListener) {
         this.act = act;
         this.list = list;
+        this.frag = frag;
+        this.currentPosListener = currentPosListener;
+        this.customClickListener = customClickListener;
     }
 
     public void setList(ArrayList<ResponseData> list) {
@@ -79,8 +98,12 @@ public class ResponseAdapter extends RecyclerView.Adapter<ResponseAdapter.ViewHo
 
         Common.processProfileImageRec(act, holder.profile_img, data.getProfile_img(), data.isImage_ok(), 5, 3);
         holder.btn_like.setSelected(data.isLike());
+        holder.btn_like.setOnClickListener(view -> {
+            doLike(data.getIdx(), i);
+        });
 
         holder.itemView.setOnClickListener(v -> {
+            currentPosListener.getCurrentIndex(i);
             checkProfileRead(data.getIdx());
         });
 
@@ -88,6 +111,47 @@ public class ResponseAdapter extends RecyclerView.Adapter<ResponseAdapter.ViewHo
         holder.progressText.setText(String.valueOf(data.getProgress()) + "%");
 
 
+    }
+
+    private void doLike(String t_idx, int position) {
+        ReqBasic server = new ReqBasic(act, NetUrls.DOMAIN) {
+            @Override
+            public void onAfter(int resultCode, HttpResult resultData) {
+                if (resultData.getResult() != null) {
+                    try {
+                        JSONObject jo = new JSONObject(resultData.getResult());
+
+                        if (StringUtil.getStr(jo, "result").equalsIgnoreCase("Y")) {
+                            act.runOnUiThread(new Runnable() {
+                                @Override
+                                public void run() {
+                                    ResponseData data = list.get(position);
+                                    data.setLike(!data.isLike());
+                                    list.set(position, data);
+                                    notifyDataSetChanged();
+
+                                    customClickListener.likeClicked();
+                                }
+                            });
+                        } else {
+
+                        }
+
+                    } catch (JSONException e) {
+                        e.printStackTrace();
+                        Common.showToastNetwork(act);
+                    }
+                } else {
+                    Common.showToastNetwork(act);
+                }
+            }
+        };
+
+        server.setTag("Like Member");
+        server.addParams("dbControl", NetUrls.LIKE);
+        server.addParams("m_idx", AppPreference.getProfilePref(act, AppPreference.PREF_MIDX));
+        server.addParams("t_idx", t_idx);
+        server.execute(true, true);
     }
 
     @Override
@@ -132,10 +196,10 @@ public class ResponseAdapter extends RecyclerView.Adapter<ResponseAdapter.ViewHo
 
                         if (StringUtil.getStr(jo, "result").equalsIgnoreCase("Y")) {
                             // 열람 했을 경우 (pay로 던지던 free로 던지던 상관없음)
-                            act.startActivity(new Intent(act, ProfileDetailAct.class)
+                            frag.startActivityForResult(new Intent(act, ProfileDetailAct.class)
                                     .putExtra("type", "pay")
                                     .putExtra("y_idx", y_idx)
-                            );
+                                    , ProfileDetailAct.TYPE_LIKE);
                         } else {
                             // 열람 안헀을 경우
                             check_1day_used(y_idx);
@@ -179,10 +243,10 @@ public class ResponseAdapter extends RecyclerView.Adapter<ResponseAdapter.ViewHo
                                     showAlert(act, "프로필 보기", "1일무료 이용권을 사용하고 프로필을 확인하시겠습니까?", new Common.OnAlertAfter() {
                                         @Override
                                         public void onAfterOk() {
-                                            act.startActivity(new Intent(act, ProfileDetailAct.class)
+                                            frag.startActivityForResult(new Intent(act, ProfileDetailAct.class)
                                                     .putExtra("type", "free")
                                                     .putExtra("y_idx", y_idx)
-                                            );
+                                                    , ProfileDetailAct.TYPE_LIKE);
                                         }
 
                                         @Override
@@ -195,10 +259,10 @@ public class ResponseAdapter extends RecyclerView.Adapter<ResponseAdapter.ViewHo
                                     showAlert(act, "프로필 보기", "하트 5개를 소모하고 프로필을 확인하시겠습니까?", new Common.OnAlertAfter() {
                                         @Override
                                         public void onAfterOk() {
-                                            act.startActivity(new Intent(act, ProfileDetailAct.class)
+                                            frag.startActivityForResult(new Intent(act, ProfileDetailAct.class)
                                                     .putExtra("type", "pay")
                                                     .putExtra("y_idx", y_idx)
-                                            );
+                                                    , ProfileDetailAct.TYPE_LIKE);
                                         }
 
                                         @Override

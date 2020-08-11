@@ -5,15 +5,24 @@ import androidx.fragment.app.FragmentManager;
 import androidx.fragment.app.FragmentTransaction;
 
 import android.app.Activity;
+import android.app.AlarmManager;
+import android.app.PendingIntent;
+import android.content.Context;
 import android.content.Intent;
+import android.os.Build;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.View;
 
 import com.bumptech.glide.Glide;
 import com.bumptech.glide.load.resource.bitmap.CircleCrop;
 
+import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
+
+import java.util.ArrayList;
+import java.util.Calendar;
 
 import kr.co.core.responsepeople.R;
 import kr.co.core.responsepeople.databinding.ActivityMainBinding;
@@ -23,6 +32,7 @@ import kr.co.core.responsepeople.fragment.NearFrag;
 import kr.co.core.responsepeople.fragment.OnlineFrag;
 import kr.co.core.responsepeople.fragment.RecommendFrag;
 import kr.co.core.responsepeople.fragment.ResponseFrag;
+import kr.co.core.responsepeople.receiver.AlarmReceiver;
 import kr.co.core.responsepeople.server.ReqBasic;
 import kr.co.core.responsepeople.server.netUtil.HttpResult;
 import kr.co.core.responsepeople.server.netUtil.NetUrls;
@@ -33,10 +43,12 @@ import kr.co.core.responsepeople.util.StringUtil;
 
 public class MainAct extends BaseAct implements View.OnClickListener {
     ActivityMainBinding binding;
-    Activity act;
+    public static Activity act;
 
     FragmentManager fragmentManager;
     private BackPressCloseHandler backPressCloseHandler;
+
+    ArrayList<String> list = new ArrayList<>();
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -60,12 +72,71 @@ public class MainAct extends BaseAct implements View.OnClickListener {
         binding.menu01Area.performClick();
     }
 
+
+    public void getQuestionCount(String dbControl) {
+        list = new ArrayList<>();
+        ReqBasic server = new ReqBasic(act, NetUrls.DOMAIN) {
+            @Override
+            public void onAfter(int resultCode, HttpResult resultData) {
+                if (resultData.getResult() != null) {
+                    try {
+                        JSONObject jo = new JSONObject(resultData.getResult());
+
+                        if (StringUtil.getStr(jo, "result").equalsIgnoreCase("Y")) {
+                            JSONArray ja = jo.getJSONArray("data");
+                            for (int i = 0; i < ja.length(); i++) {
+                                JSONObject job = ja.getJSONObject(i);
+
+                                String q_m_idx = StringUtil.getStr(job, "q_m_idx");
+
+
+                                if (!list.contains(q_m_idx))
+                                    list.add(q_m_idx);
+                            }
+
+                            act.runOnUiThread(new Runnable() {
+                                @Override
+                                public void run() {
+                                    binding.countReceive.setVisibility(View.VISIBLE);
+                                    binding.countReceive.setText(String.valueOf(list.size()));
+
+                                }
+                            });
+                        } else {
+                            act.runOnUiThread(new Runnable() {
+                                @Override
+                                public void run() {
+                                    binding.countReceive.setText("0");
+                                    binding.countReceive.setVisibility(View.GONE);
+                                }
+                            });
+                        }
+
+                    } catch (JSONException e) {
+                        e.printStackTrace();
+                        Common.showToastNetwork(act);
+                    }
+                } else {
+                    Common.showToastNetwork(act);
+                }
+            }
+        };
+
+        server.setTag("Question " + dbControl);
+        server.addParams("dbControl", dbControl);
+        server.addParams("m_idx", AppPreference.getProfilePref(act, AppPreference.PREF_MIDX));
+        server.execute(true, false);
+    }
+
+
     @Override
     protected void onResume() {
         super.onResume();
 
         if (!StringUtil.isNull(AppPreference.getProfilePref(act, AppPreference.PREF_IMAGE)))
             Glide.with(act).load(AppPreference.getProfilePref(act, AppPreference.PREF_IMAGE)).transform(new CircleCrop()).into(binding.profileImg);
+
+        getQuestionCount(NetUrls.QUESTION_RECEIVED);
     }
 
     @Override
@@ -127,44 +198,9 @@ public class MainAct extends BaseAct implements View.OnClickListener {
                 startActivity(new Intent(act, ChatListAct.class));
                 break;
             case R.id.btn_setting:
-//                doLogout();
                 startActivity(new Intent(act, MyPageAct.class));
                 break;
 
         }
-    }
-
-
-    private void doLogout() {
-        ReqBasic server = new ReqBasic(act, NetUrls.DOMAIN) {
-            @Override
-            public void onAfter(int resultCode, HttpResult resultData) {
-                if (resultData.getResult() != null) {
-                    try {
-                        JSONObject jo = new JSONObject(resultData.getResult());
-
-                        if (StringUtil.getStr(jo, "result").equalsIgnoreCase("Y")) {
-                            AppPreference.setProfilePrefBool(act, AppPreference.AUTO_LOGIN, false);
-                            startActivity(new Intent(act, LoginAct.class));
-                            finish();
-                            finishAffinity();
-                        } else {
-                            Common.showToast(act, StringUtil.getStr(jo, "message"));
-                        }
-
-                    } catch (JSONException e) {
-                        e.printStackTrace();
-                        Common.showToastNetwork(act);
-                    }
-                } else {
-                    Common.showToastNetwork(act);
-                }
-            }
-        };
-
-        server.setTag("Logout");
-        server.addParams("dbControl", NetUrls.LOGOUT);
-        server.addParams("m_idx", AppPreference.getProfilePref(act, AppPreference.PREF_MIDX));
-        server.execute(true, false);
     }
 }

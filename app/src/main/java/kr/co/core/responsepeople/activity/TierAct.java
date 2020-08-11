@@ -79,7 +79,7 @@ public class TierAct extends BaseAct {
 
 
                                     binding.scoreAverage.setText(m_pref_mark);
-                                    int progress = (int) ((Float.parseFloat(m_pref_mark) / 10f) * 100);
+                                    int progress = (int) ((Float.parseFloat(m_pref_mark) * 10));
                                     binding.progressBar.setProgress(progress);
 
                                     binding.tierText.setText(Common.calTier(Float.parseFloat(m_pref_mark)));

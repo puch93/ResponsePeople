@@ -111,10 +111,10 @@ public class LikeAdapter extends RecyclerView.Adapter<LikeAdapter.ViewHolder> {
 
                         if (StringUtil.getStr(jo, "result").equalsIgnoreCase("Y")) {
                             // 열람 했을 경우 (pay로 던지던 free로 던지던 상관없음)
-                            act.startActivity(new Intent(act, ProfileDetailAct.class)
+                            act.startActivityForResult(new Intent(act, ProfileDetailAct.class)
                                     .putExtra("type", "pay")
                                     .putExtra("y_idx", y_idx)
-                            );
+                                    , ProfileDetailAct.TYPE_LIKE);
                         } else {
                             // 열람 안헀을 경우
                             check_1day_used(y_idx);
@@ -158,10 +158,10 @@ public class LikeAdapter extends RecyclerView.Adapter<LikeAdapter.ViewHolder> {
                                     showAlert(act, "프로필 보기", "1일무료 이용권을 사용하고 프로필을 확인하시겠습니까?", new Common.OnAlertAfter() {
                                         @Override
                                         public void onAfterOk() {
-                                            act.startActivity(new Intent(act, ProfileDetailAct.class)
+                                            act.startActivityForResult(new Intent(act, ProfileDetailAct.class)
                                                     .putExtra("type", "free")
                                                     .putExtra("y_idx", y_idx)
-                                            );
+                                                    , ProfileDetailAct.TYPE_LIKE);
                                         }
 
                                         @Override
@@ -174,10 +174,10 @@ public class LikeAdapter extends RecyclerView.Adapter<LikeAdapter.ViewHolder> {
                                     showAlert(act, "프로필 보기", "하트 5개를 소모하고 프로필을 확인하시겠습니까?", new Common.OnAlertAfter() {
                                         @Override
                                         public void onAfterOk() {
-                                            act.startActivity(new Intent(act, ProfileDetailAct.class)
+                                            act.startActivityForResult(new Intent(act, ProfileDetailAct.class)
                                                     .putExtra("type", "pay")
                                                     .putExtra("y_idx", y_idx)
-                                            );
+                                                    , ProfileDetailAct.TYPE_LIKE);
                                         }
 
                                         @Override

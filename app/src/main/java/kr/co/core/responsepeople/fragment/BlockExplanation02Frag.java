@@ -42,7 +42,7 @@ public class BlockExplanation02Frag extends BaseFrag {
         binding.btnTermPrivate.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                startActivity(new Intent(act, TermAct.class));
+                startActivity(new Intent(act, TermAct.class).putExtra("type", TermAct.TYPE_PRIVATE));
             }
         });
 

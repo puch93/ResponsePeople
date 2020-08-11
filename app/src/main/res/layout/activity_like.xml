@@ -83,7 +83,7 @@
                 android:textSize="12dp"
                 android:textStyle="bold"
                 android:textColor="@color/color_6666ff"
-                android:text="255"
+                android:text="0"
                 />
 
             <TextView

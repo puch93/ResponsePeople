@@ -348,46 +348,6 @@
                             android:textSize="10dp"
                             android:textStyle="bold" />
                     </LinearLayout>
-
-                    <LinearLayout
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_marginTop="34.3dp"
-                        android:gravity="center_vertical"
-                        android:orientation="horizontal">
-
-                        <ImageView
-                            android:layout_width="22dp"
-                            android:layout_height="22dp"
-                            android:src="@drawable/icon_heartbeat" />
-
-                        <TextView
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:layout_marginLeft="9.7dp"
-                            android:includeFontPadding="false"
-                            android:text="나와 어울리는 이성"
-                            android:textColor="@color/color_2c2c2c"
-                            android:textSize="18dp"
-                            android:textStyle="bold" />
-                    </LinearLayout>
-
-                    <TextView
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_marginTop="6dp"
-                        android:includeFontPadding="false"
-                        android:text="당신을 위해 특별한 인연을 준비했어요"
-                        android:textColor="@color/color_95989d"
-                        android:textSize="12dp"
-                        android:textStyle="bold" />
-
-                    <androidx.recyclerview.widget.RecyclerView
-                        android:id="@+id/recyclerView"
-                        android:layout_width="match_parent"
-                        android:layout_height="400dp"
-                        android:fadingEdge="none"
-                        android:overScrollMode="never" />
                 </LinearLayout>
             </LinearLayout>
         </androidx.core.widget.NestedScrollView>
