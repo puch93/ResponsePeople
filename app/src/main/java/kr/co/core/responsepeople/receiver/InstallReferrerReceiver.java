@@ -19,6 +19,9 @@ import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import java.io.UnsupportedEncodingException;
+import java.net.URLDecoder;
+
 import kr.co.core.responsepeople.R;
 import kr.co.core.responsepeople.activity.EvaluationAfterAct;
 import kr.co.core.responsepeople.activity.EvaluationBeforeAct;
@@ -44,9 +47,15 @@ public class InstallReferrerReceiver extends BroadcastReceiver {
         if(intent.getAction().equals("com.android.vending.INSTALL_REFERRER")) {
             Bundle bundle = intent.getExtras();
             referrer = bundle.getString("referrer");
-            LogUtil.logI("Referrer: " + referrer);
-
-            AppPreference.setProfilePref(ctx, AppPreference.PREF_ZZAL, referrer);
+            try {
+                referrer = URLDecoder.decode(referrer, "UTF-8");
+            } catch (UnsupportedEncodingException e) {
+                e.printStackTrace();
+            }
+            LogUtil.logI("Referrer (before): " + referrer);
+            String participateID = referrer.replace("participateID=", "");
+            LogUtil.logI("Referrer (after): " + participateID);
+            AppPreference.setProfilePref(ctx, AppPreference.PREF_ZZAL, participateID);
         }
     }
 }
