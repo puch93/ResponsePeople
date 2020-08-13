@@ -48,62 +48,66 @@
         <ImageView
             android:layout_width="match_parent"
             android:layout_height="1dp"
-            android:background="@color/color_f3f4f5"/>
+            android:background="@color/color_f3f4f5" />
 
 
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:orientation="horizontal"
-            android:paddingRight="15dp"
             android:layout_marginTop="18.3dp"
             android:layout_marginBottom="15dp"
-            android:gravity="right|center_vertical">
+            android:gravity="right|center_vertical"
+            android:orientation="horizontal"
+            android:paddingRight="15dp">
 
 
             <ImageView
                 android:layout_width="15dp"
                 android:layout_height="15dp"
-                android:src="@drawable/icon_s_fav"/>
+                android:src="@drawable/icon_s_fav" />
 
             <TextView
+                android:id="@+id/title_sub"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:textSize="12dp"
                 android:layout_marginLeft="10dp"
-                android:textStyle="bold"
-                android:textColor="@color/color_2c2c2c"
                 android:text="나를 찜한 이성 "
-                />
+                android:textColor="@color/color_2c2c2c"
+                android:textSize="12dp"
+                android:textStyle="bold" />
 
             <TextView
                 android:id="@+id/count"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:textSize="12dp"
-                android:textStyle="bold"
-                android:textColor="@color/color_6666ff"
                 android:text="0"
-                />
+                android:textColor="@color/color_6666ff"
+                android:textSize="12dp"
+                android:textStyle="bold" />
 
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:textSize="12dp"
-                android:textStyle="bold"
-                android:textColor="@color/color_2c2c2c"
                 android:text="명"
-                />
+                android:textColor="@color/color_2c2c2c"
+                android:textSize="12dp"
+                android:textStyle="bold" />
 
         </LinearLayout>
 
-        <androidx.recyclerview.widget.RecyclerView
-            android:id="@+id/recyclerView"
+        <androidx.swiperefreshlayout.widget.SwipeRefreshLayout
+            android:id="@+id/refresh_layout"
             android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:fadingEdge="none"
-            android:paddingLeft="10dp"
-            android:paddingRight="10dp"
-            android:overScrollMode="never"/>
+            android:layout_height="match_parent">
+
+            <androidx.recyclerview.widget.RecyclerView
+                android:id="@+id/recyclerView"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:fadingEdge="none"
+                android:overScrollMode="never"
+                android:paddingLeft="10dp"
+                android:paddingRight="10dp" />
+        </androidx.swiperefreshlayout.widget.SwipeRefreshLayout>
     </LinearLayout>
 </layout>

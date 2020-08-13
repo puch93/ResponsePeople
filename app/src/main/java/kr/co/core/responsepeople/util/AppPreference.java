@@ -34,6 +34,10 @@ public class AppPreference {
     public static final String PREF_SET_QUESTION = ""; // 질문지푸시
 
 
+
+    public static final String PREF_ZZAL = "zzal";
+
+
     // profile string
     public static void setProfilePref(Context context, String key, String value) {
         SharedPreferences pref = context.getSharedPreferences("profile", context.MODE_PRIVATE);

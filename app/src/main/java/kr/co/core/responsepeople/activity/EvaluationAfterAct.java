@@ -1,8 +1,11 @@
 package kr.co.core.responsepeople.activity;
 
 import android.app.Activity;
+import android.content.ContentValues;
 import android.content.Intent;
+import android.os.AsyncTask;
 import android.os.Bundle;
+import android.util.Log;
 
 import androidx.databinding.DataBindingUtil;
 import androidx.recyclerview.widget.GridLayoutManager;
@@ -26,6 +29,7 @@ import kr.co.core.responsepeople.server.netUtil.NetUrls;
 import kr.co.core.responsepeople.util.AppPreference;
 import kr.co.core.responsepeople.util.Common;
 import kr.co.core.responsepeople.util.LogUtil;
+import kr.co.core.responsepeople.util.RequestHttpURLConnection;
 import kr.co.core.responsepeople.util.StringUtil;
 
 public class EvaluationAfterAct extends BaseAct {
@@ -37,6 +41,7 @@ public class EvaluationAfterAct extends BaseAct {
     MemberBeforeAdapter adapter;
     GridLayoutManager manager;
     ArrayList<MemberData> list = new ArrayList<>();
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -171,12 +176,133 @@ public class EvaluationAfterAct extends BaseAct {
     }
 
 
-
     private void setLayout() {
         binding.btnComplete.setOnClickListener(v -> {
             doEvaluationComplete();
         });
     }
+
+
+    private void doLogin() {
+        ReqBasic server = new ReqBasic(act, NetUrls.DOMAIN) {
+            @Override
+            public void onAfter(int resultCode, HttpResult resultData) {
+                if (resultData.getResult() != null) {
+                    try {
+                        JSONObject jo = new JSONObject(resultData.getResult());
+
+                        if (StringUtil.getStr(jo, "result").equalsIgnoreCase("Y")) {
+                            JSONArray ja = jo.getJSONArray("data");
+                            JSONObject job = ja.getJSONObject(0);
+                            String m_idx = StringUtil.getStr(job, "m_idx");
+                            String m_gender = StringUtil.getStr(job, "m_gender");
+                            String m_id = StringUtil.getStr(job, "m_id");
+                            String m_pass = StringUtil.getStr(job, "m_pass");
+                            String m_profile1 = StringUtil.getStr(job, "m_profile1");
+                            String m_birth = StringUtil.getStr(job, "m_birth");
+                            String m_hp = StringUtil.getStr(job, "m_hp");
+
+                            AppPreference.setProfilePref(act, AppPreference.PREF_JSON, jo.toString());
+                            AppPreference.setProfilePref(act, AppPreference.PREF_MIDX, m_idx);
+                            AppPreference.setProfilePref(act, AppPreference.PREF_GENDER, m_gender);
+                            AppPreference.setProfilePref(act, AppPreference.PREF_ID, m_id);
+                            AppPreference.setProfilePref(act, AppPreference.PREF_PW, m_pass);
+                            AppPreference.setProfilePref(act, AppPreference.PREF_AGE, StringUtil.calcAge(m_birth.substring(0, 4)));
+                            AppPreference.setProfilePref(act, AppPreference.PREF_IMAGE, NetUrls.DOMAIN_ORIGIN + m_profile1);
+                            AppPreference.setProfilePref(act, AppPreference.PREF_PHONE, m_hp);
+
+                            startActivity(new Intent(act, MainAct.class));
+                            finish();
+                        } else {
+//                            Common.showToast(act, StringUtil.getStr(jo, "message"));
+
+                            if (jo.has("data")) {
+                                JSONArray ja = jo.getJSONArray("data");
+                                JSONObject job = ja.getJSONObject(0);
+                                String type = StringUtil.getStr(jo, "type");
+                                String m_idx = StringUtil.getStr(job, "m_idx");
+                                String m_gender = StringUtil.getStr(job, "m_gender");
+                                String m_id = StringUtil.getStr(job, "m_id");
+                                String m_hp = StringUtil.getStr(job, "m_hp");
+                                String m_birth = StringUtil.getStr(job, "m_birth");
+                                String m_profile1 = StringUtil.getStr(job, "m_profile1");
+                                String m_pass = StringUtil.getStr(job, "m_pass");
+                                int cnt = StringUtil.getInt(jo, "cnt");
+
+                                AppPreference.setProfilePref(act, AppPreference.PREF_JSON, jo.toString());
+                                AppPreference.setProfilePref(act, AppPreference.PREF_MIDX, m_idx);
+                                AppPreference.setProfilePref(act, AppPreference.PREF_GENDER, m_gender);
+                                AppPreference.setProfilePref(act, AppPreference.PREF_ID, m_id);
+                                AppPreference.setProfilePref(act, AppPreference.PREF_PW, m_pass);
+                                AppPreference.setProfilePref(act, AppPreference.PREF_PHONE, m_hp);
+                                AppPreference.setProfilePref(act, AppPreference.PREF_AGE, StringUtil.calcAge(m_birth.substring(0, 4)));
+                                AppPreference.setProfilePref(act, AppPreference.PREF_IMAGE, NetUrls.DOMAIN_ORIGIN + m_profile1);
+
+                                if (!StringUtil.isNull(type)) {
+                                    AppPreference.setProfilePref(act, AppPreference.PREF_JSON, jo.toString());
+                                    // 로그인 완료회원 아니면 자동로그인 처리 (로그인시 페이지 이동 고정시킴)
+//                                    MemberUtil.setJoinProcess(act, StringUtil.getStr(job, "m_id"), StringUtil.getStr(job, "m_pass"));
+
+
+                                    switch (type) {
+                                        // 프로필 사진 검수중
+                                        case "image":
+                                            startActivity(new Intent(act, JoinAct.class).putExtra("type", "image"));
+                                            break;
+                                        // 프로필 재심사
+                                        case "image_fail":
+                                            startActivity(new Intent(act, JoinAct.class).putExtra("type", "image_fail"));
+                                            break;
+                                        // 선호 설정 안함
+                                        case "prefer":
+                                            startActivity(new Intent(act, JoinAct.class).putExtra("type", "prefer"));
+                                            break;
+                                        // 평가 중인 경우
+                                        case "rating":
+                                            if (cnt >= 5) {
+                                                startActivity(new Intent(act, EvaluationAfterAct.class));
+                                            } else {
+                                                startActivity(new Intent(act, EvaluationBeforeAct.class));
+                                            }
+                                            break;
+                                        // 평가 완료 안누른 회원
+                                        case "waiting":
+                                            startActivity(new Intent(act, EvaluationAfterAct.class));
+                                            break;
+
+                                        default:
+                                            AppPreference.setProfilePrefBool(act, AppPreference.AUTO_LOGIN, false);
+                                            break;
+                                    }
+
+                                    finish();
+                                } else {
+                                    AppPreference.setProfilePrefBool(act, AppPreference.AUTO_LOGIN, false);
+                                }
+                            }
+                        }
+
+                    } catch (JSONException e) {
+                        e.printStackTrace();
+                        Common.showToastNetwork(act);
+                    }
+                } else {
+                    Common.showToastNetwork(act);
+                }
+            }
+        };
+
+        server.setTag("Auto Login");
+        server.addParams("dbControl", NetUrls.LOGIN);
+        server.addParams("m_id", AppPreference.getProfilePref(act, AppPreference.PREF_ID));
+        server.addParams("m_pass", AppPreference.getProfilePref(act, AppPreference.PREF_PW));
+        server.addParams("fcm", AppPreference.getProfilePref(act, AppPreference.PREF_FCM));
+        server.addParams("imei", Common.getDeviceId(act));
+        server.addParams("m_x", AppPreference.getProfilePref(act, AppPreference.PREF_LAT));
+        server.addParams("m_y", AppPreference.getProfilePref(act, AppPreference.PREF_LON));
+        server.execute(true, false);
+    }
+
 
     private void doEvaluationComplete() {
         ReqBasic server = new ReqBasic(act, NetUrls.DOMAIN) {
@@ -186,13 +312,21 @@ public class EvaluationAfterAct extends BaseAct {
                     try {
                         JSONObject jo = new JSONObject(resultData.getResult());
 
-                        if( StringUtil.getStr(jo, "result").equalsIgnoreCase("Y")) {
-//                            Common.showToast(act, StringUtil.getStr(jo, "message"));
-                            startActivity(new Intent(act, MainAct.class));
-                            act.finish();
-                            if(LoginAct.act != null) {
+                        if (StringUtil.getStr(jo, "result").equalsIgnoreCase("Y")) {
+                            if (LoginAct.act != null) {
                                 LoginAct.act.finish();
                             }
+
+                            if (!StringUtil.isNull(AppPreference.getProfilePref(act, AppPreference.PREF_ZZAL))) {
+                                String url = "https://api-test.zzal.funple.com/advertising/offerwall/complete/action";
+                                ContentValues values = new ContentValues();
+                                values.put("advertiseID", "b978797cfb5340a3a6e203407a190a16");
+                                values.put("participateID", AppPreference.getProfilePref(act, AppPreference.PREF_ZZAL));
+                                NetworkTask networkTask = new NetworkTask(url, values);
+                                networkTask.execute();
+                            }
+
+                            doLogin();
                         } else {
                             Common.showToast(act, StringUtil.getStr(jo, "message"));
                         }
@@ -214,13 +348,44 @@ public class EvaluationAfterAct extends BaseAct {
         server.execute(true, false);
     }
 
+
+    public class NetworkTask extends AsyncTask<Void, Void, String> {
+        private String url;
+        private ContentValues values;
+
+        public NetworkTask(String url, ContentValues values) {
+            this.url = url;
+            this.values = values;
+        }
+
+        @Override
+        protected String doInBackground(Void... params) {
+
+            Log.i(StringUtil.TAG, "doInBackground: ");
+            String result; // 요청 결과를 저장할 변수.
+            RequestHttpURLConnection requestHttpURLConnection = new RequestHttpURLConnection();
+            result = requestHttpURLConnection.request(url, values); // 해당 URL로 부터 결과물을 얻어온다.
+
+            return result;
+        }
+
+        @Override
+        protected void onPostExecute(String s) {
+            super.onPostExecute(s);
+            Log.i(StringUtil.TAG, "onPostExecute: ");
+            //doInBackground()로 부터 리턴된 값이 onPostExecute()의 매개변수로 넘어오므로 s를 출력한다.
+            LogUtil.logI("ZZAL: " + s);
+        }
+    }
+
+
     private void setInfo() {
         try {
             JSONObject jo = new JSONObject(AppPreference.getProfilePref(act, AppPreference.PREF_JSON));
             avg_text = StringUtil.getStr(jo, "avg");
             int avg = StringUtil.getInt(jo, "avg");
 
-            if(avg != 0) {
+            if (avg != 0) {
                 act.runOnUiThread(new Runnable() {
                     @Override
                     public void run() {
@@ -245,7 +410,6 @@ public class EvaluationAfterAct extends BaseAct {
                     }
                 });
             }
-
 
 
             JSONArray ja = jo.getJSONArray("data");

@@ -52,7 +52,6 @@ public class AlarmResponseFrag extends BaseFrag {
         binding.recyclerView.setHasFixedSize(true);
         binding.recyclerView.setItemViewCacheSize(20);
 
-        getQuestionData();
         return binding.getRoot();
     }
 

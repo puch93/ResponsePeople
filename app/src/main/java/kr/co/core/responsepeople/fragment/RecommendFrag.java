@@ -12,6 +12,8 @@ import androidx.annotation.Nullable;
 import androidx.databinding.DataBindingUtil;
 import androidx.recyclerview.widget.GridLayoutManager;
 import androidx.recyclerview.widget.LinearLayoutManager;
+import androidx.recyclerview.widget.RecyclerView;
+import androidx.swiperefreshlayout.widget.SwipeRefreshLayout;
 
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -34,7 +36,7 @@ import kr.co.core.responsepeople.util.StringUtil;
 
 import static android.app.Activity.RESULT_OK;
 
-public class RecommendFrag extends BaseFrag implements View.OnClickListener {
+public class RecommendFrag extends BaseFrag implements SwipeRefreshLayout.OnRefreshListener {
     FragmentRecommendBinding binding;
     Activity act;
 
@@ -43,11 +45,26 @@ public class RecommendFrag extends BaseFrag implements View.OnClickListener {
     ArrayList<MemberData> list = new ArrayList<>();
     int currentPos = -1;
 
+    private boolean isScroll = false;
+    private int page = 1;
+
+
+    String m_age_p = "";
+    String m_distance_p = "";
+    String m_height_p = "";
+    String m_edu_p = "";
+    String m_body_p = "";
+    String m_religion_p = "";
+    String m_drink_p = "";
+    String m_smoke_p = "";
+
     @Nullable
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         binding = DataBindingUtil.inflate(inflater, R.layout.fragment_recommend, container, false);
         act = getActivity();
+
+        binding.refreshLayout.setOnRefreshListener(this);
 
         manager = new GridLayoutManager(act, 2);
         adapter = new MemberAdapter(act, this, list, new MemberAdapter.CustomClickListener() {
@@ -65,10 +82,33 @@ public class RecommendFrag extends BaseFrag implements View.OnClickListener {
         binding.recyclerView.setHasFixedSize(true);
         binding.recyclerView.setItemViewCacheSize(20);
         binding.recyclerView.setAdapter(adapter);
+        binding.recyclerView.addOnScrollListener(new RecyclerView.OnScrollListener() {
+            @Override
+            public void onScrolled(@NonNull RecyclerView recyclerView, int dx, int dy) {
+                super.onScrolled(recyclerView, dx, dy);
+                int totalCount = manager.getItemCount();
+                int lastItemPosition = manager.findLastCompletelyVisibleItemPosition();
+                if (!isScroll) {
+                    if (totalCount - 1 == lastItemPosition) {
+                        ++page;
+                        getListCheck();
+                    }
+                }
+            }
+        });
 
-        getMyInfo();
+
+        getListCheck();
 
         return binding.getRoot();
+    }
+
+    private void getListCheck() {
+        if(page == 1) {
+            getMyInfo();
+        } else {
+            getPreferList(m_age_p, m_distance_p, m_height_p, m_edu_p, m_body_p, m_religion_p, m_drink_p, m_smoke_p);
+        }
     }
 
     @Override
@@ -87,6 +127,7 @@ public class RecommendFrag extends BaseFrag implements View.OnClickListener {
     }
 
     private void getMyInfo() {
+        isScroll = true;
         ReqBasic server = new ReqBasic(act, NetUrls.DOMAIN) {
             @Override
             public void onAfter(int resultCode, HttpResult resultData) {
@@ -98,14 +139,14 @@ public class RecommendFrag extends BaseFrag implements View.OnClickListener {
                             JSONArray ja = jo.getJSONArray("data");
                             JSONObject job = ja.getJSONObject(0);
 
-                            String m_age_p = StringUtil.getStr(job, "m_age_p");
-                            String m_distance_p = StringUtil.getStr(job, "m_distance_p");
-                            String m_height_p = StringUtil.getStr(job, "m_height_p");
-                            String m_edu_p = StringUtil.getStr(job, "m_edu_p");
-                            String m_body_p = StringUtil.getStr(job, "m_body_p");
-                            String m_religion_p = StringUtil.getStr(job, "m_religion_p");
-                            String m_drink_p = StringUtil.getStr(job, "m_drink_p");
-                            String m_smoke_p = StringUtil.getStr(job, "m_smoke_p");
+                            m_age_p = StringUtil.getStr(job, "m_age_p");
+                            m_distance_p = StringUtil.getStr(job, "m_distance_p");
+                            m_height_p = StringUtil.getStr(job, "m_height_p");
+                            m_edu_p = StringUtil.getStr(job, "m_edu_p");
+                            m_body_p = StringUtil.getStr(job, "m_body_p");
+                            m_religion_p = StringUtil.getStr(job, "m_religion_p");
+                            m_drink_p = StringUtil.getStr(job, "m_drink_p");
+                            m_smoke_p = StringUtil.getStr(job, "m_smoke_p");
 
                             getPreferList(m_age_p, m_distance_p, m_height_p, m_edu_p, m_body_p, m_religion_p, m_drink_p, m_smoke_p);
                         } else {
@@ -129,6 +170,7 @@ public class RecommendFrag extends BaseFrag implements View.OnClickListener {
     }
 
     private void getPreferList(String m_age_p, String m_distance_p, String m_height_p, String m_edu_p, String m_body_p, String m_religion_p, String m_smoke_p, String m_drink_p) {
+        isScroll = true;
         ReqBasic server = new ReqBasic(act, NetUrls.DOMAIN) {
             @Override
             public void onAfter(int resultCode, HttpResult resultData) {
@@ -163,17 +205,39 @@ public class RecommendFrag extends BaseFrag implements View.OnClickListener {
                                     adapter.setList(list);
                                 }
                             });
-                        } else {
 
+                            isScroll = false;
+                        } else {
+                            if(page == 1) {
+                                act.runOnUiThread(new Runnable() {
+                                    @Override
+                                    public void run() {
+                                        adapter.setList(list);
+                                    }
+                                });
+                            }
+                            isScroll = true;
                         }
 
                     } catch (JSONException e) {
+                        isScroll = false;
                         e.printStackTrace();
                         Common.showToastNetwork(act);
                     }
                 } else {
+                    isScroll = false;
                     Common.showToastNetwork(act);
                 }
+
+
+                act.runOnUiThread(new Runnable() {
+                    @Override
+                    public void run() {
+                        if (binding.refreshLayout.isRefreshing()) {
+                            binding.refreshLayout.setRefreshing(false);
+                        }
+                    }
+                });
             }
         };
 
@@ -196,11 +260,15 @@ public class RecommendFrag extends BaseFrag implements View.OnClickListener {
             server.addParams("m_drink_p", m_drink_p);
         if (!StringUtil.isNull(m_smoke_p))
             server.addParams("m_smoke_p", m_smoke_p);
+
+        server.addParams("pagenum", String.valueOf(page));
         server.execute(true, false);
     }
 
     @Override
-    public void onClick(View view) {
-
+    public void onRefresh() {
+        list = new ArrayList<>();
+        page = 1;
+        getListCheck();
     }
 }

@@ -343,7 +343,7 @@
                             android:layout_weight="2"
                             android:gravity="center"
                             android:includeFontPadding="false"
-                            android:text="브론즈"
+                            android:text="다이아"
                             android:textColor="#cc95989d"
                             android:textSize="10dp"
                             android:textStyle="bold" />

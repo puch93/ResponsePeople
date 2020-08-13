@@ -16,6 +16,8 @@ import androidx.annotation.Nullable;
 import androidx.databinding.DataBindingUtil;
 import androidx.recyclerview.widget.GridLayoutManager;
 import androidx.recyclerview.widget.LinearLayoutManager;
+import androidx.recyclerview.widget.RecyclerView;
+import androidx.swiperefreshlayout.widget.SwipeRefreshLayout;
 
 import com.bumptech.glide.Glide;
 import com.bumptech.glide.load.resource.bitmap.CircleCrop;
@@ -32,21 +34,18 @@ import kr.co.core.responsepeople.R;
 import kr.co.core.responsepeople.activity.ProfileDetailAct;
 import kr.co.core.responsepeople.adapter.ResponseAdapter;
 import kr.co.core.responsepeople.data.ResponseData;
-import kr.co.core.responsepeople.data.ResponseData;
-import kr.co.core.responsepeople.databinding.FragmentNearBinding;
 import kr.co.core.responsepeople.databinding.FragmentResponseBinding;
 import kr.co.core.responsepeople.server.ReqBasic;
 import kr.co.core.responsepeople.server.netUtil.HttpResult;
 import kr.co.core.responsepeople.server.netUtil.NetUrls;
 import kr.co.core.responsepeople.util.AppPreference;
 import kr.co.core.responsepeople.util.Common;
-import kr.co.core.responsepeople.util.GpsInfo;
 import kr.co.core.responsepeople.util.LogUtil;
 import kr.co.core.responsepeople.util.StringUtil;
 
 import static android.app.Activity.RESULT_OK;
 
-public class ResponseFrag extends BaseFrag implements View.OnClickListener {
+public class ResponseFrag extends BaseFrag implements SwipeRefreshLayout.OnRefreshListener {
     FragmentResponseBinding binding;
     Activity act;
 
@@ -55,6 +54,8 @@ public class ResponseFrag extends BaseFrag implements View.OnClickListener {
     ArrayList<ResponseData> list = new ArrayList<>();
 
     private Timer timer = new Timer();
+    private boolean isScroll = false;
+    private int page = 1;
 
     int currentPos = -1;
     @Nullable
@@ -62,6 +63,8 @@ public class ResponseFrag extends BaseFrag implements View.OnClickListener {
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         binding = DataBindingUtil.inflate(inflater, R.layout.fragment_response, container, false);
         act = getActivity();
+
+        binding.refreshLayout.setOnRefreshListener(this);
 
         manager = new LinearLayoutManager(act);
         adapter = new ResponseAdapter(act, this, list, new ResponseAdapter.CurrentPosListener() {
@@ -79,6 +82,21 @@ public class ResponseFrag extends BaseFrag implements View.OnClickListener {
         binding.recyclerView.setHasFixedSize(true);
         binding.recyclerView.setItemViewCacheSize(20);
         binding.recyclerView.setAdapter(adapter);
+        binding.recyclerView.addOnScrollListener(new RecyclerView.OnScrollListener() {
+            @Override
+            public void onScrolled(@NonNull RecyclerView recyclerView, int dx, int dy) {
+                super.onScrolled(recyclerView, dx, dy);
+                int totalCount = manager.getItemCount();
+                int lastItemPosition = manager.findLastCompletelyVisibleItemPosition();
+                if (!isScroll) {
+                    if (totalCount - 1 == lastItemPosition) {
+                        ++page;
+                        getResponseList();
+                    }
+                }
+            }
+        });
+
 
         getResponseList();
 
@@ -102,7 +120,7 @@ public class ResponseFrag extends BaseFrag implements View.OnClickListener {
     }
 
     private void getResponseList() {
-        list = new ArrayList<>();
+        isScroll = true;
         ReqBasic server = new ReqBasic(act, NetUrls.DOMAIN) {
             @Override
             public void onAfter(int resultCode, HttpResult resultData) {
@@ -143,27 +161,52 @@ public class ResponseFrag extends BaseFrag implements View.OnClickListener {
                                     adapter.setList(list);
                                 }
                             });
+                            isScroll = false;
                         } else {
-
+                            isScroll = true;
+                            if(page == 1) {
+                                act.runOnUiThread(new Runnable() {
+                                    @Override
+                                    public void run() {
+                                        binding.count.setText(String.valueOf(0));
+                                        adapter.setList(list);
+                                    }
+                                });
+                            }
                         }
 
                     } catch (JSONException e) {
+                        isScroll = false;
                         e.printStackTrace();
                         Common.showToastNetwork(act);
                     }
                 } else {
+                    isScroll = false;
                     Common.showToastNetwork(act);
                 }
+
+                act.runOnUiThread(new Runnable() {
+                    @Override
+                    public void run() {
+                        if (binding.refreshLayout.isRefreshing()) {
+                            binding.refreshLayout.setRefreshing(false);
+                        }
+                    }
+                });
             }
         };
         server.setTag("Response List");
         server.addParams("dbControl", NetUrls.QUESTION_RESPONSE_LIST);
         server.addParams("m_idx", AppPreference.getProfilePref(act, AppPreference.PREF_MIDX));
+        server.addParams("pagenum", String.valueOf(page));
         server.execute(true, false);
     }
 
-    @Override
-    public void onClick(View view) {
 
+    @Override
+    public void onRefresh() {
+        list = new ArrayList<>();
+        page = 1;
+        getResponseList();
     }
 }

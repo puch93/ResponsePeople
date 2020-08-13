@@ -422,7 +422,7 @@
                 <ImageView
                     android:layout_width="22dp"
                     android:layout_height="22dp"
-                    android:src="@drawable/icon_type" />
+                    android:src="@drawable/icon_grade" />
 
                 <TextView
                     android:layout_width="0dp"
@@ -484,6 +484,41 @@
                     android:layout_weight="1"
                     android:includeFontPadding="false"
                     android:text="선호 설정"
+                    android:textColor="@color/color_2c2c2c"
+                    android:textSize="18dp"
+                    android:textStyle="bold" />
+
+                <ImageView
+                    android:layout_width="33dp"
+                    android:layout_height="33dp"
+                    android:src="@drawable/btn_more_2" />
+            </LinearLayout>
+
+            <ImageView
+                android:layout_width="match_parent"
+                android:layout_height="1dp"
+                android:background="@color/color_ebedef" />
+
+            <LinearLayout
+                android:id="@+id/menu_like_other"
+                android:layout_width="match_parent"
+                android:layout_height="67dp"
+                android:gravity="center_vertical"
+                android:paddingLeft="15dp"
+                android:paddingRight="9dp">
+
+                <ImageView
+                    android:layout_width="22dp"
+                    android:layout_height="22dp"
+                    android:src="@drawable/icon_fav_2" />
+
+                <TextView
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_marginLeft="14.7dp"
+                    android:layout_weight="1"
+                    android:includeFontPadding="false"
+                    android:text="내가 찜한 사람"
                     android:textColor="@color/color_2c2c2c"
                     android:textSize="18dp"
                     android:textStyle="bold" />

@@ -51,6 +51,7 @@ public class MyPageAct extends BaseAct implements View.OnClickListener {
         binding.btnCharge.setOnClickListener(this);
 
         binding.menuLike.setOnClickListener(this);
+        binding.menuLikeOther.setOnClickListener(this);
         binding.menuPrefer.setOnClickListener(this);
         binding.menuTier.setOnClickListener(this);
         binding.menuCustomer.setOnClickListener(this);
@@ -174,8 +175,11 @@ public class MyPageAct extends BaseAct implements View.OnClickListener {
             case R.id.menu_prefer:
                 startActivity(new Intent(act, PreferAct.class));
                 break;
+            case R.id.menu_like_other:
+                startActivity(new Intent(act, LikeAct.class).putExtra("dbControl", NetUrls.LIKE_OTHER_LIST));
+                break;
             case R.id.menu_like:
-                startActivity(new Intent(act, LikeAct.class));
+                startActivity(new Intent(act, LikeAct.class).putExtra("dbControl", NetUrls.LIKED));
                 break;
             case R.id.menu_customer:
                 startActivity(new Intent(act, CustomerAct.class));

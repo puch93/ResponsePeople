@@ -17,6 +17,7 @@ import androidx.databinding.DataBindingUtil;
 import androidx.recyclerview.widget.GridLayoutManager;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
+import androidx.swiperefreshlayout.widget.SwipeRefreshLayout;
 
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -41,7 +42,7 @@ import kr.co.core.responsepeople.util.StringUtil;
 
 import static android.app.Activity.RESULT_OK;
 
-public class OnlineFrag extends BaseFrag implements View.OnClickListener {
+public class OnlineFrag extends BaseFrag implements SwipeRefreshLayout.OnRefreshListener {
     FragmentOnlineBinding binding;
     Activity act;
 
@@ -58,6 +59,8 @@ public class OnlineFrag extends BaseFrag implements View.OnClickListener {
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         binding = DataBindingUtil.inflate(inflater, R.layout.fragment_online, container, false);
         act = getActivity();
+
+        binding.refreshLayout.setOnRefreshListener(this);
 
         manager = new GridLayoutManager(act, 2);
         adapter = new MemberAdapter(act, this, list, new MemberAdapter.CustomClickListener() {
@@ -76,20 +79,20 @@ public class OnlineFrag extends BaseFrag implements View.OnClickListener {
         binding.recyclerView.setItemViewCacheSize(20);
         binding.recyclerView.setAdapter(adapter);
 
-//        binding.recyclerView.addOnScrollListener(new RecyclerView.OnScrollListener() {
-//            @Override
-//            public void onScrolled(@NonNull RecyclerView recyclerView, int dx, int dy) {
-//                super.onScrolled(recyclerView, dx, dy);
-//                int totalCount = manager.getItemCount();
-//                int lastItemPosition = manager.findLastCompletelyVisibleItemPosition();
-//                if (!isScroll) {
-//                    if (totalCount - 1 == lastItemPosition) {
-//                        ++page;
-//                        getOnlineMember();
-//                    }
-//                }
-//            }
-//        });
+        binding.recyclerView.addOnScrollListener(new RecyclerView.OnScrollListener() {
+            @Override
+            public void onScrolled(@NonNull RecyclerView recyclerView, int dx, int dy) {
+                super.onScrolled(recyclerView, dx, dy);
+                int totalCount = manager.getItemCount();
+                int lastItemPosition = manager.findLastCompletelyVisibleItemPosition();
+                if (!isScroll) {
+                    if (totalCount - 1 == lastItemPosition) {
+                        ++page;
+                        getOnlineMember();
+                    }
+                }
+            }
+        });
 
         binding.nestedScrollView.getViewTreeObserver().addOnScrollChangedListener(new ViewTreeObserver.OnScrollChangedListener() {
             @Override
@@ -169,6 +172,14 @@ public class OnlineFrag extends BaseFrag implements View.OnClickListener {
                             });
                             isScroll = false;
                         } else {
+                            if(page == 1) {
+                                act.runOnUiThread(new Runnable() {
+                                    @Override
+                                    public void run() {
+                                        adapter.setList(list);
+                                    }
+                                });
+                            }
                             isScroll = true;
                         }
 
@@ -181,6 +192,15 @@ public class OnlineFrag extends BaseFrag implements View.OnClickListener {
                     isScroll = false;
                     Common.showToastNetwork(act);
                 }
+
+                act.runOnUiThread(new Runnable() {
+                    @Override
+                    public void run() {
+                        if (binding.refreshLayout.isRefreshing()) {
+                            binding.refreshLayout.setRefreshing(false);
+                        }
+                    }
+                });
             }
         };
 
@@ -192,7 +212,9 @@ public class OnlineFrag extends BaseFrag implements View.OnClickListener {
     }
 
     @Override
-    public void onClick(View view) {
-
+    public void onRefresh() {
+        list = new ArrayList<>();
+        page = 1;
+        getOnlineMember();
     }
 }

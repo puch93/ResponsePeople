@@ -33,9 +33,9 @@ public class LoginAct extends BaseAct {
         act = this;
 
         binding.btnLogin.setOnClickListener(v -> {
-            if(binding.id.length() == 0) {
+            if (binding.id.length() == 0) {
                 Common.showToast(act, "아이디를 입력해주세요");
-            } else if(binding.password.length() == 0) {
+            } else if (binding.password.length() == 0) {
                 Common.showToast(act, "비밀번호를 입력해주세요");
             } else {
                 doLogin();
@@ -78,8 +78,7 @@ public class LoginAct extends BaseAct {
                             AppPreference.setProfilePref(act, AppPreference.PREF_AGE, StringUtil.calcAge(m_birth.substring(0, 4)));
                             AppPreference.setProfilePref(act, AppPreference.PREF_IMAGE, NetUrls.DOMAIN_ORIGIN + m_profile1);
 
-                            if (binding.ckAutoLogin.isChecked())
-                                AppPreference.setProfilePrefBool(act, AppPreference.AUTO_LOGIN, true);
+                            AppPreference.setProfilePrefBool(act, AppPreference.AUTO_LOGIN, true);
 
                             startActivity(new Intent(act, MainAct.class));
                             finish();
@@ -130,7 +129,7 @@ public class LoginAct extends BaseAct {
                                             break;
                                         // 평가 중인 경우
                                         case "rating":
-                                            if(cnt >= 5) {
+                                            if (cnt >= 5) {
                                                 startActivity(new Intent(act, EvaluationAfterAct.class));
                                             } else {
                                                 startActivity(new Intent(act, EvaluationBeforeAct.class));

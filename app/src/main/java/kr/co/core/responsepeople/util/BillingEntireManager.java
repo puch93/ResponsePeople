@@ -135,7 +135,7 @@ public class BillingEntireManager implements PurchasesUpdatedListener {
                 Log.d(TAG, "구글 결제 서버와 접속이 끊어졌습니다.");
                 manager_state = "N";
                 manager_state_message = "구글 결제 서버와 접속이 끊어졌습니다";
-                afterListener.sendMessage("구글 결제 서버와 접속이 끊어졌습니다", false);
+//                afterListener.sendMessage("구글 결제 서버와 접속이 끊어졌습니다", false);
             }
         });
 

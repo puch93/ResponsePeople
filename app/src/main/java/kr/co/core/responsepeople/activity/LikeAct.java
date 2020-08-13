@@ -9,6 +9,7 @@ import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.databinding.DataBindingUtil;
 import androidx.recyclerview.widget.GridLayoutManager;
+import androidx.swiperefreshlayout.widget.SwipeRefreshLayout;
 
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -35,6 +36,8 @@ public class LikeAct extends BaseAct {
     LikeAdapter adapter;
 
     int currentPos = -1;
+
+    String dbControl = "";
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -47,10 +50,24 @@ public class LikeAct extends BaseAct {
         binding.recyclerView.setItemViewCacheSize(20);
         binding.recyclerView.setAdapter(adapter);
 
+        dbControl = getIntent().getStringExtra("dbControl");
+
+        if(!dbControl.equalsIgnoreCase(NetUrls.LIKED)) {
+            binding.title.setText("내가 찜한 사람");
+            binding.titleSub.setText("내가 찜한 이성 ");
+        }
+
         getLikeList();
 
         binding.btnBack.setOnClickListener(v -> {
             finish();
+        });
+        binding.refreshLayout.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
+            @Override
+            public void onRefresh() {
+                list = new ArrayList<>();
+                getLikeList();
+            }
         });
     }
 
@@ -103,7 +120,7 @@ public class LikeAct extends BaseAct {
         };
 
         server.setTag("Like Member");
-        server.addParams("dbControl", NetUrls.LIKED);
+        server.addParams("dbControl", dbControl);
         server.addParams("m_idx", AppPreference.getProfilePref(act, AppPreference.PREF_MIDX));
         server.execute(true, false);
     }

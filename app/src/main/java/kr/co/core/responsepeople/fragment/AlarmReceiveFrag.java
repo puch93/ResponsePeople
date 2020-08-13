@@ -55,7 +55,6 @@ public class AlarmReceiveFrag extends BaseFrag {
         binding.recyclerView.setHasFixedSize(true);
         binding.recyclerView.setItemViewCacheSize(20);
 
-        getQuestionData();
         return binding.getRoot();
     }
 
@@ -75,6 +74,7 @@ public class AlarmReceiveFrag extends BaseFrag {
                 if (resultData.getResult() != null) {
                     try {
                         JSONObject jo = new JSONObject(resultData.getResult());
+                        LogUtil.logLarge(jo.toString());
 
                         if (StringUtil.getStr(jo, "result").equalsIgnoreCase("Y")) {
                             JSONArray ja = jo.getJSONArray("data");
@@ -110,21 +110,14 @@ public class AlarmReceiveFrag extends BaseFrag {
 
                             list = new ArrayList<>(hashMap.values());
                             LogUtil.logI(list.toString());
-
-                            act.runOnUiThread(new Runnable() {
-                                @Override
-                                public void run() {
-                                    adapter.setList(list);
-                                }
-                            });
-                        } else {
-                            act.runOnUiThread(new Runnable() {
-                                @Override
-                                public void run() {
-                                    adapter.setList(list);
-                                }
-                            });
                         }
+
+                        act.runOnUiThread(new Runnable() {
+                            @Override
+                            public void run() {
+                                adapter.setList(list);
+                            }
+                        });
 
                     } catch (JSONException e) {
                         e.printStackTrace();

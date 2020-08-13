@@ -46,15 +46,15 @@ public class Join03Frag extends BaseFrag {
         binding.btnNext.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-//                if (!isAuthSucceed) {
-//                    Common.showToast(act, "전화번호 인증을 먼저 진행해주세요");
-//                } else {
-//                    nextProcess();
-//                }
+                if (!isAuthSucceed) {
+                    Common.showToast(act, "전화번호 인증을 먼저 진행해주세요");
+                } else {
+                    nextProcess();
+                }
 
-                //TODO test
-                phoneNum = binding.phoneNum.getText().toString();
-                nextProcess();
+//                TODO test
+//                phoneNum = binding.phoneNum.getText().toString();
+//                nextProcess();
             }
         });
 

@@ -18,6 +18,7 @@ import androidx.constraintlayout.widget.ConstraintLayout;
 import androidx.databinding.DataBindingUtil;
 import androidx.recyclerview.widget.GridLayoutManager;
 import androidx.recyclerview.widget.LinearLayoutManager;
+import androidx.swiperefreshlayout.widget.SwipeRefreshLayout;
 
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -40,7 +41,7 @@ import kr.co.core.responsepeople.util.StringUtil;
 
 import static android.app.Activity.RESULT_OK;
 
-public class HomeFrag extends BaseFrag implements View.OnClickListener {
+public class HomeFrag extends BaseFrag implements SwipeRefreshLayout.OnRefreshListener {
     FragmentHomeBinding binding;
     Activity act;
 
@@ -56,6 +57,8 @@ public class HomeFrag extends BaseFrag implements View.OnClickListener {
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         binding = DataBindingUtil.inflate(inflater, R.layout.fragment_home, container, false);
         act = getActivity();
+
+        binding.refreshLayout.setOnRefreshListener(this);
 
         manager = new LinearLayoutManager(act);
         adapter = new HomeAdapter(act, this, list, new HomeAdapter.CurrentPosListener() {
@@ -253,6 +256,7 @@ public class HomeFrag extends BaseFrag implements View.OnClickListener {
     }
 
     private void getRecommendList() {
+        list = new ArrayList<>();
         ReqBasic server = new ReqBasic(act, NetUrls.DOMAIN) {
             @Override
             public void onAfter(int resultCode, HttpResult resultData) {
@@ -287,7 +291,12 @@ public class HomeFrag extends BaseFrag implements View.OnClickListener {
                                 }
                             });
                         } else {
-
+                            act.runOnUiThread(new Runnable() {
+                                @Override
+                                public void run() {
+                                    adapter.setList(list);
+                                }
+                            });
                         }
 
                     } catch (JSONException e) {
@@ -297,6 +306,16 @@ public class HomeFrag extends BaseFrag implements View.OnClickListener {
                 } else {
                     Common.showToastNetwork(act);
                 }
+
+
+                act.runOnUiThread(new Runnable() {
+                    @Override
+                    public void run() {
+                        if (binding.refreshLayout.isRefreshing()) {
+                            binding.refreshLayout.setRefreshing(false);
+                        }
+                    }
+                });
             }
         };
 
@@ -307,7 +326,7 @@ public class HomeFrag extends BaseFrag implements View.OnClickListener {
     }
 
     @Override
-    public void onClick(View view) {
-
+    public void onRefresh() {
+        getRecommendList();
     }
 }

@@ -2,6 +2,7 @@ package kr.co.core.responsepeople.fragment;
 
 import android.Manifest;
 import android.app.Activity;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.os.Build;
@@ -20,6 +21,7 @@ import kr.co.core.responsepeople.activity.BlockExplainAct;
 import kr.co.core.responsepeople.activity.TermAct;
 import kr.co.core.responsepeople.databinding.FragmentBlockExplanation01Binding;
 import kr.co.core.responsepeople.databinding.FragmentBlockExplanation03Binding;
+import kr.co.core.responsepeople.util.AppPreference;
 import kr.co.core.responsepeople.util.Common;
 
 public class BlockExplanation03Frag extends BaseFrag {
@@ -37,8 +39,7 @@ public class BlockExplanation03Frag extends BaseFrag {
             public void onClick(View view) {
                 if(binding.ckConfirm.isChecked()) {
                     if (checkPermission()) {
-                        startActivity(new Intent(act, BlockAct.class));
-                        act.finish();
+                        showAlert();
                     } else {
                         requestPermission();
                     }
@@ -81,6 +82,33 @@ public class BlockExplanation03Frag extends BaseFrag {
         }
     }
 
+    private void showAlert() {
+        androidx.appcompat.app.AlertDialog.Builder alertDialog = new androidx.appcompat.app.AlertDialog.Builder(act);
+
+        alertDialog.setCancelable(false);
+        alertDialog.setTitle("지인 만나지 않기");
+        alertDialog.setMessage("OK 버튼 클릭시 회원님의 연락처 정보를 가져옵니다. 동의하시겠습니까?");
+
+        // ok
+        alertDialog.setPositiveButton("OK",
+                new DialogInterface.OnClickListener() {
+                    public void onClick(DialogInterface dialog, int which) {
+                        startActivity(new Intent(act, BlockAct.class));
+                        act.finish();
+                        dialog.cancel();
+                    }
+                });
+        // cancel
+        alertDialog.setNegativeButton("CANCEL",
+                new DialogInterface.OnClickListener() {
+                    public void onClick(DialogInterface dialog, int which) {
+                        dialog.cancel();
+                    }
+                });
+        alertDialog.show();
+    }
+
+
     @Override
     public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
         super.onRequestPermissionsResult(requestCode, permissions, grantResults);
@@ -91,8 +119,7 @@ public class BlockExplanation03Frag extends BaseFrag {
                 act.finish();
                 Common.showToast(act, "다시 묻지 않음 을 선택한 경우, 설정 -> 애플리케이션(해당 앱) -> 앱 권한에서 승인 부탁드립니다");
             } else {
-                startActivity(new Intent(act, BlockAct.class));
-                act.finish();
+                showAlert();
             }
         }
     }

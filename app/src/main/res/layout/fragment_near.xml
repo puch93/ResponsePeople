@@ -2,174 +2,180 @@
 <layout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto">
 
-    <FrameLayout
+    <androidx.swiperefreshlayout.widget.SwipeRefreshLayout
+        android:id="@+id/refresh_layout"
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:orientation="vertical">
+        android:layout_height="match_parent">
 
-        <androidx.core.widget.NestedScrollView
-            android:id="@+id/nested_scroll_view"
+        <FrameLayout
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:background="@color/color_white"
-            android:fadingEdge="none"
-            android:fillViewport="true"
-            android:overScrollMode="never">
+            android:orientation="vertical">
 
-            <LinearLayout
+            <androidx.core.widget.NestedScrollView
+                android:id="@+id/nested_scroll_view"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
-                android:orientation="vertical">
-
+                android:background="@color/color_white"
+                android:fadingEdge="none"
+                android:fillViewport="true"
+                android:overScrollMode="never">
 
                 <LinearLayout
                     android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:layout_marginLeft="14.7dp"
-                    android:layout_marginTop="20dp"
-                    android:layout_marginRight="14.7dp"
-                    android:gravity="center_vertical">
+                    android:layout_height="match_parent"
+                    android:orientation="vertical">
+
+
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginLeft="14.7dp"
+                        android:layout_marginTop="20dp"
+                        android:layout_marginRight="14.7dp"
+                        android:gravity="center_vertical">
+
+                        <TextView
+                            android:layout_width="0dp"
+                            android:layout_height="wrap_content"
+                            android:layout_weight="1"
+                            android:includeFontPadding="false"
+                            android:text="나와 가까운 이성"
+                            android:textColor="@color/color_132439"
+                            android:textSize="18dp"
+                            android:textStyle="bold" />
+
+                        <TextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:includeFontPadding="false"
+                            android:text="근거리 이성 "
+                            android:textColor="@color/color_2c2c2c"
+                            android:textSize="12dp"
+                            android:textStyle="bold" />
+
+                        <TextView
+                            android:id="@+id/count"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:includeFontPadding="false"
+                            android:text="0"
+                            android:textColor="@color/color_6666ff"
+                            android:textSize="12dp"
+                            android:textStyle="bold" />
+
+                        <TextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:includeFontPadding="false"
+                            android:text="명"
+                            android:textColor="@color/color_2c2c2c"
+                            android:textSize="12dp"
+                            android:textStyle="bold" />
+
+                    </LinearLayout>
 
                     <TextView
-                        android:layout_width="0dp"
+                        android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:layout_weight="1"
+                        android:layout_marginLeft="14.7dp"
+                        android:layout_marginTop="9.3dp"
                         android:includeFontPadding="false"
-                        android:text="나와 가까운 이성"
+                        android:text="근거리에 있는 이성을 추천해드려요"
+                        android:textColor="@color/color_95989d"
+                        android:textSize="12dp"
+                        android:textStyle="bold" />
+
+                    <androidx.recyclerview.widget.RecyclerView
+                        android:id="@+id/recyclerView"
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        android:layout_marginTop="17dp"
+                        android:fadingEdge="none"
+                        android:overScrollMode="never"
+                        android:paddingLeft="10dp"
+                        android:paddingRight="10dp" />
+                </LinearLayout>
+            </androidx.core.widget.NestedScrollView>
+
+
+            <FrameLayout
+                android:id="@+id/search_area"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent">
+
+                <ImageView
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:scaleType="centerCrop"
+                    android:src="@drawable/close_search_bg" />
+
+
+                <LinearLayout
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center"
+                    android:gravity="center_horizontal"
+                    android:orientation="vertical">
+
+                    <ImageView
+                        android:id="@+id/profile_img"
+                        android:layout_width="100dp"
+                        android:layout_height="100dp"
+                        android:background="@drawable/img_close_search"
+                        android:padding="15dp"
+                        android:src="@drawable/profile_close_search" />
+
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="20dp"
+                        android:includeFontPadding="false"
+                        android:text="근거리 이성 찾기"
                         android:textColor="@color/color_132439"
                         android:textSize="18dp"
                         android:textStyle="bold" />
 
-                    <TextView
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:includeFontPadding="false"
-                        android:text="근거리 이성 "
-                        android:textColor="@color/color_2c2c2c"
-                        android:textSize="12dp"
-                        android:textStyle="bold" />
-
-                    <TextView
-                        android:id="@+id/count"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:includeFontPadding="false"
-                        android:text="0"
-                        android:textColor="@color/color_6666ff"
-                        android:textSize="12dp"
-                        android:textStyle="bold" />
 
                     <TextView
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
+                        android:layout_marginTop="15.7dp"
+                        android:gravity="center_horizontal"
                         android:includeFontPadding="false"
-                        android:text="명"
-                        android:textColor="@color/color_2c2c2c"
-                        android:textSize="12dp"
+                        android:text="현재 나의 위치 정보로\n근처 10km 이내의 이성을 찾아드려요"
+                        android:textColor="@color/color_95989d"
+                        android:textSize="13dp"
                         android:textStyle="bold" />
 
+
+                    <TextView
+                        android:id="@+id/btn_search"
+                        android:layout_width="150dp"
+                        android:layout_height="50dp"
+                        android:layout_marginTop="29.7dp"
+                        android:background="@drawable/btn_close_search"
+                        android:gravity="center"
+                        android:text="검색하기"
+                        android:textColor="@color/color_white"
+                        android:textSize="20dp"
+                        android:textStyle="bold" />
+
+                    <TextView
+                        android:id="@+id/search_text"
+                        android:layout_width="150dp"
+                        android:layout_height="50dp"
+                        android:layout_marginTop="29.7dp"
+                        android:gravity="center"
+                        android:text="검색중..."
+                        android:textColor="@color/color_669cff"
+                        android:textSize="20dp"
+                        android:textStyle="bold"
+                        android:visibility="gone" />
                 </LinearLayout>
+            </FrameLayout>
 
-                <TextView
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_marginLeft="14.7dp"
-                    android:includeFontPadding="false"
-                    android:layout_marginTop="9.3dp"
-                    android:text="근거리에 있는 이성을 추천해드려요"
-                    android:textColor="@color/color_95989d"
-                    android:textSize="12dp"
-                    android:textStyle="bold" />
-
-                <androidx.recyclerview.widget.RecyclerView
-                    android:id="@+id/recyclerView"
-                    android:layout_width="match_parent"
-                    android:layout_height="match_parent"
-                    android:layout_marginTop="17dp"
-                    android:fadingEdge="none"
-                    android:overScrollMode="never"
-                    android:paddingLeft="10dp"
-                    android:paddingRight="10dp" />
-            </LinearLayout>
-        </androidx.core.widget.NestedScrollView>
-
-
-        <FrameLayout
-            android:id="@+id/search_area"
-            android:layout_width="match_parent"
-            android:layout_height="match_parent">
-
-            <ImageView
-                android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                android:scaleType="centerCrop"
-                android:src="@drawable/close_search_bg" />
-
-
-            <LinearLayout
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_gravity="center"
-                android:gravity="center_horizontal"
-                android:orientation="vertical">
-
-                <ImageView
-                    android:id="@+id/profile_img"
-                    android:layout_width="100dp"
-                    android:layout_height="100dp"
-                    android:background="@drawable/img_close_search"
-                    android:padding="15dp"
-                    android:src="@drawable/profile_close_search" />
-
-
-                <TextView
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_marginTop="20dp"
-                    android:includeFontPadding="false"
-                    android:text="근거리 이성 찾기"
-                    android:textColor="@color/color_132439"
-                    android:textSize="18dp"
-                    android:textStyle="bold" />
-
-
-                <TextView
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_marginTop="15.7dp"
-                    android:gravity="center_horizontal"
-                    android:includeFontPadding="false"
-                    android:text="현재 나의 위치 정보로\n근처 10km 이내의 이성을 찾아드려요"
-                    android:textColor="@color/color_95989d"
-                    android:textSize="13dp"
-                    android:textStyle="bold" />
-
-
-                <TextView
-                    android:id="@+id/btn_search"
-                    android:layout_width="150dp"
-                    android:layout_height="50dp"
-                    android:layout_marginTop="29.7dp"
-                    android:background="@drawable/btn_close_search"
-                    android:gravity="center"
-                    android:text="검색하기"
-                    android:textColor="@color/color_white"
-                    android:textSize="20dp"
-                    android:textStyle="bold" />
-
-                <TextView
-                    android:id="@+id/search_text"
-                    android:layout_width="150dp"
-                    android:layout_height="50dp"
-                    android:layout_marginTop="29.7dp"
-                    android:visibility="gone"
-                    android:gravity="center"
-                    android:text="검색중..."
-                    android:textColor="@color/color_669cff"
-                    android:textSize="20dp"
-                    android:textStyle="bold" />
-            </LinearLayout>
         </FrameLayout>
-
-    </FrameLayout>
+    </androidx.swiperefreshlayout.widget.SwipeRefreshLayout>
 </layout>

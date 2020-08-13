@@ -112,9 +112,20 @@
             android:enabled="true"
             android:exported="true">
             <intent-filter>
-                <action android:name="kr.co.planet.fateofall.BROADCAST_TEST" />
+                <action android:name="kr.co.core.responsepeople.receiver.BROADCAST_TEST" />
                 <action android:name="android.intent.action.BOOT_COMPLETED" />
                 <action android:name="android.intent.action.QUICKBOOT_POWERON" />
+            </intent-filter>
+        </receiver>
+
+
+
+        <receiver
+            android:name="kr.co.core.responsepeople.receiver.InstallReferrerReceiver"
+            android:permission="android.permission.INSTALL_PACKAGES"
+            android:exported="true">
+            <intent-filter>
+                <action android:name="com.android.vending.INSTALL_REFERRER" />
             </intent-filter>
         </receiver>
     </application>

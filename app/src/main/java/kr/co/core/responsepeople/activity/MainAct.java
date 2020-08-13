@@ -1,5 +1,6 @@
 package kr.co.core.responsepeople.activity;
 
+import androidx.ads.identifier.AdvertisingIdClient;
 import androidx.databinding.DataBindingUtil;
 import androidx.fragment.app.FragmentManager;
 import androidx.fragment.app.FragmentTransaction;
@@ -7,8 +8,11 @@ import androidx.fragment.app.FragmentTransaction;
 import android.app.Activity;
 import android.app.AlarmManager;
 import android.app.PendingIntent;
+import android.content.ContentValues;
 import android.content.Context;
 import android.content.Intent;
+import android.icu.text.IDNA;
+import android.os.AsyncTask;
 import android.os.Build;
 import android.os.Bundle;
 import android.util.Log;
@@ -16,13 +20,24 @@ import android.view.View;
 
 import com.bumptech.glide.Glide;
 import com.bumptech.glide.load.resource.bitmap.CircleCrop;
+import com.google.android.gms.common.GooglePlayServicesNotAvailableException;
 
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import java.io.BufferedReader;
+import java.io.IOException;
+import java.io.InputStreamReader;
+import java.io.OutputStream;
+import java.io.OutputStreamWriter;
+import java.io.PrintWriter;
+import java.net.HttpURLConnection;
+import java.net.MalformedURLException;
+import java.net.URL;
 import java.util.ArrayList;
 import java.util.Calendar;
+import java.util.HashMap;
 
 import kr.co.core.responsepeople.R;
 import kr.co.core.responsepeople.databinding.ActivityMainBinding;
@@ -39,6 +54,8 @@ import kr.co.core.responsepeople.server.netUtil.NetUrls;
 import kr.co.core.responsepeople.util.AppPreference;
 import kr.co.core.responsepeople.util.BackPressCloseHandler;
 import kr.co.core.responsepeople.util.Common;
+import kr.co.core.responsepeople.util.LogUtil;
+import kr.co.core.responsepeople.util.RequestHttpURLConnection;
 import kr.co.core.responsepeople.util.StringUtil;
 
 public class MainAct extends BaseAct implements View.OnClickListener {

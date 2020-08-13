@@ -1,18 +1,23 @@
 package kr.co.core.responsepeople.fragment;
 
 import android.app.Activity;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Looper;
+import android.provider.Settings;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
+import androidx.appcompat.app.AlertDialog;
 import androidx.databinding.DataBindingUtil;
 import androidx.recyclerview.widget.GridLayoutManager;
+import androidx.recyclerview.widget.RecyclerView;
+import androidx.swiperefreshlayout.widget.SwipeRefreshLayout;
 
 import com.bumptech.glide.Glide;
 import com.bumptech.glide.load.resource.bitmap.CircleCrop;
@@ -55,12 +60,16 @@ public class NearFrag extends BaseFrag implements View.OnClickListener {
     private Timer timer = new Timer();
     int currentPos = -1;
 
+    private boolean isScroll = false;
+    private int page = 1;
+
     @Nullable
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         binding = DataBindingUtil.inflate(inflater, R.layout.fragment_near, container, false);
         act = getActivity();
 
+        binding.refreshLayout.setEnabled(false);
 
         Glide.with(act)
                 .load(AppPreference.getProfilePref(act, AppPreference.PREF_IMAGE))
@@ -84,6 +93,23 @@ public class NearFrag extends BaseFrag implements View.OnClickListener {
         binding.recyclerView.setHasFixedSize(true);
         binding.recyclerView.setItemViewCacheSize(20);
         binding.recyclerView.setAdapter(adapter);
+        binding.recyclerView.addOnScrollListener(new RecyclerView.OnScrollListener() {
+            @Override
+            public void onScrolled(@NonNull RecyclerView recyclerView, int dx, int dy) {
+                super.onScrolled(recyclerView, dx, dy);
+                int totalCount = manager.getItemCount();
+                int lastItemPosition = manager.findLastCompletelyVisibleItemPosition();
+                if (!isScroll) {
+                    if (totalCount - 1 == lastItemPosition) {
+                        ++page;
+                        getNearList();
+                    }
+                }
+            }
+        });
+
+
+
 
         binding.btnSearch.setOnClickListener(view -> {
             gpsInfo = new GpsInfo(act);
@@ -113,13 +139,40 @@ public class NearFrag extends BaseFrag implements View.OnClickListener {
                 act.runOnUiThread(new Runnable() {
                     @Override
                     public void run() {
-                        gpsInfo.showSettingsAlert();
+                        showSettingsAlert();
                     }
                 });
             }
         });
 
         return binding.getRoot();
+    }
+
+    public void showSettingsAlert(){
+        AlertDialog.Builder alertDialog = new AlertDialog.Builder(act);
+
+        alertDialog.setCancelable(false);
+        alertDialog.setTitle("GPS 사용유무");
+        alertDialog.setMessage("GPS가 연결되어 있지 않습니다. \n설정창으로 가시겠습니까?");
+
+        // OK 를 누르게 되면 설정창으로 이동합니다.
+        alertDialog.setPositiveButton("Settings",
+                new DialogInterface.OnClickListener() {
+                    public void onClick(DialogInterface dialog,int which) {
+                        dialog.cancel();
+                        Intent intent = new Intent(Settings.ACTION_LOCATION_SOURCE_SETTINGS);
+                        ((Activity)act).startActivityForResult(intent, 1002);
+                    }
+                });
+        // Cancle 하면 종료 합니다.
+        alertDialog.setNegativeButton("아니오",
+                new DialogInterface.OnClickListener() {
+                    public void onClick(DialogInterface dialog, int which) {
+                        dialog.cancel();
+                    }
+                });
+
+        alertDialog.show();
     }
 
     @Override
@@ -145,35 +198,28 @@ public class NearFrag extends BaseFrag implements View.OnClickListener {
                 new Handler(Looper.getMainLooper()).postDelayed(new Runnable() {
                     @Override
                     public void run() {
-                        binding.searchText.setText("검색중");
+                        binding.searchText.setText("검색중.");
                     }
                 }, 0);
 
                 new Handler(Looper.getMainLooper()).postDelayed(new Runnable() {
                     @Override
                     public void run() {
-                        binding.searchText.setText("검색중.");
+                        binding.searchText.setText("검색중..");
                     }
                 }, 400);
 
                 new Handler(Looper.getMainLooper()).postDelayed(new Runnable() {
                     @Override
                     public void run() {
-                        binding.searchText.setText("검색중..");
+                        binding.searchText.setText("검색중...");
                     }
                 }, 800);
 
                 new Handler(Looper.getMainLooper()).postDelayed(new Runnable() {
                     @Override
                     public void run() {
-                        binding.searchText.setText("검색중...");
-                    }
-                }, 1200);
-
-                new Handler(Looper.getMainLooper()).postDelayed(new Runnable() {
-                    @Override
-                    public void run() {
-                        binding.searchText.setText("검색중");
+                        binding.searchText.setText("검색중....");
                     }
                 }, 1200);
 
@@ -181,7 +227,17 @@ public class NearFrag extends BaseFrag implements View.OnClickListener {
                     @Override
                     public void run() {
                         binding.searchText.setText("검색중.");
+                    }
+                }, 1200);
+
+                new Handler(Looper.getMainLooper()).postDelayed(new Runnable() {
+                    @Override
+                    public void run() {
+                        binding.searchText.setText("검색중..");
                         binding.searchArea.setVisibility(View.GONE);
+
+                        binding.refreshLayout.setEnabled(true);
+                        binding.refreshLayout.setOnRefreshListener(listener);
                         timer.cancel();
                     }
                 }, 2000);
@@ -191,7 +247,17 @@ public class NearFrag extends BaseFrag implements View.OnClickListener {
         timer.schedule(adTask, 0, 2000);
     }
 
+    SwipeRefreshLayout.OnRefreshListener listener = new SwipeRefreshLayout.OnRefreshListener() {
+        @Override
+        public void onRefresh() {
+            list = new ArrayList<>();
+            page = 1;
+            getNearList();
+        }
+    };
+
     private void getNearList() {
+        isScroll = true;
         ReqBasic server = new ReqBasic(act, NetUrls.DOMAIN) {
             @Override
             public void onAfter(int resultCode, HttpResult resultData) {
@@ -227,17 +293,39 @@ public class NearFrag extends BaseFrag implements View.OnClickListener {
                                     adapter.setList(list);
                                 }
                             });
-                        } else {
 
+                            isScroll = false;
+                        } else {
+                            if(page == 1) {
+                                act.runOnUiThread(new Runnable() {
+                                    @Override
+                                    public void run() {
+                                        binding.count.setText("0");
+                                        adapter.setList(list);
+                                    }
+                                });
+                            }
+                            isScroll = true;
                         }
 
                     } catch (JSONException e) {
+                        isScroll = false;
                         e.printStackTrace();
                         Common.showToastNetwork(act);
                     }
                 } else {
+                    isScroll = false;
                     Common.showToastNetwork(act);
                 }
+
+                act.runOnUiThread(new Runnable() {
+                    @Override
+                    public void run() {
+                        if (binding.refreshLayout.isRefreshing()) {
+                            binding.refreshLayout.setRefreshing(false);
+                        }
+                    }
+                });
             }
         };
         server.setTag("Near List");
@@ -245,6 +333,7 @@ public class NearFrag extends BaseFrag implements View.OnClickListener {
         server.addParams("m_idx", AppPreference.getProfilePref(act, AppPreference.PREF_MIDX));
         server.addParams("m_x", AppPreference.getProfilePref(act, AppPreference.PREF_LAT));
         server.addParams("m_y", AppPreference.getProfilePref(act, AppPreference.PREF_LON));
+        server.addParams("pagenum", String.valueOf(page));
         server.execute(true, false);
     }
 

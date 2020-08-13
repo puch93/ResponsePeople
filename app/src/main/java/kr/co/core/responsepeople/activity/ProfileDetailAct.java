@@ -251,7 +251,7 @@ public class ProfileDetailAct extends BaseAct implements View.OnClickListener {
                                     binding.age.setText(StringUtil.calcAge(m_birth.substring(0, 4)));
                                     binding.jobTop.setText(m_job);
                                     binding.location.setText(m_location);
-
+                                    binding.height.setText(m_height);
                                     if(m_salary_result) {
                                         binding.salaryTop.setText(m_salary);
                                         binding.salary.setText(m_salary);

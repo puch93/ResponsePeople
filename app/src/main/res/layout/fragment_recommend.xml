@@ -2,66 +2,72 @@
 <layout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto">
 
-    <LinearLayout
+    <androidx.swiperefreshlayout.widget.SwipeRefreshLayout
+        android:id="@+id/refresh_layout"
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:orientation="vertical">
+        android:layout_height="match_parent">
 
-        <androidx.core.widget.NestedScrollView
-            android:id="@+id/nested_scroll_view"
+        <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:background="@color/color_white"
-            android:fadingEdge="none"
-            android:fillViewport="true"
-            android:overScrollMode="never">
+            android:orientation="vertical">
 
-            <LinearLayout
+            <androidx.core.widget.NestedScrollView
+                android:id="@+id/nested_scroll_view"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
-                android:orientation="vertical">
-
+                android:background="@color/color_white"
+                android:fadingEdge="none"
+                android:fillViewport="true"
+                android:overScrollMode="never">
 
                 <LinearLayout
                     android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:layout_marginLeft="14.7dp"
-                    android:layout_marginTop="20dp"
-                    android:layout_marginRight="14.7dp"
-                    android:gravity="center_vertical">
+                    android:layout_height="match_parent"
+                    android:orientation="vertical">
+
+
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginLeft="14.7dp"
+                        android:layout_marginTop="20dp"
+                        android:layout_marginRight="14.7dp"
+                        android:gravity="center_vertical">
+
+                        <TextView
+                            android:layout_width="0dp"
+                            android:layout_height="wrap_content"
+                            android:layout_weight="1"
+                            android:includeFontPadding="false"
+                            android:text="나와 잘 맞는 이성 추천"
+                            android:textColor="@color/color_132439"
+                            android:textSize="18dp"
+                            android:textStyle="bold" />
+                    </LinearLayout>
 
                     <TextView
-                        android:layout_width="0dp"
+                        android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:layout_weight="1"
+                        android:layout_marginLeft="14.7dp"
+                        android:layout_marginTop="9.3dp"
                         android:includeFontPadding="false"
-                        android:text="나와 잘 맞는 이성 추천"
-                        android:textColor="@color/color_132439"
-                        android:textSize="18dp"
+                        android:text="당신이 원하는 이상형을 찾아드려요"
+                        android:textColor="@color/color_95989d"
+                        android:textSize="12dp"
                         android:textStyle="bold" />
+
+                    <androidx.recyclerview.widget.RecyclerView
+                        android:id="@+id/recyclerView"
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        android:layout_marginTop="16.7dp"
+                        android:fadingEdge="none"
+                        android:overScrollMode="never"
+                        android:paddingLeft="10dp"
+                        android:paddingRight="10dp" />
                 </LinearLayout>
-
-                <TextView
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_marginLeft="14.7dp"
-                    android:includeFontPadding="false"
-                    android:layout_marginTop="9.3dp"
-                    android:text="당신이 원하는 이상형을 찾아드려요"
-                    android:textColor="@color/color_95989d"
-                    android:textSize="12dp"
-                    android:textStyle="bold" />
-
-                <androidx.recyclerview.widget.RecyclerView
-                    android:id="@+id/recyclerView"
-                    android:layout_width="match_parent"
-                    android:layout_height="match_parent"
-                    android:layout_marginTop="16.7dp"
-                    android:fadingEdge="none"
-                    android:overScrollMode="never"
-                    android:paddingLeft="10dp"
-                    android:paddingRight="10dp" />
-            </LinearLayout>
-        </androidx.core.widget.NestedScrollView>
-    </LinearLayout>
+            </androidx.core.widget.NestedScrollView>
+        </LinearLayout>
+    </androidx.swiperefreshlayout.widget.SwipeRefreshLayout>
 </layout>
