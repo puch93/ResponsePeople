@@ -7,17 +7,20 @@ import androidx.databinding.DataBindingUtil;
 import android.Manifest;
 import android.app.Activity;
 import android.content.Context;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.net.ConnectivityManager;
 import android.net.NetworkCapabilities;
 import android.net.NetworkInfo;
+import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Looper;
 import android.provider.Settings;
 import android.util.Log;
+import android.view.ContextThemeWrapper;
 import android.view.WindowManager;
 
 import com.bumptech.glide.Glide;
@@ -68,6 +71,13 @@ public class SplashAct extends BaseAct {
                 .load(R.raw.splash_gif_1440)
                 .into(binding.splash);
 
+        // get device version
+        try {
+            device_version = getPackageManager().getPackageInfo(getPackageName(), 0).versionName;
+        } catch (PackageManager.NameNotFoundException e) {
+            e.printStackTrace();
+        }
+
         // get fcm token
         getFcmToken();
 
@@ -76,9 +86,68 @@ public class SplashAct extends BaseAct {
         new Handler().postDelayed(new Runnable() {
             @Override
             public void run() {
-                startProgram();
+                checkVersion();
             }
         }, 1500);
+    }
+
+    private void checkVersion() {
+        ReqBasic server = new ReqBasic(this, NetUrls.DOMAIN) {
+            @Override
+            public void onAfter(int resultCode, HttpResult resultData) {
+                final String res = resultData.getResult();
+
+                runOnUiThread(new Runnable() {
+                    @Override
+                    public void run() {
+                        try {
+                            if (!StringUtil.isNull(res)) {
+                                JSONObject jo = new JSONObject(res);
+
+                                String[] version = StringUtil.getStr(jo, "MEMCODE").split("\\.");
+                                String[] version_me = device_version.split("\\.");
+
+                                for (int i = 0; i < 3; i++) {
+                                    int tmp1 = Integer.parseInt(version[i]);
+                                    int tmp2 = Integer.parseInt(version_me[i]);
+
+                                    if (tmp2 < tmp1) {
+                                        android.app.AlertDialog.Builder alertDialogBuilder =
+                                                new android.app.AlertDialog.Builder(new ContextThemeWrapper(act, android.R.style.Theme_DeviceDefault_Light_Dialog_Alert));
+                                        alertDialogBuilder.setTitle("업데이트");
+                                        alertDialogBuilder.setMessage("새로운 버전이 있습니다.")
+                                                .setPositiveButton("업데이트 바로가기", new DialogInterface.OnClickListener() {
+                                                    @Override
+                                                    public void onClick(DialogInterface dialogInterface, int i) {
+                                                        Intent intent = new Intent(Intent.ACTION_VIEW);
+                                                        intent.setData(Uri.parse("https://play.google.com/store/apps/details?id=kr.co.core.responsepeople"));
+                                                        startActivity(intent);
+                                                        finish();
+                                                    }
+                                                });
+                                        android.app.AlertDialog alertDialog = alertDialogBuilder.create();
+                                        alertDialog.setCanceledOnTouchOutside(false);
+                                        alertDialog.show();
+
+                                        return;
+                                    }
+                                }
+
+                                startProgram();
+                            } else {
+                                startProgram();
+                            }
+                        } catch (JSONException e) {
+                            e.printStackTrace();
+                        }
+                    }
+                });
+            }
+        };
+        server.setTag("Version Check");
+        server.addParams("dbControl", NetUrls.VERSION);
+        server.addParams("thisVer", NetUrls.VERSION);
+        server.execute(true, false);
     }
 
     //로딩중 텍스트 애니메이션

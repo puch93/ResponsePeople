@@ -1,7 +1,7 @@
 package kr.co.core.responsepeople.util;
 
 public class ChatValues {
-    public static final String SOCKET_URL = "http://qnating.adamstore.co.kr:1457";
+    public static final String SOCKET_URL = "https://qnating.adamstore.co.kr:1457";
 
 //    public static final String TYPE = "type";
 //    public static final String SITEIDX = "site_idx";
@@ -19,17 +19,13 @@ public class ChatValues {
 //    //채팅타입
     public static final String MSG_DATELINE = "dateline";
 
-
-
-
-
-    public static final String MSG_TYPE_SYSTEM_NOTI = "system_noti";
-    public static final String MSG_TYPE_INPUT = "input";
-    public static final String MSG_TYPE_OUTPUT = "out";
-    public static final String ROOMENTER = "RoomEnter";
-    public static final String ROOMOUT = "RoomOut";
-    public static final String SETCHAT = "setChat";
-    public static final String GETCHAT = "getChat";
+//    public static final String MSG_TYPE_SYSTEM_NOTI = "system_noti";
+//    public static final String MSG_TYPE_INPUT = "input";
+//    public static final String MSG_TYPE_OUTPUT = "out";
+//    public static final String ROOMENTER = "RoomEnter";
+//    public static final String ROOMOUT = "RoomOut";
+//    public static final String SETCHAT = "setChat";
+//    public static final String GETCHAT = "getChat";
 
     public static final String GETCHATS = "getChats";
     public static final String READADD = "readadd";

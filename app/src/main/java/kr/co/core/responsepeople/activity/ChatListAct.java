@@ -6,6 +6,7 @@ import androidx.recyclerview.widget.LinearLayoutManager;
 
 import android.app.Activity;
 import android.os.Bundle;
+import android.util.Log;
 
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -84,6 +85,11 @@ public class ChatListAct extends BaseAct {
                                     String send_date = StringUtil.getStr(job_chat, "c_regdate");
                                     SimpleDateFormat format = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
                                     send_date = Common.formatImeString(format.parse(send_date), act);
+
+                                    if (Common.isImage(contents)) {
+                                        contents = "이미지";
+                                    }
+
 
                                     // job
                                     String unread_count = StringUtil.getStr(job, "notreadcount");
