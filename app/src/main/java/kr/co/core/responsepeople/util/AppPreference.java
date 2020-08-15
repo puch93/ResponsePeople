@@ -30,8 +30,11 @@ public class AppPreference {
     public static final String AUTO_LOGIN = "auto_login"; // 자동로그인
 
     public static final String PREF_SET_CHAT = "chat"; // 채팅푸시
-    public static final String PREF_SET_LIKE = ""; // 좋아요푸시
-    public static final String PREF_SET_QUESTION = ""; // 질문지푸시
+    public static final String PREF_SET_LIKE = "like"; // 좋아요푸시
+    public static final String PREF_SET_QUESTION = "question"; // 질문지푸시
+
+
+    public static final String PREF_FIRST_RUNNING = "first"; // 앱 첫 실행 체크
 
 
 
@@ -61,7 +64,7 @@ public class AppPreference {
     }
     public static boolean getProfilePrefBool(Context context, String key) {
         SharedPreferences pref = context.getSharedPreferences("profile", context.MODE_PRIVATE);
-        if(key.equalsIgnoreCase(PREF_SET_CHAT) || key.equalsIgnoreCase(PREF_SET_LIKE) || key.equalsIgnoreCase(PREF_SET_QUESTION))
+        if(key.equalsIgnoreCase(PREF_SET_CHAT) || key.equalsIgnoreCase(PREF_SET_LIKE) || key.equalsIgnoreCase(PREF_SET_QUESTION) || key.equalsIgnoreCase(PREF_FIRST_RUNNING))
             return pref.getBoolean(key, true);
         else
             return pref.getBoolean(key, false);
