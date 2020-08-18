@@ -11,7 +11,7 @@ import kr.co.core.responsepeople.R;
 import kr.co.core.responsepeople.databinding.ActivityBlockExplainBinding;
 import kr.co.core.responsepeople.databinding.ActivityBlockPermissionBinding;
 
-public class BlockPermissionAct extends AppCompatActivity {
+public class BlockPermissionAct extends BaseAct {
     ActivityBlockPermissionBinding binding;
 
     @Override

@@ -13,11 +13,13 @@ import android.widget.NumberPicker;
 import java.util.ArrayList;
 
 import kr.co.core.responsepeople.R;
+import kr.co.core.responsepeople.activity.BaseAct;
 import kr.co.core.responsepeople.databinding.DialogProfileSimpleBinding;
 import kr.co.core.responsepeople.util.Common;
 import kr.co.core.responsepeople.util.StringUtil;
 
-public class ProfileSimpleDlg extends AppCompatActivity {
+public class ProfileSimpleDlg extends BaseAct {
+
     DialogProfileSimpleBinding binding;
     Activity act;
 

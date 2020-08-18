@@ -5,6 +5,7 @@ import androidx.appcompat.app.AppCompatActivity;
 import android.app.Activity;
 import android.content.DialogInterface;
 import android.os.Bundle;
+import android.view.WindowManager;
 
 import kr.co.core.responsepeople.server.inter.OnAfterConnection;
 
@@ -13,7 +14,7 @@ public class BaseAct extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-
+        getWindow().addFlags(WindowManager.LayoutParams.FLAG_SECURE);
     }
 
     public interface OnAlertAfter {

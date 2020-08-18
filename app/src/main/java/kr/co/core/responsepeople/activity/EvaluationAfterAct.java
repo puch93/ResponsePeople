@@ -318,7 +318,8 @@ public class EvaluationAfterAct extends BaseAct {
                             }
 
                             if (!StringUtil.isNull(AppPreference.getProfilePref(act, AppPreference.PREF_ZZAL))) {
-                                String url = "https://api-test.zzal.funple.com/advertising/offerwall/complete/action";
+//                                String url = "https://api-test.zzal.funple.com/advertising/offerwall/complete/action";
+                                String url = "https://api.zzal.funple.com/advertising/offerwall/complete/action";
                                 ContentValues values = new ContentValues();
                                 values.put("advertiseID", "b978797cfb5340a3a6e203407a190a16");
                                 values.put("participateID", AppPreference.getProfilePref(act, AppPreference.PREF_ZZAL));

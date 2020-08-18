@@ -24,7 +24,7 @@ import kr.co.core.responsepeople.server.netUtil.NetUrls;
 import kr.co.core.responsepeople.util.Common;
 import kr.co.core.responsepeople.util.StringUtil;
 
-public class NoticeAct extends AppCompatActivity {
+public class NoticeAct extends BaseAct {
     ActivityNoticeBinding binding;
     Activity act;
 

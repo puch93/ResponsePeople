@@ -11,11 +11,12 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.databinding.DataBindingUtil;
 
 import kr.co.core.responsepeople.R;
+import kr.co.core.responsepeople.activity.BaseAct;
 import kr.co.core.responsepeople.databinding.DialogGalleryBinding;
 import kr.co.core.responsepeople.databinding.DialogProfileSimpleBinding;
 import kr.co.core.responsepeople.util.StringUtil;
 
-public class GalleryDlg extends AppCompatActivity {
+public class GalleryDlg extends BaseAct {
     DialogGalleryBinding binding;
     Activity act;
 
