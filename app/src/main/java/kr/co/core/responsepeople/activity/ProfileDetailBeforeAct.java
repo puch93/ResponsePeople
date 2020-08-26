@@ -136,8 +136,8 @@ public class ProfileDetailBeforeAct extends BaseAct implements View.OnClickListe
                             JSONObject job = ja.getJSONObject(0);
 
                             for (int i = 1; i < 7; i++) {
-                                if (!StringUtil.isNull(StringUtil.getStr(job, "m_profile" + i))) {
-                                    list_image.add(new ImageData(StringUtil.getStr(job, "m_profile" + i), StringUtil.getStr(job, "m_profile"+ i +"_result").equalsIgnoreCase("Y")));
+                                if (!StringUtil.isNull(StringUtil.getStr(job, "m_before_profile" + i))) {
+                                    list_image.add(new ImageData(StringUtil.getStr(job, "m_before_profile" + i), true));
                                 } else {
                                     if(i == 1) {
                                         list_image.add(new ImageData("", true));

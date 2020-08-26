@@ -33,10 +33,7 @@ public class AppPreference {
     public static final String PREF_SET_LIKE = "like"; // 좋아요푸시
     public static final String PREF_SET_QUESTION = "question"; // 질문지푸시
 
-
     public static final String PREF_FIRST_RUNNING = "first"; // 앱 첫 실행 체크
-
-
 
     public static final String PREF_ZZAL = "zzal";
 

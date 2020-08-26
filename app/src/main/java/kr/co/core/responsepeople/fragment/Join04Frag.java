@@ -10,6 +10,7 @@ import android.graphics.drawable.ColorDrawable;
 import android.media.MediaScannerConnection;
 import android.net.Uri;
 import android.os.Bundle;
+import android.os.Environment;
 import android.os.Handler;
 import android.text.Editable;
 import android.text.TextWatcher;
@@ -40,9 +41,13 @@ import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import java.io.BufferedInputStream;
 import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
+import java.io.IOException;
+import java.net.URL;
+import java.net.URLConnection;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.regex.Matcher;
@@ -59,6 +64,7 @@ import kr.co.core.responsepeople.adapter.EtcAdapter;
 import kr.co.core.responsepeople.adapter.EtcProfileAdapter;
 import kr.co.core.responsepeople.adapter.ImageAdapter;
 import kr.co.core.responsepeople.data.EtcData;
+import kr.co.core.responsepeople.data.ImageEditData;
 import kr.co.core.responsepeople.databinding.FragmentJoin03Binding;
 import kr.co.core.responsepeople.databinding.FragmentJoin04Binding;
 import kr.co.core.responsepeople.dialog.ProfileBirthDlg;
@@ -81,7 +87,7 @@ public class Join04Frag extends BaseFrag implements View.OnClickListener {
     public static Fragment frag;
 
     // image
-    private ArrayList<String> images = new ArrayList<>();
+    private ArrayList<ImageEditData> images = new ArrayList<>();
     private ImageAdapter adapter;
     private Uri photoUri;
     private String mImgFilePath;
@@ -130,20 +136,32 @@ public class Join04Frag extends BaseFrag implements View.OnClickListener {
         act.runOnUiThread(new Runnable() {
             @Override
             public void run() {
-                binding.nestedScrollView.scrollTo(0,0);
+                binding.nestedScrollView.scrollTo(0, 0);
                 binding.imageFailText.setVisibility(View.VISIBLE);
                 binding.btnNext.setOnClickListener(view -> {
                     // 프로필 사진 재검수 요청
                     if (images.size() < 4) {
                         Common.showToast(act, "이미지를 3장이상 등록해주세요");
                     } else {
-                        doRequestCheck();
+                        boolean isOk = true;
+                        for (int i = 1; i < images.size(); i++) {
+                            if (!StringUtil.isNull(images.get(i).getImageState()) &&
+                                    (images.get(i).getImageState().equalsIgnoreCase("N") || images.get(i).getImageState().equalsIgnoreCase("F"))) {
+                                isOk = false;
+                                break;
+                            }
+                        }
+
+                        if (isOk) {
+                            doRequestCheck();
+                        } else {
+                            Common.showToast(act, "불합격된 사진이 있습니다. 사진을 삭제후 다른사진으로 등록해주세요.");
+                        }
                     }
                 });
 
                 images = new ArrayList<>();
                 images.add(null);
-                adapter.setList(images);
 
                 binding.nick.setClickable(false);
                 binding.nick.setEnabled(false);
@@ -178,15 +196,11 @@ public class Join04Frag extends BaseFrag implements View.OnClickListener {
                 binding.checkImgSmoke.setSelected(true);
                 binding.checkImgReligion.setSelected(true);
                 binding.checkImgSalary.setSelected(true);
-
-                // 재검수 요청일때
-                if (images.size() < 4) {
-                    binding.btnNext.setSelected(false);
-                } else {
-                    binding.btnNext.setSelected(true);
-                }
             }
         });
+
+
+        setFromLoginLayout();
     }
 
 
@@ -259,7 +273,6 @@ public class Join04Frag extends BaseFrag implements View.OnClickListener {
             setFromLoginLayout();
         } else if (fromType.equalsIgnoreCase("image_fail")) {
             imageFailed();
-            setFromLoginLayout();
         }
 
         return binding.getRoot();
@@ -333,16 +346,76 @@ public class Join04Frag extends BaseFrag implements View.OnClickListener {
         server.setTag("Request ReCheck");
         server.addParams("dbControl", NetUrls.REQUEST_CHECK);
         server.addParams("m_idx", AppPreference.getProfilePref(act, AppPreference.PREF_MIDX));
-        // 파일
-        ArrayList<String> list_image = adapter.getList();
-        for (int i = 1; i < list_image.size(); i++) {
-            String filePath = list_image.get(i);
-            File file = new File(filePath);
-            server.addFileParams("m_profile" + i, file);
-            server.addParams("m_profile" + i + "ck", "Y");
-        }
-        server.execute(true, false);
+
+        new Thread() {
+            @Override
+            public void run() {
+                super.run();
+
+                // 파일
+                ArrayList<ImageEditData> list_image = adapter.getList();
+                Log.i(StringUtil.TAG, "doRequestCheck: " + list_image);
+                for (int i = 1; i < list_image.size(); i++) {
+                    File file = null;
+
+                    if (list_image.get(i).getImageUrl().contains("http")) {
+                        file = downloadImage(list_image.get(i).getImageUrl());
+                        Log.i(StringUtil.TAG, "file name" + i + ": " + file.getName());
+                    } else {
+                        file = new File(list_image.get(i).getImageUrl());
+                    }
+
+                    server.addFileParams("m_profile" + i, file);
+                    server.addParams("m_profile" + i + "ck", "Y");
+                }
+                server.execute(true, false);
+            }
+        }.start();
     }
+
+    public File downloadImage(String imgUrl) {
+        Bitmap img = null;
+        File f = null;
+        Log.e(StringUtil.TAG, "imgUrl: " + imgUrl);
+
+        try {
+            f = createImageFile();
+            URL url = new URL(imgUrl);
+            URLConnection conn = url.openConnection();
+
+            int nSize = conn.getContentLength();
+            BufferedInputStream bis = new BufferedInputStream(conn.getInputStream(), nSize);
+            img = BitmapFactory.decodeStream(bis);
+
+            bis.close();
+
+            FileOutputStream out = new FileOutputStream(f);
+            img.compress(Bitmap.CompressFormat.PNG, 100, out);
+            out.close();
+
+            img.recycle();
+
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+
+        return f;
+    }
+
+    private File createImageFile() throws IOException {
+//        String timeStamp = new SimpleDateFormat("HHmmss").format(new Date());
+//        String imageFileName = "thefiven" + timeStamp;
+        String imageFileName = String.valueOf(System.currentTimeMillis());
+
+        File storageDir = new File(Environment.getExternalStorageDirectory().getAbsolutePath() + "/RESPONSEPEOPLE");
+
+        if (!storageDir.exists()) {
+            storageDir.mkdirs();
+        }
+
+        return File.createTempFile(imageFileName, ".png", storageDir);
+    }
+
 
     private void setProgressDialogShow() {
         if (progressDialog != null && !progressDialog.isShowing())
@@ -360,13 +433,20 @@ public class Join04Frag extends BaseFrag implements View.OnClickListener {
             JSONArray ja = jo.getJSONArray("data");
             JSONObject job = ja.getJSONObject(0);
 
-            if (fromType.equalsIgnoreCase("image")) {
-                for (int i = 1; i < 7; i++) {
-                    if (!StringUtil.isNull(StringUtil.getStr(job, "m_profile" + i))) {
-                        images.add(NetUrls.DOMAIN_ORIGIN + StringUtil.getStr(job, "m_profile" + i));
-                    } else {
-                        break;
-                    }
+//            if (fromType.equalsIgnoreCase("image")) {
+//                for (int i = 1; i < 7; i++) {
+//                    if (!StringUtil.isNull(StringUtil.getStr(job, "m_profile" + i))) {
+//                        images.add(new ImageEditData(NetUrls.DOMAIN_ORIGIN + StringUtil.getStr(job, "m_profile" + i), StringUtil.getStr(job, "m_profile" + i + "_result")));
+//                    } else {
+//                        break;
+//                    }
+//                }
+//            }
+            for (int i = 1; i < 7; i++) {
+                if (!StringUtil.isNull(StringUtil.getStr(job, "m_profile" + i))) {
+                    images.add(new ImageEditData(NetUrls.DOMAIN_ORIGIN + StringUtil.getStr(job, "m_profile" + i), StringUtil.getStr(job, "m_profile" + i + "_result")));
+                } else {
+                    break;
                 }
             }
 
@@ -383,14 +463,17 @@ public class Join04Frag extends BaseFrag implements View.OnClickListener {
             String m_salary = StringUtil.getStr(job, "m_salary");
             String m_intro = StringUtil.getStr(job, "m_intro");
 
+            list_charm = new ArrayList<>();
             for (String contents : StringUtil.getStr(job, "m_charm").split(",")) {
                 list_charm.add(new EtcData(contents, false));
             }
 
+            list_interest = new ArrayList<>();
             for (String contents : StringUtil.getStr(job, "m_interest").split(",")) {
                 list_interest.add(new EtcData(contents, false));
             }
 
+            list_ideal = new ArrayList<>();
             for (String contents : StringUtil.getStr(job, "m_ideal").split(",")) {
                 list_ideal.add(new EtcData(contents, false));
             }
@@ -398,8 +481,10 @@ public class Join04Frag extends BaseFrag implements View.OnClickListener {
             act.runOnUiThread(new Runnable() {
                 @Override
                 public void run() {
-                    if (fromType.equalsIgnoreCase("image"))
-                        adapter.setList(images);
+//                    if (fromType.equalsIgnoreCase("image"))
+//                        adapter.setList(images);
+
+                    adapter.setList(images);
 
                     binding.nick.setText(m_nick);
                     binding.location.setText(m_location);
@@ -417,6 +502,13 @@ public class Join04Frag extends BaseFrag implements View.OnClickListener {
                     adapter_charm.setList(list_charm);
                     adapter_interest.setList(list_interest);
                     adapter_ideal.setList(list_ideal);
+
+                    // 재검수 요청일때
+                    if (images.size() < 4) {
+                        binding.btnNext.setSelected(false);
+                    } else {
+                        binding.btnNext.setSelected(true);
+                    }
                 }
             });
         } catch (JSONException e) {
@@ -438,12 +530,13 @@ public class Join04Frag extends BaseFrag implements View.OnClickListener {
                             JSONObject job = ja.getJSONObject(0);
 
                             MemberUtil.setJoinProcess(act, StringUtil.getStr(job, "m_id"), StringUtil.getStr(job, "m_pass"));
+                            AppPreference.setProfilePref(act, AppPreference.PREF_MIDX, StringUtil.getStr(job, "m_idx"));
 
-                            if(LoginAct.act != null) {
+                            if (LoginAct.act != null) {
                                 LoginAct.act.finish();
                             }
                         } else {
-                            Common.showToast(act, "message");
+                            Common.showToast(act, StringUtil.getStr(jo, "message"));
                         }
 
                     } catch (JSONException e) {
@@ -750,7 +843,12 @@ public class Join04Frag extends BaseFrag implements View.OnClickListener {
         JoinAct.joinData.setSalary_file(salary_file);
 
         // 이미지 파일
-        JoinAct.joinData.setImages(adapter.getList());
+        ArrayList<String> send_images = new ArrayList<>();
+        send_images.add(null);
+        for (int i = 1; i < adapter.getList().size(); i++) {
+            send_images.add(adapter.getList().get(i).getImageUrl());
+        }
+        JoinAct.joinData.setImages(send_images);
 
         Log.i(StringUtil.TAG, "joinData: " + JoinAct.joinData);
 
@@ -882,7 +980,7 @@ public class Join04Frag extends BaseFrag implements View.OnClickListener {
                             Common.showToast(act, "파일 용량이 초과되었습니다. 다른사진을 선택해주세요");
                         } else {
                             // 사진 추가
-                            images.add(mImgFilePath);
+                            images.add(new ImageEditData(mImgFilePath, ""));
                             act.runOnUiThread(new Runnable() {
                                 @Override
                                 public void run() {

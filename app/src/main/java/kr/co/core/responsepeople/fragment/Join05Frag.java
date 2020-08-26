@@ -150,7 +150,6 @@ public class Join05Frag extends BaseFrag implements View.OnClickListener {
 
             @Override
             public void onStartTrackingTouch(RangeSeekBar view, boolean isLeft) {
-
             }
 
             @Override

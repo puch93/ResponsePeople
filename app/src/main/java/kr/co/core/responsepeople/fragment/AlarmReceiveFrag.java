@@ -93,17 +93,16 @@ public class AlarmReceiveFrag extends BaseFrag {
 
                                 String m_age = StringUtil.calcAge(StringUtil.getStr(job, "m_birth").substring(0, 4));
                                 String m_nick = StringUtil.getStr(job, "m_nick");
-                                String m_profile1 = StringUtil.getStr(job, "m_profile1");
-                                boolean m_profile1_result = StringUtil.getStr(job, "m_profile1_result").equalsIgnoreCase("Y");
+                                String m_before_profile1 = StringUtil.getStr(job, "m_before_profile1");
 
                                 if (hashMap.containsKey(q_m_idx)) {
                                     ArrayList<QuestionReceivedData> tmp_list = hashMap.get(q_m_idx);
-                                    tmp_list.add(new QuestionReceivedData(q_idx, q_m_idx, q_question, q_sheet, q_answer, q_regdate, qh_idx, qh_answer, qh_regdate, m_nick, m_age, m_profile1, m_profile1_result));
+                                    tmp_list.add(new QuestionReceivedData(q_idx, q_m_idx, q_question, q_sheet, q_answer, q_regdate, qh_idx, qh_answer, qh_regdate, m_nick, m_age, m_before_profile1, true));
                                     hashMap.put(q_m_idx, tmp_list);
                                     LogUtil.logI(list.toString());
                                 } else {
                                     ArrayList<QuestionReceivedData> tmp_list = new ArrayList<>();
-                                    tmp_list.add(new QuestionReceivedData(q_idx, q_m_idx, q_question, q_sheet, q_answer, q_regdate, qh_idx, qh_answer, qh_regdate, m_nick, m_age, m_profile1, m_profile1_result));
+                                    tmp_list.add(new QuestionReceivedData(q_idx, q_m_idx, q_question, q_sheet, q_answer, q_regdate, qh_idx, qh_answer, qh_regdate, m_nick, m_age, m_before_profile1, true));
                                     hashMap.put(q_m_idx, tmp_list);
                                 }
                             }

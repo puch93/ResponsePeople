@@ -205,19 +205,23 @@ public class Common {
                     .load(R.drawable.noimg_sexless)
                     .into(imageView);
         } else {
-            // 사진 값이 있을 때
-            if (!isPass) {
-                // 검수중일때
-                Glide.with(ctx)
-                        .load(NetUrls.DOMAIN_ORIGIN + profile_img)
-                        .transform(new BlurTransformation(radius, sampling), new CenterCrop())
-                        .into(imageView);
-            } else {
-                //검수완료일때
-                Glide.with(ctx)
-                        .load(NetUrls.DOMAIN_ORIGIN + profile_img)
-                        .into(imageView);
-            }
+//            // 사진 값이 있을 때
+//            if (!isPass) {
+//                // 검수중일때
+//                Glide.with(ctx)
+//                        .load(NetUrls.DOMAIN_ORIGIN + profile_img)
+//                        .transform(new BlurTransformation(radius, sampling), new CenterCrop())
+//                        .into(imageView);
+//            } else {
+//                //검수완료일때
+//                Glide.with(ctx)
+//                        .load(NetUrls.DOMAIN_ORIGIN + profile_img)
+//                        .into(imageView);
+//            }
+
+            Glide.with(ctx)
+                    .load(NetUrls.DOMAIN_ORIGIN + profile_img)
+                    .into(imageView);
         }
     }
 
@@ -231,20 +235,25 @@ public class Common {
                     .transform(new CircleCrop())
                     .into(imageView);
         } else {
-            // 사진 값이 있을 때
-            if (!isPass) {
-                // 검수중일때
-                Glide.with(ctx)
-                        .load(NetUrls.DOMAIN_ORIGIN + profile_img)
-                        .transform(new BlurTransformation(radius, sampling), new CircleCrop(), new CenterCrop())
-                        .into(imageView);
-            } else {
-                //검수완료일때
-                Glide.with(ctx)
-                        .load(NetUrls.DOMAIN_ORIGIN + profile_img)
-                        .transform(new CircleCrop())
-                        .into(imageView);
-            }
+//            // 사진 값이 있을 때
+//            if (!isPass) {
+//                // 검수중일때
+//                Glide.with(ctx)
+//                        .load(NetUrls.DOMAIN_ORIGIN + profile_img)
+//                        .transform(new BlurTransformation(radius, sampling), new CircleCrop(), new CenterCrop())
+//                        .into(imageView);
+//            } else {
+//                //검수완료일때
+//                Glide.with(ctx)
+//                        .load(NetUrls.DOMAIN_ORIGIN + profile_img)
+//                        .transform(new CircleCrop())
+//                        .into(imageView);
+//            }
+
+            Glide.with(ctx)
+                    .load(NetUrls.DOMAIN_ORIGIN + profile_img)
+                    .transform(new CircleCrop())
+                    .into(imageView);
         }
     }
 

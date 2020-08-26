@@ -140,7 +140,9 @@ public class ResponseFrag extends BaseFrag implements SwipeRefreshLayout.OnRefre
                                 String m_job = StringUtil.getStr(job, "m_job");
                                 String m_location = StringUtil.getStr(job, "m_location");
                                 String m_salary = StringUtil.getStr(job, "m_salary");
-                                String m_profile1 = StringUtil.getStr(job, "m_profile1");
+                                String m_before_profile1 = StringUtil.getStr(job, "m_before_profile1");
+
+
                                 int total_cnt = StringUtil.getInt(job, "total_cnt");
                                 int complet_cnt = StringUtil.getInt(job, "complet_cnt");
                                 int matching_cnt = StringUtil.getInt(job, "matching_cnt");
@@ -151,7 +153,7 @@ public class ResponseFrag extends BaseFrag implements SwipeRefreshLayout.OnRefre
                                 boolean m_profile_result = StringUtil.getStr(job, "m_profile1_result").equalsIgnoreCase("Y");
                                 boolean f_idx = !StringUtil.isNull(StringUtil.getStr(job, "f_idx"));
 
-                                list.add(new ResponseData(m_idx, m_nick, m_age, m_job, m_location, m_salary, m_profile1, result ,f_idx, m_salary_result, m_profile_result));
+                                list.add(new ResponseData(m_idx, m_nick, m_age, m_job, m_location, m_salary, m_before_profile1, result ,f_idx, m_salary_result, true));
                             }
 
                             act.runOnUiThread(new Runnable() {

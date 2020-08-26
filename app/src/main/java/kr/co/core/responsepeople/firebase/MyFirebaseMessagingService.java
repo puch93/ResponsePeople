@@ -26,6 +26,7 @@ import androidx.core.app.NotificationManagerCompat;
 import com.google.firebase.messaging.FirebaseMessagingService;
 import com.google.firebase.messaging.RemoteMessage;
 
+import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
@@ -39,7 +40,9 @@ import java.util.TimerTask;
 import kr.co.core.responsepeople.R;
 import kr.co.core.responsepeople.activity.ChatAct;
 import kr.co.core.responsepeople.activity.ChatListAct;
+import kr.co.core.responsepeople.activity.EvaluationAfterAct;
 import kr.co.core.responsepeople.activity.EvaluationBeforeAct;
+import kr.co.core.responsepeople.activity.JoinAct;
 import kr.co.core.responsepeople.activity.MainAct;
 import kr.co.core.responsepeople.activity.PushAct;
 import kr.co.core.responsepeople.fragment.BaseFrag;
@@ -96,9 +99,7 @@ public class MyFirebaseMessagingService extends FirebaseMessagingService {
                 case "image_fail":
                     if (Join04Frag.frag != null) {
                         LogUtil.logI("Join04Frag.frag != null");
-                        ((Join04Frag) Join04Frag.frag).imageFailed();
-
-                        sendDefaultNotification("알림", "프로필 사진을 다시 등록해주세요", 101);
+                        doLogin();
                     }
                     break;
 
@@ -162,7 +163,6 @@ public class MyFirebaseMessagingService extends FirebaseMessagingService {
             ((MainAct) MainAct.act).getQuestionCount(NetUrls.QUESTION_RECEIVED);
         }
 
-
         //매니저 설정
         NotificationManagerCompat notificationManager = NotificationManagerCompat.from(this);
 
@@ -192,6 +192,51 @@ public class MyFirebaseMessagingService extends FirebaseMessagingService {
         //푸시 날리기
         notificationManager.notify(channelNum, notification);
     }
+
+    private void doLogin() {
+        ReqBasic server = new ReqBasic(ctx, NetUrls.DOMAIN) {
+            @Override
+            public void onAfter(int resultCode, HttpResult resultData) {
+                if (resultData.getResult() != null) {
+                    try {
+                        JSONObject jo = new JSONObject(resultData.getResult());
+
+                        if (StringUtil.getStr(jo, "result").equalsIgnoreCase("Y")) {
+                        } else {
+
+                            if (jo.has("data")) {
+                                JSONArray ja = jo.getJSONArray("data");
+                                JSONObject job = ja.getJSONObject(0);
+                                String type = StringUtil.getStr(jo, "type");
+
+                                if (!StringUtil.isNull(type)) {
+                                    AppPreference.setProfilePref(ctx, AppPreference.PREF_JSON, jo.toString());
+                                    ((Join04Frag) Join04Frag.frag).imageFailed();
+
+                                    sendDefaultNotification("알림", "프로필 사진을 다시 등록해주세요", 101);
+                                }
+                            }
+                        }
+
+                    } catch (JSONException e) {
+                        e.printStackTrace();
+                    }
+                } else {
+                }
+            }
+        };
+
+        server.setTag("Login");
+        server.addParams("dbControl", NetUrls.LOGIN);
+        server.addParams("m_id", AppPreference.getProfilePref(ctx, AppPreference.PREF_ID));
+        server.addParams("m_pass", AppPreference.getProfilePref(ctx, AppPreference.PREF_PW));
+        server.addParams("fcm", AppPreference.getProfilePref(ctx, AppPreference.PREF_FCM));
+        server.addParams("imei", Common.getDeviceId(ctx));
+        server.addParams("m_x", AppPreference.getProfilePref(ctx, AppPreference.PREF_LAT));
+        server.addParams("m_y", AppPreference.getProfilePref(ctx, AppPreference.PREF_LON));
+        server.execute(true, false);
+    }
+
 
     private void sendSitePUsh(JSONObject jo) {
         String b_title = StringUtil.getStr(jo, "b_title");

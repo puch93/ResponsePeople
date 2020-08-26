@@ -87,8 +87,7 @@ public class MyPageAct extends BaseAct implements View.OnClickListener {
                             String m_job = StringUtil.getStr(job, "m_job");
                             String m_location = StringUtil.getStr(job, "m_location");
                             String m_salary = StringUtil.getStr(job, "m_salary");
-                            String m_profile1 = StringUtil.getStr(job, "m_profile1");
-                            boolean m_profile1_result = StringUtil.getStr(job, "m_profile1_result").equalsIgnoreCase("Y");
+                            String m_before_profile1 = StringUtil.getStr(job, "m_before_profile1");
                             boolean m_salary_result = StringUtil.getStr(job, "m_salary_result").equalsIgnoreCase("Y");
 
 //                            String total_cnt = StringUtil.isNull(StringUtil.getStr(job, "total_cnt"))
@@ -96,7 +95,7 @@ public class MyPageAct extends BaseAct implements View.OnClickListener {
 //                            String answer_cnt = StringUtil.isNull(StringUtil.getStr(job, "answer_cnt"))
 //                                    ? "0" : StringUtil.getStr(job, "answer_cnt");
 
-                            AppPreference.setProfilePref(act, AppPreference.PREF_IMAGE, NetUrls.DOMAIN_ORIGIN + m_profile1);
+                            AppPreference.setProfilePref(act, AppPreference.PREF_IMAGE, NetUrls.DOMAIN_ORIGIN + m_before_profile1);
 
                             // 평점
                             String m_pref_mark = StringUtil.getStr(job, "m_pref_mark");
@@ -109,7 +108,7 @@ public class MyPageAct extends BaseAct implements View.OnClickListener {
 //                                    binding.countReceive.setText(total_cnt);
 //                                    binding.countResponse.setText(answer_cnt);
 
-                                    Common.processProfileImageCircle(act, binding.profileImg, m_profile1, true, 2, 5);
+                                    Common.processProfileImageCircle(act, binding.profileImg, m_before_profile1, true, 2, 5);
 
                                     binding.nick.setText(m_nick);
                                     binding.age.setText(m_age);

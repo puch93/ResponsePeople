@@ -358,6 +358,12 @@ public class SplashAct extends BaseAct {
                         } else {
 //                            Common.showToast(act, StringUtil.getStr(jo, "message"));
 
+                            if(StringUtil.getStr(jo, "message").equalsIgnoreCase("탈퇴한 회원입니다.")) {
+                                Common.showToast(act, StringUtil.getStr(jo, "message"));
+                                AppPreference.setProfilePrefBool(act, AppPreference.AUTO_LOGIN, false);
+                                startActivity(new Intent(act, LoginAct.class));
+                                finish();
+                            }
                             if (jo.has("data")) {
                                 JSONArray ja = jo.getJSONArray("data");
                                 JSONObject job = ja.getJSONObject(0);

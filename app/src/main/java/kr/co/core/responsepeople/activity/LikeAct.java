@@ -57,8 +57,6 @@ public class LikeAct extends BaseAct {
             binding.titleSub.setText("내가 찜한 이성 ");
         }
 
-        getLikeList();
-
         binding.btnBack.setOnClickListener(v -> {
             finish();
         });
@@ -71,8 +69,15 @@ public class LikeAct extends BaseAct {
         });
     }
 
+    @Override
+    protected void onResume() {
+        super.onResume();
+        getLikeList();
+    }
 
     private void getLikeList() {
+        list = new ArrayList<>();
+
         ReqBasic server = new ReqBasic(act, NetUrls.DOMAIN) {
             @Override
             public void onAfter(int resultCode, HttpResult resultData) {
@@ -91,10 +96,10 @@ public class LikeAct extends BaseAct {
                                 String m_age = StringUtil.calcAge(StringUtil.getStr(job, "m_birth").substring(0, 4));
                                 String m_job = StringUtil.getStr(job, "m_job");
                                 String m_location = StringUtil.getStr(job, "m_location");
-                                String m_profile1 = StringUtil.getStr(job, "m_profile1");
+                                String m_before_profile1 = StringUtil.getStr(job, "m_before_profile1");
                                 boolean m_profile_result = StringUtil.getStr(job, "m_profile1_result").equalsIgnoreCase("Y");
 
-                                list.add(new MemberData(m_idx, m_nick, m_age, m_job, m_location, null, m_profile1, m_profile_result, false, false));
+                                list.add(new MemberData(m_idx, m_nick, m_age, m_job, m_location, null, m_before_profile1, m_profile_result, false, false));
                             }
 
                             act.runOnUiThread(new Runnable() {
@@ -106,7 +111,12 @@ public class LikeAct extends BaseAct {
                                 }
                             });
                         } else {
-
+                            act.runOnUiThread(new Runnable() {
+                                @Override
+                                public void run() {
+                                    adapter.setList(list);
+                                }
+                            });
                         }
 
                     } catch (JSONException e) {

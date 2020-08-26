@@ -1,6 +1,7 @@
 package kr.co.core.responsepeople.adapter;
 
 import android.app.Activity;
+import android.graphics.Color;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -16,12 +17,13 @@ import com.bumptech.glide.Glide;
 import java.util.ArrayList;
 
 import kr.co.core.responsepeople.R;
+import kr.co.core.responsepeople.data.ImageEditData;
 import kr.co.core.responsepeople.util.StringUtil;
 
 
 public class ImageAdapter extends RecyclerView.Adapter<ImageAdapter.ViewHolder> {
     private Activity act;
-    private ArrayList<String> list = new ArrayList<>();
+    private ArrayList<ImageEditData> list = new ArrayList<>();
     private ButtonClickListener buttonClickListener;
 
     public interface ButtonClickListener {
@@ -31,18 +33,18 @@ public class ImageAdapter extends RecyclerView.Adapter<ImageAdapter.ViewHolder> 
     }
 
 
-    public ImageAdapter(Activity act, ArrayList<String> list, ButtonClickListener buttonClickListener ) {
+    public ImageAdapter(Activity act, ArrayList<ImageEditData> list, ButtonClickListener buttonClickListener ) {
         this.act = act;
         this.list = list;
         this.buttonClickListener = buttonClickListener;
     }
 
-    public void setList(ArrayList<String> list) {
+    public void setList(ArrayList<ImageEditData> list) {
         this.list = list;
         notifyDataSetChanged();
     }
 
-    public ArrayList<String> getList() {
+    public ArrayList<ImageEditData> getList() {
         return list;
     }
 
@@ -55,9 +57,9 @@ public class ImageAdapter extends RecyclerView.Adapter<ImageAdapter.ViewHolder> 
 
     @Override
     public void onBindViewHolder(@NonNull ViewHolder holder, int i) {
-        String data = list.get(i);
+        ImageEditData data = list.get(i);
 
-        if(StringUtil.isNull(data)) {
+        if(data == null) {
             holder.select_area.setVisibility(View.VISIBLE);
             holder.data_area.setVisibility(View.GONE);
             holder.btn_select.setOnClickListener(v -> {
@@ -72,16 +74,48 @@ public class ImageAdapter extends RecyclerView.Adapter<ImageAdapter.ViewHolder> 
             holder.select_area.setVisibility(View.GONE);
             holder.data_area.setVisibility(View.VISIBLE);
 
-            Glide.with(act).load(data).into(holder.image);
+            Glide.with(act).load(data.getImageUrl()).into(holder.image);
             holder.image.setOnClickListener(view -> {
-                buttonClickListener.expand(data);
+                buttonClickListener.expand(data.getImageUrl());
             });
 
             holder.btn_delete.setOnClickListener(v -> {
-                list.remove(data);
+                list.remove(i);
                 notifyDataSetChanged();
                 buttonClickListener.deleteButtonClicked();
             });
+
+
+
+
+            if(StringUtil.isNull(data.getImageState())) {
+                holder.state.setVisibility(View.GONE);
+            } else if(data.getImageState().equalsIgnoreCase("Y")) {
+                holder.state.setVisibility(View.VISIBLE);
+                holder.state.setText("통과");
+                holder.state.setTextColor(Color.parseColor("#80cdf0"));
+            } else if(data.getImageState().equalsIgnoreCase("N")) {
+                holder.state.setVisibility(View.VISIBLE);
+                holder.state.setText("심사중");
+                holder.state.setTextColor(Color.parseColor("#f0e980"));
+            } else if(data.getImageState().equalsIgnoreCase("F")) {
+                holder.state.setVisibility(View.VISIBLE);
+                holder.state.setText("불합격");
+                holder.state.setTextColor(Color.parseColor("#f08080"));
+            }
+
+
+//            if(StringUtil.isNull(data.getImageState())) {
+//                holder.state.setVisibility(View.GONE);
+//            } else if(data.getImageState().equalsIgnoreCase("Y")) {
+//                holder.state.setVisibility(View.VISIBLE);
+//                holder.state.setText("통과");
+//                holder.state.setTextColor(Color.parseColor("#80cdf0"));
+//            } else {
+//                holder.state.setVisibility(View.VISIBLE);
+//                holder.state.setText("불합격");
+//                holder.state.setTextColor(Color.parseColor("#f08080"));
+//            }
         }
     }
 
@@ -92,7 +126,7 @@ public class ImageAdapter extends RecyclerView.Adapter<ImageAdapter.ViewHolder> 
 
     class ViewHolder extends RecyclerView.ViewHolder {
         ImageView image, btn_select;
-        TextView representative;
+        TextView representative, state;
         FrameLayout btn_delete, select_area, data_area;
 
         ViewHolder(@NonNull View itemView) {
@@ -103,6 +137,7 @@ public class ImageAdapter extends RecyclerView.Adapter<ImageAdapter.ViewHolder> 
             btn_delete = itemView.findViewById(R.id.btn_delete);
             select_area = itemView.findViewById(R.id.select_area);
             data_area = itemView.findViewById(R.id.data_area);
+            state = itemView.findViewById(R.id.state);
         }
     }
 }

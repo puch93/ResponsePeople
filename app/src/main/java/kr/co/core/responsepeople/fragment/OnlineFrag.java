@@ -153,12 +153,12 @@ public class OnlineFrag extends BaseFrag implements SwipeRefreshLayout.OnRefresh
                                 String m_job = StringUtil.getStr(job, "m_job");
                                 String m_location = StringUtil.getStr(job, "m_location");
                                 String m_salary = StringUtil.getStr(job, "m_salary");
-                                String m_profile1 = StringUtil.getStr(job, "m_profile1");
+                                String m_before_profile1 = StringUtil.getStr(job, "m_before_profile1");
+
                                 boolean m_salary_result = StringUtil.getStr(job, "m_salary_result").equalsIgnoreCase("Y");
                                 boolean m_profile_result = StringUtil.getStr(job, "m_profile1_result").equalsIgnoreCase("Y");
                                 boolean f_idx = !StringUtil.isNull(StringUtil.getStr(job, "f_idx"));
-
-                                list.add(new MemberData(m_idx, m_nick, m_age, m_job, m_location, m_salary, m_profile1, m_profile_result, f_idx, m_salary_result));
+                                list.add(new MemberData(m_idx, m_nick, m_age, m_job, m_location, m_salary, m_before_profile1, true, f_idx, m_salary_result));
                             }
 
                             act.runOnUiThread(new Runnable() {

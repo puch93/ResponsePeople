@@ -600,10 +600,10 @@ public class ChatAct extends BaseAct implements View.OnClickListener {
                         JSONObject uo = users.getJSONObject(u);
                         if (!StringUtil.getStr(uo, "m_idx").equalsIgnoreCase(AppPreference.getProfilePref(act, AppPreference.PREF_MIDX))) {
                             t_idx = StringUtil.getStr(uo, "m_idx");
-                            otherImage = StringUtil.getStr(uo, "m_profile1");
+                            otherImage = StringUtil.getStr(uo, "m_before_profile1");
                             otherNick = StringUtil.getStr(uo, "m_nick");
                             otherAge = StringUtil.calcAge(StringUtil.getStr(uo, "m_birth").substring(0, 4));
-                            otherImageOk = StringUtil.getStr(uo, "m_profile1_result").equalsIgnoreCase("Y");
+                            otherImageOk = true;
 
                             act.runOnUiThread(new Runnable() {
                                 @Override

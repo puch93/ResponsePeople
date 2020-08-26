@@ -96,10 +96,9 @@ public class ChatListAct extends BaseAct {
                                     String y_nick = StringUtil.getStr(job, "m_nick");
                                     String y_idx = StringUtil.getStr(job, "m_idx");
                                     String y_age = StringUtil.calcAge(StringUtil.getStr(job, "m_birth").substring(0, 4));
-                                    String y_profile_img = StringUtil.getStr(job, "m_profile1");
-                                    boolean y_profile_img_ok = StringUtil.getStr(job, "m_profile1_result").equalsIgnoreCase("Y");
+                                    String y_profile_img = StringUtil.getStr(job, "m_before_profile1");
 
-                                    list.add(new ChatListData(room_idx, contents, send_date, unread_count, y_idx, y_nick, y_age, y_profile_img, y_profile_img_ok));
+                                    list.add(new ChatListData(room_idx, contents, send_date, unread_count, y_idx, y_nick, y_age, y_profile_img, true));
                                 }
                             }
 

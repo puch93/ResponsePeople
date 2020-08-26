@@ -40,8 +40,9 @@ import java.util.ArrayList;
 
 import kr.co.core.responsepeople.R;
 import kr.co.core.responsepeople.adapter.EtcProfileAdapter;
-import kr.co.core.responsepeople.adapter.ImageAdapter;
+import kr.co.core.responsepeople.adapter.ImageEditAdapter;
 import kr.co.core.responsepeople.data.EtcData;
+import kr.co.core.responsepeople.data.ImageEditData;
 import kr.co.core.responsepeople.databinding.ActivityEditBinding;
 import kr.co.core.responsepeople.dialog.ProfileBirthDlg;
 import kr.co.core.responsepeople.dialog.ProfileSimpleDlg;
@@ -59,8 +60,8 @@ public class EditAct extends BaseAct implements View.OnClickListener {
     Activity act;
 
     // image
-    private ArrayList<String> images = new ArrayList<>();
-    private ImageAdapter adapter;
+    private ArrayList<ImageEditData> images = new ArrayList<>();
+    private ImageEditAdapter adapter;
     private Uri photoUri;
     private String mImgFilePath;
     private File salary_file;
@@ -104,11 +105,18 @@ public class EditAct extends BaseAct implements View.OnClickListener {
                             JSONObject job = ja.getJSONObject(0);
                             for (int i = 1; i < 7; i++) {
                                 if (!StringUtil.isNull(StringUtil.getStr(job, "m_profile" + i))) {
-                                    images.add(NetUrls.DOMAIN_ORIGIN + StringUtil.getStr(job, "m_profile" + i));
+                                    String imageUrl = NetUrls.DOMAIN_ORIGIN + StringUtil.getStr(job, "m_profile" + i);
+                                    String imageState = StringUtil.getStr(job, "m_profile" + i + "_result");
+                                    images.add(new ImageEditData(imageUrl, imageState));
+                                    Log.i(StringUtil.TAG, "image[" + i + "]: url: " + imageUrl + ", state: " + imageState);
                                 } else {
                                     break;
                                 }
                             }
+
+                            Log.i(StringUtil.TAG, "images: " + images.toString());
+
+
                             String m_height = StringUtil.getStr(job, "m_height");
                             String m_body = StringUtil.getStr(job, "m_body");
                             String m_edu = StringUtil.getStr(job, "m_edu");
@@ -171,7 +179,7 @@ public class EditAct extends BaseAct implements View.OnClickListener {
             }
         };
 
-        server.setTag("My Info");
+        server.setTag("My Info (EditAct)");
         server.addParams("dbControl", NetUrls.MY_INFO);
         server.addParams("m_idx", AppPreference.getProfilePref(act, AppPreference.PREF_MIDX));
         server.execute(true, false);
@@ -205,7 +213,7 @@ public class EditAct extends BaseAct implements View.OnClickListener {
         /* image */
         images.add(null);
 
-        adapter = new ImageAdapter(act, images, new ImageAdapter.ButtonClickListener() {
+        adapter = new ImageEditAdapter(act, images, new ImageEditAdapter.ButtonClickListener() {
             @Override
             public void selectButtonClicked() {
                 Log.i(StringUtil.TAG, "images: " + images);
@@ -319,15 +327,25 @@ public class EditAct extends BaseAct implements View.OnClickListener {
                 for (int i = 1; i < images.size(); i++) {
                     File file = null;
 
-                    if (images.get(i).contains("http")) {
-                        file = downloadImage(images.get(i));
+                    if (images.get(i).getImageUrl().contains("http")) {
+                        file = downloadImage(images.get(i).getImageUrl());
                         Log.i(StringUtil.TAG, "file name" + i + ": " + file.getName());
                     } else {
-                        file = new File(images.get(i));
+                        file = new File(images.get(i).getImageUrl());
+                    }
+
+                    String imageState = images.get(i).getImageState();
+                    if (StringUtil.isNull(imageState)) {
+                        imageState = "N";
                     }
 
                     server.addFileParams("m_profile" + i, file);
+                    server.addParams("m_profile" + i + "_state", imageState);
                     server.addParams("m_profile" + i + "ck", "Y");
+                }
+
+                for (int i = images.size(); i < 7; i++) {
+                    server.addParams("m_profile" + i + "ck", "N");
                 }
 
                 if (null != salary_file) {
@@ -454,7 +472,18 @@ public class EditAct extends BaseAct implements View.OnClickListener {
                     // 이미지 파일
                     images = adapter.getList();
 
-                    doEdit(charm.toString(), ideal.toString(), interest.toString());
+                    boolean isOk = true;
+                    for (int i = 1 ; i < images.size(); i++) {
+                        if (images.get(i).getImageState().equalsIgnoreCase("F")) {
+                            isOk = false;
+                            break;
+                        }
+                    }
+
+                    if (isOk)
+                        doEdit(charm.toString(), ideal.toString(), interest.toString());
+                    else
+                        Common.showToast(act, "불합격된 사진이 있습니다. 사진을 삭제후 다른사진으로 등록해주세요.");
                 }
                 break;
 
@@ -610,7 +639,7 @@ public class EditAct extends BaseAct implements View.OnClickListener {
                             Common.showToast(act, "파일 용량이 초과되었습니다. 다른사진을 선택해주세요");
                         } else {
                             // 사진 추가
-                            images.add(mImgFilePath);
+                            images.add(new ImageEditData(mImgFilePath, ""));
                             runOnUiThread(new Runnable() {
                                 @Override
                                 public void run() {
