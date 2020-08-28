@@ -182,7 +182,7 @@ public class RecommendFrag extends BaseFrag implements SwipeRefreshLayout.OnRefr
                         if (StringUtil.getStr(jo, "result").equalsIgnoreCase("Y")) {
                             String total = StringUtil.getStr(jo, "total");
 
-                            JSONArray ja = jo.getJSONArray("value");
+                            JSONArray ja = jo.getJSONArray("data");
                             for (int i = 0; i < ja.length(); i++) {
                                 JSONObject job = ja.getJSONObject(i);
                                 String m_idx = StringUtil.getStr(job, "m_idx");
@@ -242,24 +242,41 @@ public class RecommendFrag extends BaseFrag implements SwipeRefreshLayout.OnRefr
         };
 
         server.setTag("Prefer List");
-        server.addParams("dbControl", NetUrls.RECOMMEND_LIST);
+        server.addParams("dbControl", NetUrls.PREFER_LIST);
         server.addParams("m_idx", AppPreference.getProfilePref(act, AppPreference.PREF_MIDX));
         if (!StringUtil.isNull(m_age_p))
             server.addParams("m_age_p", m_age_p);
-        if (!StringUtil.isNull(m_distance_p))
-            server.addParams("m_distance_p", m_distance_p);
+//        if (!StringUtil.isNull(m_distance_p))
+//            server.addParams("m_distance_p", m_distance_p);
         if (!StringUtil.isNull(m_height_p))
             server.addParams("m_height_p", m_height_p);
-        if (!StringUtil.isNull(m_edu_p))
-            server.addParams("m_edu_p", m_edu_p);
+        else
+            server.addParams("m_height_p", "");
+
         if (!StringUtil.isNull(m_body_p))
             server.addParams("m_body_p", m_body_p);
+        else
+            server.addParams("m_body_p", "");
+
+        if (!StringUtil.isNull(m_edu_p))
+            server.addParams("m_edu_p", m_edu_p);
+        else
+            server.addParams("m_edu_p", "");
+
         if (!StringUtil.isNull(m_religion_p))
             server.addParams("m_religion_p", m_religion_p);
+        else
+            server.addParams("m_religion_p", "");
+
         if (!StringUtil.isNull(m_drink_p))
             server.addParams("m_drink_p", m_drink_p);
+        else
+            server.addParams("m_drink_p", "");
+
         if (!StringUtil.isNull(m_smoke_p))
             server.addParams("m_smoke_p", m_smoke_p);
+        else
+            server.addParams("m_smoke_p", "");
 
         server.addParams("pagenum", String.valueOf(page));
         server.execute(true, false);
