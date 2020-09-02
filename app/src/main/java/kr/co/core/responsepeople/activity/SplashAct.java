@@ -324,7 +324,6 @@ public class SplashAct extends BaseAct {
 
 
 
-
     private void doLogin() {
         ReqBasic server = new ReqBasic(act, NetUrls.DOMAIN) {
             @Override
