@@ -104,36 +104,38 @@ public class SplashAct extends BaseAct {
                             if (!StringUtil.isNull(res)) {
                                 JSONObject jo = new JSONObject(res);
 
-                                String[] version = StringUtil.getStr(jo, "MEMCODE").split("\\.");
-                                String[] version_me = device_version.split("\\.");
+                                if(StringUtil.getStr(jo, "result").equalsIgnoreCase("Y")) {
+                                    String[] version = StringUtil.getStr(jo, "MEMCODE").split("\\.");
+                                    String[] version_me = device_version.split("\\.");
 
-                                for (int i = 0; i < 3; i++) {
-                                    int tmp1 = Integer.parseInt(version[i]);
-                                    int tmp2 = Integer.parseInt(version_me[i]);
+                                    for (int i = 0; i < 3; i++) {
+                                        int tmp1 = Integer.parseInt(version[i]);
+                                        int tmp2 = Integer.parseInt(version_me[i]);
 
-                                    if (tmp2 < tmp1) {
-                                        android.app.AlertDialog.Builder alertDialogBuilder =
-                                                new android.app.AlertDialog.Builder(new ContextThemeWrapper(act, android.R.style.Theme_DeviceDefault_Light_Dialog_Alert));
-                                        alertDialogBuilder.setTitle("업데이트");
-                                        alertDialogBuilder.setMessage("새로운 버전이 있습니다.")
-                                                .setPositiveButton("업데이트 바로가기", new DialogInterface.OnClickListener() {
-                                                    @Override
-                                                    public void onClick(DialogInterface dialogInterface, int i) {
-                                                        Intent intent = new Intent(Intent.ACTION_VIEW);
-                                                        intent.setData(Uri.parse("https://play.google.com/store/apps/details?id=kr.co.core.responsepeople"));
-                                                        startActivity(intent);
-                                                        finish();
-                                                    }
-                                                });
-                                        android.app.AlertDialog alertDialog = alertDialogBuilder.create();
-                                        alertDialog.setCanceledOnTouchOutside(false);
-                                        alertDialog.show();
+                                        if (tmp2 < tmp1) {
+                                            android.app.AlertDialog.Builder alertDialogBuilder =
+                                                    new android.app.AlertDialog.Builder(new ContextThemeWrapper(act, android.R.style.Theme_DeviceDefault_Light_Dialog_Alert));
+                                            alertDialogBuilder.setTitle("업데이트");
+                                            alertDialogBuilder.setMessage("새로운 버전이 있습니다.")
+                                                    .setPositiveButton("업데이트 바로가기", new DialogInterface.OnClickListener() {
+                                                        @Override
+                                                        public void onClick(DialogInterface dialogInterface, int i) {
+                                                            Intent intent = new Intent(Intent.ACTION_VIEW);
+                                                            intent.setData(Uri.parse("https://play.google.com/store/apps/details?id=kr.co.core.responsepeople"));
+                                                            startActivity(intent);
+                                                            finish();
+                                                        }
+                                                    });
+                                            android.app.AlertDialog alertDialog = alertDialogBuilder.create();
+                                            alertDialog.setCanceledOnTouchOutside(false);
+                                            alertDialog.show();
 
-                                        return;
+                                            return;
+                                        }
                                     }
+                                } else {
+                                    startProgram();
                                 }
-
-                                startProgram();
                             } else {
                                 startProgram();
                             }
@@ -146,7 +148,7 @@ public class SplashAct extends BaseAct {
         };
         server.setTag("Version Check");
         server.addParams("dbControl", NetUrls.VERSION);
-        server.addParams("thisVer", NetUrls.VERSION);
+        server.addParams("thisVer", device_version);
         server.execute(true, false);
     }
 

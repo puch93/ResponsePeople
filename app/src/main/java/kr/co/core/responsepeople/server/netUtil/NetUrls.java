@@ -47,6 +47,7 @@ public class NetUrls {
     public static final String BLOCK = "setMobileMemberBanRegi"; // 지인 차단
     public static final String BLOCK_LIST = "setMobileMemberBanlist"; // 지인 차단 리스트 가져오기
     public static final String LIKE_OTHER_LIST = "getMyFollowMemberList"; // 내가 찜한 회원 리스트
+    public static final String GPS_UPLOAD = "setMemberXYUpdate"; // 위치정보 업데이트
 
     public static final String QUESTION_MY_LIST = "getQuestionList"; // 내 질문지 리스트 가져오기
     public static final String QUESTION_DELETE = "delQuestion"; // 질문지 삭제하기

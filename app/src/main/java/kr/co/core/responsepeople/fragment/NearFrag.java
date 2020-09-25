@@ -124,6 +124,7 @@ public class NearFrag extends BaseFrag implements View.OnClickListener {
 
                 AppPreference.setProfilePref(act, AppPreference.PREF_LAT, lat);
                 AppPreference.setProfilePref(act, AppPreference.PREF_LON, lon);
+//                Common.showToastLong(act, "위도: " + lat + ", 경도: " + lon);
 
                 act.runOnUiThread(new Runnable() {
                     @Override

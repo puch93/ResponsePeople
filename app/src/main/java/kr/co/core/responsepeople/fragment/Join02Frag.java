@@ -63,8 +63,8 @@ public class Join02Frag extends BaseFrag {
                 } else if (binding.pwConfirm.length() == 0 || !binding.pwConfirm.getText().toString().equalsIgnoreCase(binding.pw.getText().toString())) {
                     Common.showToast(act, "비밀번호를 정확하게 입력해주세요");
                 } else {
-                    nextProcess();
-                }
+                    nextProcess();}
+
             }
         });
 

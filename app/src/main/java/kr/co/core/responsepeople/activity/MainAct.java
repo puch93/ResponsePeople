@@ -4,10 +4,16 @@ import androidx.ads.identifier.AdvertisingIdClient;
 import androidx.databinding.DataBindingUtil;
 import androidx.fragment.app.FragmentManager;
 import androidx.fragment.app.FragmentTransaction;
+import androidx.work.OneTimeWorkRequest;
+import androidx.work.PeriodicWorkRequest;
+import androidx.work.WorkManager;
 
 import android.app.Activity;
 import android.app.AlarmManager;
 import android.app.PendingIntent;
+import android.app.job.JobInfo;
+import android.app.job.JobScheduler;
+import android.content.ComponentName;
 import android.content.ContentValues;
 import android.content.Context;
 import android.content.Intent;
@@ -15,6 +21,8 @@ import android.icu.text.IDNA;
 import android.os.AsyncTask;
 import android.os.Build;
 import android.os.Bundle;
+import android.os.Handler;
+import android.os.Looper;
 import android.util.Log;
 import android.view.View;
 
@@ -38,6 +46,9 @@ import java.net.URL;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.HashMap;
+import java.util.Timer;
+import java.util.TimerTask;
+import java.util.concurrent.TimeUnit;
 
 import kr.co.core.responsepeople.R;
 import kr.co.core.responsepeople.databinding.ActivityMainBinding;
@@ -53,10 +64,13 @@ import kr.co.core.responsepeople.server.netUtil.HttpResult;
 import kr.co.core.responsepeople.server.netUtil.NetUrls;
 import kr.co.core.responsepeople.util.AppPreference;
 import kr.co.core.responsepeople.util.BackPressCloseHandler;
+import kr.co.core.responsepeople.util.CHttpUrlConnection;
 import kr.co.core.responsepeople.util.Common;
+import kr.co.core.responsepeople.util.GpsInfo;
 import kr.co.core.responsepeople.util.LogUtil;
 import kr.co.core.responsepeople.util.RequestHttpURLConnection;
 import kr.co.core.responsepeople.util.StringUtil;
+import kr.co.core.responsepeople.util.UploadWorker;
 
 public class MainAct extends BaseAct implements View.OnClickListener {
     ActivityMainBinding binding;
@@ -66,6 +80,10 @@ public class MainAct extends BaseAct implements View.OnClickListener {
     private BackPressCloseHandler backPressCloseHandler;
 
     ArrayList<String> list = new ArrayList<>();
+
+    private GpsInfo gpsInfo;
+    private Timer timer = new Timer();
+    private TimerTask adTask;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -89,6 +107,148 @@ public class MainAct extends BaseAct implements View.OnClickListener {
         binding.menu01Area.performClick();
     }
 
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
+        if (adTask != null) {
+            adTask.cancel();
+        }
+
+        if (timer != null) {
+            timer.cancel();
+        }
+    }
+
+    @Override
+    protected void onResume() {
+        super.onResume();
+        if (!StringUtil.isNull(AppPreference.getProfilePref(act, AppPreference.PREF_IMAGE)))
+            Glide.with(act).load(AppPreference.getProfilePref(act, AppPreference.PREF_IMAGE)).transform(new CircleCrop()).into(binding.profileImg);
+
+        getQuestionCount(NetUrls.QUESTION_RECEIVED);
+
+        if (adTask != null) {
+            adTask.cancel();
+        }
+
+        if (timer != null) {
+            timer.cancel();
+        }
+
+        setGpsTimer();
+    }
+
+    //로딩중 텍스트 애니메이션
+    public void setGpsTimer() {
+        timer = new Timer();
+        adTask = new TimerTask() {
+            @Override
+            public void run() {
+                runOnUiThread(new Runnable() {
+                    @Override
+                    public void run() {
+                        gpsInfo = new GpsInfo(act);
+                        if (gpsInfo.isGetLocation()) {
+                            double latitude = gpsInfo.getLatitude();
+                            double longitude = gpsInfo.getLongitude();
+                            String lat = String.valueOf(latitude);
+                            String lon = String.valueOf(longitude);
+
+                            if (lat.equals("0.0")) lat = "35";
+                            if (lon.equals("0.0")) lon = "128";
+
+                            AppPreference.setProfilePref(act, AppPreference.PREF_LAT, lat);
+                            AppPreference.setProfilePref(act, AppPreference.PREF_LON, lon);
+
+                            doGpsUpload();
+                            Log.d("TEST@@", "CHECK POINT0");
+                        }
+                    }
+                });
+            }
+        };
+        timer.schedule(adTask, 0, 5 * 60 * 1000);
+
+//        OneTimeWorkRequest uploadWorkRequest = new OneTimeWorkRequest.Builder(UploadWorker.class)
+//            .build();
+//        WorkManager.getInstance(act).enqueue(uploadWorkRequest);
+    }
+
+    public void doGpsUpload() {
+        Log.d("TEST@@", "CHECK POINT START");
+        final String Url = "https://qnating.adamstore.co.kr/lib/control.siso";
+        final CHttpUrlConnection conn = new CHttpUrlConnection();
+
+        new Thread(new Runnable() {
+            @Override
+            public void run() {
+                final String result;
+                Log.d("TEST@@", "CHECK POINT THREAD");
+                HashMap<String, String> mParam = new HashMap<>();
+
+                mParam.put("dbControl", NetUrls.GPS_UPLOAD);
+                mParam.put("m_idx", AppPreference.getProfilePref(act, AppPreference.PREF_MIDX));
+                mParam.put("m_x", AppPreference.getProfilePref(act, AppPreference.PREF_LAT));
+                mParam.put("m_y", AppPreference.getProfilePref(act, AppPreference.PREF_LON));
+                result = conn.sendPost(Url, mParam);
+                Log.d("TEST@@", "CHECK POINT1" + result);
+
+//                act.runOnUiThread(new Runnable() {
+//                    @Override
+//                    public void run() {
+//                        try {
+//                            Log.d("TEST@@", "CHECK POINT2");
+//                            JSONObject jo = new JSONObject(result);
+//                            String status = StringUtil.getStr(jo, "result");
+//
+//                            if (status.equalsIgnoreCase("Y")) {
+////                                Category cData = mGson.fromJson(jo.toString(), Category.class);
+////                                doGetSubCategory(cData, 0);
+//                            }
+//                        } catch (JSONException e) {
+//                            e.printStackTrace();
+//                        }
+//                    }
+//                });
+            }
+        }).start();
+    }
+
+//    private void doGpsUpload() {
+//        Log.d("TEST@@", "CHECK POINT55");
+//        ReqBasic server = new ReqBasic(act, NetUrls.DOMAIN) {
+//            @Override
+//            public void onAfter(int resultCode, HttpResult resultData) {
+//                if (resultData.getResult() != null) {
+//                    try {
+//                        JSONObject jo = new JSONObject(resultData.getResult());
+//                        Log.d("TEST@@", "CHECK POINT1");
+//
+//                        if( StringUtil.getStr(jo, "result").equalsIgnoreCase("Y")) {
+//                            Log.d("TEST@@", "CHECK POINT2");
+//
+//                        } else {
+//
+//                        }
+//                        Log.d("TEST@@", "CHECK POINT3");
+//                    } catch (JSONException e) {
+//                        e.printStackTrace();
+//                        Common.showToastNetwork(act);
+//                    }
+//                } else {
+//                    Log.d("TEST@@", "CHECK POINT NULL");
+//                    Common.showToastNetwork(act);
+//                }
+//            }
+//        };
+//
+//        server.setTag("Gps Upload");
+//        server.addParams("dbControl", NetUrls.GPS_UPLOAD);
+//        server.addParams("m_idx", AppPreference.getProfilePref(act, AppPreference.PREF_MIDX));
+//        server.addParams("m_x", AppPreference.getProfilePref(act, AppPreference.PREF_LAT));
+//        server.addParams("m_y", AppPreference.getProfilePref(act, AppPreference.PREF_LON));
+//        server.execute(true, false);
+//    }
 
     public void getQuestionCount(String dbControl) {
         list = new ArrayList<>();
@@ -145,16 +305,6 @@ public class MainAct extends BaseAct implements View.OnClickListener {
         server.execute(true, false);
     }
 
-
-    @Override
-    protected void onResume() {
-        super.onResume();
-
-        if (!StringUtil.isNull(AppPreference.getProfilePref(act, AppPreference.PREF_IMAGE)))
-            Glide.with(act).load(AppPreference.getProfilePref(act, AppPreference.PREF_IMAGE)).transform(new CircleCrop()).into(binding.profileImg);
-
-        getQuestionCount(NetUrls.QUESTION_RECEIVED);
-    }
 
     @Override
     public void onBackPressed() {
